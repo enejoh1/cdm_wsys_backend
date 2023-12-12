@@ -1,0 +1,40 @@
+@charset "EUC-KR";
+.title {
+  font-size: 40px;
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 20px;
+  }
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap');
+
+h1 {
+  font-family: 'Orbitron', sans-serif;
+  
+  &:after {
+    display: block;
+    margin-top: 4px;
+    font-size: 80%;
+    color: #999;
+    font-family: monospace;
+    content: 'font-size: 40px';
+  }
+}
+
+@media (max-width: 600px) {
+  h1:after {
+    content: 'font-size: 20px';
+  }
+}
+
+.alert {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  background-color: #e0e0e0;
+}

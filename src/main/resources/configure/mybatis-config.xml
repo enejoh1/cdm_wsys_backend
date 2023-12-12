@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- MyBatis 설정 -->
+	<settings>
+		<!-- 설정에서 각 mapper 에 설정된 캐시를 전역적으로 사용할지 말지에 대한 여부 -->
+        <setting name="cacheEnabled" value="true" />
+        
+        <!-- 늦은 로딩을 사용할지에 대한 여부. 사용하지 않는다면 모두 즉시 로딩할 것이다. 이 값은 fetchType 속성을 사용해서 대체할 수 있다. -->
+        <setting name="lazyLoadingEnabled" value="false" />
+        
+        <!-- 디폴트 실행자(executor) 설정. SIMPLE 실행자는 특별히 하는 것이 없다. REUSE 실행자는 PreparedStatement 를 재사용한다. BATCH 실행자는 구문을 재사용하고 수정을 배치처리한다. -->
+        <setting name="defaultExecutorType" value="BATCH" />
+        
+      	<setting name="useGeneratedKeys"    value="false"/> 
+      	
+        <!-- MyBatis 가 칼럼을 필드/프로퍼티에 자동으로 매핑할지와 방법에 대해 명시. PARTIAL 은 간단한 자동매핑만 할뿐, 내포된 결과에 대해서는 처리하지 않는다. FULL 은 처리가능한 모든 자동매핑을 처리한다. NONE, PARTIAL, FULL -->
+        <setting name="autoMappingBehavior" value="PARTIAL" />
+        
+        <!-- CLOB 데이터 입력시 오류 발생하여 추가 -->
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+	
+	
+	<!-- VO Aliase 설정 -->
+	<typeAliases> 
+    	<typeAlias type="com.wsys.vo.SysConf" 	alias="sysconf"/>
+    	<typeAlias type="com.wsys.vo.Company" 	alias="company"/>
+    	<typeAlias type="com.wsys.vo.User" 		alias="user"/>
+    	<typeAlias type="com.wsys.vo.Author" 	alias="author"/>
+    	<typeAlias type="com.wsys.vo.CompEnv" 	alias="compenv"/>
+    	<typeAlias type="com.wsys.vo.Menu" 		alias="menu"/>
+    	
+    	<typeAlias type="com.wsys.vo.Item" 		alias="item"/>
+    	<typeAlias type="com.wsys.vo.Whouse" 	alias="whouse"/>
+    	<typeAlias type="com.wsys.vo.Rack" 		alias="rack"/>
+    	<typeAlias type="com.wsys.vo.Bin" 		alias="bin"/>
+    	<typeAlias type="com.wsys.vo.BinMan" 	alias="BinMan"/>
+    	<typeAlias type="com.wsys.vo.Location"	alias="location"/>
+    	<typeAlias type="com.wsys.vo.History" 	alias="history"/>
+		
+	</typeAliases>
+	
+</configuration>

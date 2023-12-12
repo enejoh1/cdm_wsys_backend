@@ -1,0 +1,51 @@
+Ext.Loader.setConfig({
+	enabled: true,
+	paths: {
+		'Wsys.app':	gCONTENT_PATH + '/resources/view/js/app',
+		'Wsys.base':	gCONTENT_PATH + '/resources/view/js/base',
+		'Wsys.model':	gCONTENT_PATH + '/resources/view/js/wsys/model',
+		'Wsys.store':	gCONTENT_PATH + '/resources/view/js/wsys/store',
+		// 'Wsys.view':	gCONTENT_PATH + '/resources/view/js/wsys/views',
+		'Wsys.views':	gCONTENT_PATH + '/resources/view/js/wsys/views',
+		'Wsys.util':	gCONTENT_PATH + '/resources/view/js/util',
+		'Ext.ux':	gCONTENT_PATH + '/extjs5/module/ux',
+		'Ext.xdview':	gCONTENT_PATH + '/extjs5/module/xdview',
+		// 'Ext.calendar':	gCONTENT_PATH + '/ext-6.7.0/packages/calendar/src/calendar/view',
+		'Ext.calendar':	gCONTENT_PATH + '/resources/view/js/wsys/views/calendar/src',
+		// 'Ext.calendar':	gCONTENT_PATH + '/resources/view/js/wsys/views/calendar2/src',
+		// 'Ext.calendar':	gCONTENT_PATH + '/extjs5/calendar/src',
+		// 'Sch':	gCONTENT_PATH + '/taskboard-2.0.9/taskboard/lib/Sch',
+		// 'Kanban':	gCONTENT_PATH + '/taskboard-2.0.9/taskboard/lib/Kanban',
+		'Ext.ux.upload':	gCONTENT_PATH + '/upload/',
+		'PdfViewer.view': gCONTENT_PATH + '/ext-pdf-viewer-master/src/view/',
+    }
+});
+
+Ext.require([
+	'Ext.grid.*',
+	'Ext.data.*',
+	'Ext.util.*',
+	'Ext.Action',
+	'Ext.tab.*',
+	'Ext.button.*',
+	'Ext.form.*',
+	'Ext.tree.*',
+	'Ext.Array.*',
+	'Ext.layout.container.Card',
+	'Ext.layout.container.Border',
+	'Ext.ux.ajax.SimManager',
+	'Ext.ux.PreviewPlugin',
+	'Ext.window.MessageBox',
+	'Ext.util.History',
+	'Ext.tip.*',
+	'Ext.ux.CheckColumn',
+	// 'Kanban.view.TaskBoard',
+	// 'Kanban.editor.SimpleEditor',
+	'Ext.pivot.*',
+	'PdfViewer.view.*',
+	'Ext.list.*',
+	'Ext.listview.*',
+	
+//	'Wsys.view.form.TaskEditor',
+	'Wsys.app.Util'
+]);

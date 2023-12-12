@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="company">
+	<resultMap id="result" type="company">
+		<result property="unique_id" 		column="unique_id" 		javaType="java.lang.Long" />
+		<result property="cp_code" 			column="cp_code" />
+		<result property="cp_name" 			column="cp_name" />
+		<result property="biz_no" 			column="biz_no" />
+		<result property="biz_cond" 		column="biz_cond" />
+		<result property="biz_category" 	column="biz_category" />
+		<result property="cp_president" 	column="cp_president" />
+		<result property="zip_code" 		column="zip_code" />
+		<result property="address_kr" 		column="address_kr" />
+		<result property="address_en" 		column="address_en" />
+		<result property="tel_no" 			column="tel_no" />
+		<result property="fax_no" 			column="fax_no" />
+		<result property="email_address" 	column="email_address" />
+		<result property="code_type" 		column="code_type" />
+		
+		<result property="del_yn" 			column="del_yn" />
+		<result property="creator" 			column="creator" />
+		<result property="creator_uid" 		column="creator_uid" 	javaType="java.lang.Long" />
+		<result property="create_date" 		column="create_date" 	javaType="java.util.Date" />
+		<result property="changer" 			column="changer" />
+		<result property="changer_uid" 		column="changer_uid" 	javaType="java.lang.Long" />
+		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
+	</resultMap>
+	
+	<insert id="insert-company" parameterType="company">
+		INSERT INTO TB_COMPANY
+			(
+			 unique_id, cp_code, cp_name, biz_no, biz_cond, biz_category, cp_president, zip_code,
+			 address_kr, address_en, tel_no, fax_no, email_address, code_type,
+			 creator_uid, creator, create_date
+			)
+		VALUES
+		 	(
+		 	 #{unique_id}, #{cp_code}, #{cp_name}, #{biz_no}, #{biz_cond}, #{biz_category}, #{cp_president}, #{zip_code},
+		 	 #{address_kr}, #{address_en}, #{tel_no}, #{fax_no}, #{email_address}, #{code_type},
+		 	 #{creator_uid}, #{creator}, #{create_date}
+		 	)
+	</insert>
+	
+	<sql id="select-company-fields">
+		company.unique_id, company.cp_code, company.cp_name, company.biz_no, company.biz_cond,
+		company.biz_category, company.cp_president, company.zip_code, company.address_kr, company.address_en,
+		company.tel_no, company.fax_no, company.email_address, company.code_type,
+		company.del_yn, company.creator, company.creator_uid, company.create_date, company.changer, company.changer_uid, company.change_date
+	</sql>
+	
+	<sql id="select-company-join">
+		FROM TB_COMPANY company
+	</sql>
+	
+   <sql id="select-company-where">
+		WHERE company.del_yn='N'
+		<if test="cp_code">			AND company.cp_code 		= 		#{cp_code}</if>
+		<if test="cp_name">			AND company.cp_name 		= 		#{cp_name}</if>
+		<if test="biz_no">			AND company.biz_no 			= 		#{biz_no}</if>
+		<if test="biz_cond">		AND company.biz_cond 		= 		#{biz_cond}</if>
+		<if test="biz_category">	AND company.biz_category 	= 		#{biz_category}</if>
+		<if test="cp_president">	AND company.cp_president 	= 		#{cp_president}</if>
+		<if test="zip_code">		AND company.zip_code 		= 		#{zip_code}</if>
+		<if test="address_kr">		AND company.address_kr 		= 		#{address_kr}</if>
+		<if test="address_en">		AND company.address_en 		= 		#{address_en}</if>
+		<if test="tel_no">			AND company.tel_no 			= 		#{tel_no}</if>
+		<if test="fax_no">			AND company.fax_no 			= 		#{fax_no}</if>
+		<if test="email_address">	AND company.email_address 	= 		#{email_address}</if>
+		<if test="code_type">		AND company.code_type 	= 		#{code_type}</if>
+		
+		<if test="creator_uid">		AND	company.creator_uid 	= 		#{creator_uid}</if>
+		<if test="creator">			AND	company.creator 		like 	#{creator}</if>
+		<if test="create_date">		AND DATE_FORMAT(company.create_date, '%Y-%m-%d') BETWEEN #{create_date_s} AND #{create_date_e}</if>
+		<if test="changer_uid">		AND	company.changer_uid 	= 		#{changer_uid}</if>
+		<if test="changer">			AND	company.changer 		like 	#{changer}</if>
+		<if test="change_date">		AND DATE_FORMAT(company.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
+		
+		<if test="unique_id">		AND	company.unique_id 		= 		#{unique_id}</if>
+		
+	</sql>	
+	
+	<select id="selectuid-company" parameterType="java.lang.Long" resultMap="result">
+		/*selectcond-company*/SELECT
+		<include refid="select-company-fields" />
+		<include refid="select-company-join" />
+		WHERE company.del_yn='N' AND company.unique_id=#{value}
+	</select>
+	
+	<select id="selectcond-company" parameterType="map" resultMap="result">
+		/*selectcond-company*/SELECT
+		<include refid="select-company-fields" />
+		<include refid="select-company-join" />
+		<include refid="select-company-where" />
+	</select>
+	
+	<select id="selectcond-company-count" parameterType="map" resultType="Integer">
+		/*selectcond-company-count*/SELECT
+		COUNT(*) AS result
+		<include refid="select-company-join" />
+		<include refid="select-company-where" />
+	</select>
+	
+	<select id="selectcond-company-page" parameterType="map" resultMap="result">
+		/*selectcond-company-page*/SELECT
+		<include refid="select-company-fields" />
+		<include refid="select-company-join" />
+		<include refid="select-company-where" />
+		ORDER BY company.seq_no ASC
+		limit ${start_point} , ${end_point}
+	</select>
+     
+	<sql id= "update-bymap-company-set" >
+		SET
+			del_yn='N'
+			<if test= "changer_uid"> 	,changer_uid 	= #{changer_uid} </if>
+			<if test= "changer"> 		,changer 		= #{changer} </if>
+			<if test= "change_date"> 	,change_date 	= #{change_date} </if>
+			
+			<if test= "cp_code"> 		,cp_code 		= #{cp_code} </if>
+			<if test= "cp_name"> 		,cp_name 		= #{cp_name} </if>
+			<if test= "biz_no"> 		,biz_no 		= #{biz_no} </if>
+			<if test= "biz_cond"> 		,biz_cond 		= #{biz_cond} </if>
+			<if test= "biz_category"> 	,biz_category 	= #{biz_category} </if>
+			<if test= "cp_president"> 	,cp_president 	= #{cp_president} </if>
+			<if test= "zip_code"> 		,zip_code 		= #{zip_code} </if>
+			<if test= "address_kr"> 	,address_kr 	= #{address_kr} </if>
+			<if test= "address_en"> 	,address_en 	= #{address_en} </if>
+			<if test= "tel_no"> 		,tel_no 		= #{tel_no} </if>
+			<if test= "fax_no"> 		,fax_no 		= #{fax_no} </if>
+			<if test= "email_address"> 	,email_address 	= #{email_address} </if>
+			<if test= "code_type"> 		,code_type 		= #{code_type} </if>
+	</sql>
+
+	<update id= "update-bymap-company" parameterType = "map">
+      /*update-bymap-company*/
+      UPDATE TB_COMPANY
+      	<include refid= "update-bymap-company-set" />
+      WHERE 
+      	unique_id = #{unique_id} 
+      	AND del_yn='N'
+	</update >
+   
+	<update id="delete-bymap-company" parameterType="map">
+		UPDATE TB_COMPANY 
+		SET 
+			changer_uid = #{changer_uid},
+			changer = #{changer},
+			change_date=#{change_date},
+			del_yn = 'Y' 
+		where unique_id=#{unique_id}
+	</update>
+   
+</mapper>

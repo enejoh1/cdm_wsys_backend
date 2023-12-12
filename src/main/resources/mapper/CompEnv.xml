@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="compenv">
+	<resultMap id="result" type="compenv">
+		<result property="unique_id" 		column="unique_id" 		javaType="java.lang.Long" />
+		<result property="uid_company" 		column="uid_company" 	javaType="java.lang.Long" />
+		<result property="env_code" 		column="env_code" />
+		<result property="env_name" 		column="env_name" />
+		<result property="remark" 		column="remark" />
+		<result property="del_yn" 			column="del_yn" />
+		<result property="creator" 			column="creator" />
+		<result property="creator_uid" 		column="creator_uid" 	javaType="java.lang.Long" />
+		<result property="create_date" 		column="create_date" 	javaType="java.util.Date" />
+		<result property="changer" 			column="changer" />
+		<result property="changer_uid" 		column="changer_uid" 	javaType="java.lang.Long" />
+		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
+	</resultMap>
+	
+	<insert id="insert-compenv" parameterType="compenv">
+		INSERT INTO TB_COMPENV
+			(
+			 unique_id, uid_company, env_code, env_name, remark,
+			 creator_uid, creator, create_date
+			)
+		VALUES
+		 	(
+		 	 #{unique_id}, #{uid_company}, #{env_code}, #{env_name}, #{remark},
+		 	 #{creator_uid}, #{creator}, #{create_date}
+		 	)
+	</insert>
+	
+	<sql id="select-compenv-fields">
+		compenv.unique_id, compenv.uid_company, compenv.env_code, compenv.env_name, compenv.remark,
+		compenv.del_yn, compenv.creator, compenv.creator_uid, compenv.create_date, compenv.changer, compenv.changer_uid, compenv.change_date
+	</sql>
+	
+	<sql id="select-compenv-join">
+		FROM TB_COMPENV compenv
+	</sql>
+	
+   <sql id="select-compenv-where">
+		WHERE compenv.del_yn='N'
+		<if test="uid_company">		AND compenv.uid_company 	= 		#{uid_company}</if>
+		<if test="env_code">		AND compenv.env_code 		= 		#{env_code}</if>
+		<if test="env_name">		AND compenv.env_name 		= 		#{env_name}</if>
+		<if test="remark">			AND compenv.remark 			= 		#{remark}</if>
+		<if test="creator_uid">		AND	compenv.creator_uid 	= 		#{creator_uid}</if>
+		<if test="creator">			AND	compenv.creator 		like 	#{creator}</if>
+		<if test="create_date">		AND DATE_FORMAT(compenv.create_date, '%Y-%m-%d') BETWEEN #{create_date_s} AND #{create_date_e}</if>
+		<if test="changer_uid">		AND	compenv.changer_uid 	= 		#{changer_uid}</if>
+		<if test="changer">			AND	compenv.changer 		like 	#{changer}</if>
+		<if test="change_date">		AND DATE_FORMAT(compenv.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
+		
+		<if test="unique_id">		AND	compenv.unique_id 		= 		#{unique_id}</if>
+		
+	</sql>	
+	
+	<select id="selectuid-compenv" parameterType="java.lang.Long" resultMap="result">
+		/*selectcond-compenv*/SELECT
+		<include refid="select-compenv-fields" />
+		<include refid="select-compenv-join" />
+		WHERE compenv.del_yn='N' AND compenv.unique_id=#{value}
+	</select>
+	
+	<select id="selectcond-compenv" parameterType="map" resultMap="result">
+		/*selectcond-compenv*/SELECT
+		<include refid="select-compenv-fields" />
+		<include refid="select-compenv-join" />
+		<include refid="select-compenv-where" />
+	</select>
+	
+	<select id="selectcond-compenv-count" parameterType="map" resultType="Integer">
+		/*selectcond-compenv-count*/SELECT
+		COUNT(*) AS result
+		<include refid="select-compenv-join" />
+		<include refid="select-compenv-where" />
+	</select>
+	
+	<select id="selectcond-compenv-page" parameterType="map" resultMap="result">
+		/*selectcond-compenv-page*/SELECT
+		<include refid="select-compenv-fields" />
+		<include refid="select-compenv-join" />
+		<include refid="select-compenv-where" />
+		ORDER BY compenv.seq_no ASC
+		limit ${start_point} , ${end_point}
+	</select>
+     
+	<sql id= "update-bymap-compenv-set" >
+		SET
+			del_yn='N'
+			<if test= "changer_uid"> 	,changer_uid 	= #{changer_uid} </if>
+			<if test= "changer"> 		,changer 		= #{changer} </if>
+			<if test= "change_date"> 	,change_date 	= #{change_date} </if>
+			<if test= "uid_company"> 	,uid_company 	= #{uid_company} </if>
+			<if test= "env_code"> 		,env_code 		= #{env_code} </if>
+			<if test= "env_name"> 		,env_name 		= #{env_name} </if>
+			<if test= "remark"> 		,remark 		= #{remark} </if>
+	</sql>
+
+	<update id= "update-bymap-compenv" parameterType = "map">
+      /*update-bymap-compenv*/
+      UPDATE TB_COMPENV
+      	<include refid= "update-bymap-compenv-set" />
+      WHERE 
+      	unique_id = #{unique_id} 
+      	AND del_yn='N'
+	</update >
+   
+	<update id="delete-bymap-compenv" parameterType="map">
+		UPDATE TB_COMPENV 
+		SET 
+			changer_uid = #{changer_uid},
+			changer = #{changer},
+			change_date=#{change_date},
+			del_yn = 'Y' 
+		where unique_id=#{unique_id}
+	</update>
+   
+</mapper>

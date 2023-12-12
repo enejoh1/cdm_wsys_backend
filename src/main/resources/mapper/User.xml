@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="user">
+	<resultMap id="result" type="user">
+		<result property="unique_id" 		column="unique_id" 			javaType="java.lang.Long" />
+		<result property="uid_company" 		column="uid_company" 		javaType="java.lang.Long" />
+		<result property="user_id" 			column="user_id" />
+		<result property="user_name" 		column="user_name" />
+		<result property="u_pwd" 			column="u_pwd" />
+		<result property="u_type" 			column="u_type" />
+		<result property="u_role" 			column="u_role" />
+		<result property="u_position" 		column="u_position" />
+		<result property="emp_no" 			column="emp_no" />
+		<result property="email_address" 	column="email_address" />
+		<result property="tel_no" 			column="tel_no" />
+		<result property="hp_no" 			column="hp_no" />
+		<result property="is_login" 		column="is_login" />
+		<result property="login_ip" 		column="login_ip" />
+		<result property="login_date" 		column="login_date" 		javaType="java.util.Date" />
+		<result property="logout_date" 		column="logout_date" 		javaType="java.util.Date" />
+		<result property="login_fail_cnt" 	column="login_fail_cnt" 	javaType="java.lang.Integer" />
+		<result property="pw_change_date" 	column="pw_change_date" 	javaType="java.util.Date" />
+		<result property="last_menu" 		column="last_menu" />
+		
+		<result property="del_yn" 			column="del_yn" />
+		<result property="creator" 			column="creator" />
+		<result property="creator_uid" 		column="creator_uid" 	javaType="java.lang.Long" />
+		<result property="create_date" 		column="create_date" 	javaType="java.util.Date" />
+		<result property="changer" 			column="changer" />
+		<result property="changer_uid" 		column="changer_uid" 	javaType="java.lang.Long" />
+		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
+		
+		<result property="cp_code" 			column="cp_code" />
+		<result property="cp_name" 			column="cp_name" />
+		<result property="code_type" 		column="code_type" />
+	</resultMap>
+	
+	<insert id="insert-user" parameterType="user">
+		INSERT INTO TB_USER
+			(
+			 unique_id, uid_company, user_id, user_name, u_pwd, u_type, u_role, u_position, emp_no, email_address,
+			 tel_no, hp_no, is_login, login_ip, login_date, logout_date, login_fail_cnt, pw_change_date, last_menu,
+			 creator_uid, creator, create_date
+			)
+		VALUES
+		 	(
+		 	 #{unique_id}, #{uid_company}, #{user_id}, #{user_name}, #{u_pwd}, #{u_type}, #{u_role}, #{u_position}, #{emp_no}, #{email_address},
+		 	 #{tel_no}, #{hp_no}, #{is_login}, #{login_ip}, #{login_date}, #{logout_date}, #{login_fail_cnt}, #{pw_change_date}, #{last_menu},
+		 	 #{creator_uid}, #{creator}, #{create_date}
+		 	)
+	</insert>
+	
+	<sql id="select-user-fields">
+		user.unique_id, user.uid_company, user.user_id, user.user_name, user.u_type, user.u_role, user.u_position, user.emp_no,
+		user.email_address, user.tel_no, user.hp_no, user.is_login, user.login_ip, user.login_date, user.logout_date, user.login_fail_cnt, user.pw_change_date, user.last_menu,
+		user.del_yn, user.creator, user.creator_uid, user.create_date, user.changer, user.changer_uid, user.change_date,
+		
+		company.cp_code, company.cp_name, company.code_type
+	</sql>
+	
+	<sql id="select-user-join">
+		FROM TB_USER user
+		INNER JOIN TB_COMPANY company on company.unique_id = user.uid_company
+	</sql>
+	
+   <sql id="select-user-where">
+		WHERE user.del_yn='N'
+		<if test="uid_company">		AND user.uid_company 		= 		#{uid_company}</if>
+		<if test="user_id">			AND user.user_id 			like 		#{user_id}</if>	<!-- ##DDBG 수정 -->
+		<if test="user_name">		AND user.user_name 			like 		#{user_name}</if><!-- ##DDBG 수정 -->
+		<if test="u_pwd">			AND user.u_pwd 				= 		#{u_pwd}</if>
+		<if test="u_type">			AND user.u_type 			like 		#{u_type}</if><!-- ##DDBG 수정 -->
+		<if test="u_role">			AND user.u_role 			= 		#{u_role}</if>
+		<if test="u_position">		AND user.u_position 		= 		#{u_position}</if>
+		<if test="user">			AND user.user 				= 		#{user}</if>
+		<if test="email_address">	AND user.email_address 		like 		#{email_address}</if><!-- ##DDBG 수정 -->
+		<if test="tel_no">			AND user.tel_no 			= 		#{tel_no}</if>
+		<if test="hp_no">			AND user.hp_no 				= 		#{hp_no}</if>
+		<if test="is_login">		AND user.is_login 			= 		#{is_login}</if>
+		<if test="login_ip">		AND user.login_ip 			= 		#{login_ip}</if>
+		<if test="login_date">		AND user.login_date 		= 		#{login_date}</if>
+		<if test="logout_date">		AND user.logout_date 		= 		#{logout_date}</if>
+		<if test="login_fail_cnt">	AND user.login_fail_cnt 	= 		#{login_fail_cnt}</if>
+		<if test="pw_change_date">	AND user.pw_change_date 	= 		#{pw_change_date}</if>
+		<if test="last_menu">		AND user.last_menu 			= 		#{last_menu}</if>
+		
+		<if test="creator_uid">		AND	user.creator_uid 	= 		#{creator_uid}</if>
+		<if test="creator">			AND	user.creator 		like 	#{creator}</if>
+		<if test="create_date">		AND DATE_FORMAT(user.create_date, '%Y-%m-%d') BETWEEN #{create_date_s} AND #{create_date_e}</if>
+		<if test="changer_uid">		AND	user.changer_uid 	= 		#{changer_uid}</if>
+		<if test="changer">			AND	user.changer 		like 	#{changer}</if>
+		<if test="change_date">		AND DATE_FORMAT(user.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
+		
+		<if test="unique_id">		AND	user.unique_id 		= 		#{unique_id}</if>
+		
+	</sql>	
+	
+	<select id="selectuid-user" parameterType="java.lang.Long" resultMap="result">
+		/*selectuid-user*/SELECT
+		<include refid="select-user-fields" />
+		<include refid="select-user-join" />
+		WHERE user.del_yn='N' AND user.unique_id=#{value}
+	</select>
+	
+	<select id="selectcond-user" parameterType="map" resultMap="result">
+		/*selectcond-user*/SELECT
+		<include refid="select-user-fields" />
+		<include refid="select-user-join" />
+		<include refid="select-user-where" />
+	</select>
+	
+	<select id="selectcond-user-count" parameterType="map" resultType="Integer">
+		/*selectcond-user-count*/SELECT
+		COUNT(*) AS result
+		<include refid="select-user-join" />
+		<include refid="select-user-where" />
+	</select>
+	
+	<select id="selectcond-user-page" parameterType="map" resultMap="result">
+		/*selectcond-user-page*/SELECT
+		<include refid="select-user-fields" />
+		<include refid="select-user-join" />
+		<include refid="select-user-where" />
+		${order_by}
+		limit ${start_point} , ${end_point}
+	</select>
+     
+	<sql id= "update-bymap-user-set" >
+		SET
+			del_yn='N'
+			<if test= "changer_uid"> 	,changer_uid 	= #{changer_uid} </if>
+			<if test= "changer"> 		,changer 		= #{changer} </if>
+			<if test= "change_date"> 	,change_date 	= #{change_date} </if>
+			
+			<if test= "user_id"> 		,user_id 		= #{user_id} </if>
+			<if test= "user_name"> 		,user_name 		= #{user_name} </if>
+			<if test= "u_pwd"> 			,u_pwd 			= #{u_pwd} </if>
+			<if test= "u_type"> 		,u_type 		= #{u_type} </if>
+			<if test= "u_role"> 		,u_role 		= #{u_role} </if>
+			<if test= "u_position"> 	,u_position 	= #{u_position} </if>
+			<if test= "emp_no"> 		,emp_no 		= #{emp_no} </if>
+			<if test= "email_address"> 	,email_address 	= #{email_address} </if>
+			<if test= "tel_no"> 		,tel_no 		= #{tel_no} </if>
+			<if test= "hp_no"> 			,hp_no 			= #{hp_no} </if>
+			<if test= "is_login"> 		,is_login 		= #{is_login} </if>
+			<if test= "login_ip"> 		,login_ip 		= #{login_ip} </if>
+			<if test= "login_date"> 	,login_date 	= #{login_date} </if>
+			<if test= "logout_date"> 	,logout_date 	= #{logout_date} </if>
+			<if test= "login_fail_cnt"> ,login_fail_cnt = #{login_fail_cnt} </if>
+			<if test= "pw_change_date"> ,pw_change_date = #{pw_change_date} </if>
+			<if test= "last_menu"> 		,last_menu 		= #{last_menu} </if>
+	</sql>
+
+	<update id= "update-bymap-user" parameterType = "map">
+      /*update-bymap-user*/
+      UPDATE TB_USER
+      	<include refid= "update-bymap-user-set" />
+      WHERE 
+      	unique_id = #{unique_id} 
+      	AND del_yn='N'
+	</update >
+   
+	<update id="delete-bymap-user" parameterType="map">
+		UPDATE TB_USER 
+		SET 
+			changer_uid = #{changer_uid},
+			changer = #{changer},
+			change_date=#{change_date},
+			del_yn = 'Y' 
+		where unique_id=#{unique_id}
+	</update>
+	
+	<select id="getUserPwd" parameterType="map" resultType="String">
+		/*"getUserPwd"*/SELECT
+		u_pwd
+		FROM TB_USER
+		WHERE del_yn = 'N' AND unique_id = #{unique_id}
+		AND uid_company = #{uid_company}
+	</select>
+   
+</mapper>

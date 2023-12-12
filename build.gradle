@@ -1,0 +1,135 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.5'
+	//id 'org.springframework.boot' version '2.5.5'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'war'
+	id "com.github.node-gradle.node" version "2.2.3" 
+}
+
+node { 
+    version = '14.18.1' 
+    npmVersion = '8.1.0' 
+    distBaseUrl = 'https://nodejs.org/dist' 
+    workDir = file("./vue_wsys")
+    npmWorkDir = file("./vue_wsys")
+    nodeModulesDir = file("./vue_wsys")
+} 
+
+// task1. 기존 vuejs 프로젝트 빌드 결과물 제거
+/*
+1) Vuejs 프로젝트의 새 빌드 결과물을 생성하기 위해서 기존에 생성되어 있던 빌드 결과물을 제거해줍니다.
+2) Vuejs 프로젝트를 빌드하기 전에 packjage.json파일에 명시된 의존 라이브러리들을 최신화 하기위해서 
+기존 node_modules에 저장되어 있는 library들을 제거해줍니다. 
+*/
+task deleteVueArtifact(type: Delete) {
+    delete "src/main/resources/static", "src/main/resources/index.html" 
+	/*"fontend/node_modules" , "src/main/resources/basic-tool/node_modules"*/
+}
+
+// task2. Vuejs 프로젝트의 의존 라이브러리 최신화 (npm install)
+/* 
+기본적으로 Gradle Node Plugin에 npmInstall이라는 task가 내장되어 있기 때문에 별도의 task를 생성하지 않고
+내장된 npmInstall task를 불러 사용하면 됩니다.
+가끔 예전 버전에서 내장된 npmInstall task가 동작 오류를 발생시킬 때가 있어 별도 정의해서 사용하기도 합니다.
+별도 정의가 필요하다면 아래처럼 생성해서 사용하시면 됩니다.^^ 
+*/
+task installNpm(type: NpmTask) {
+    args = ['install']
+}
+
+// task3. vuejs 프로젝트 빌드 
+// dependsOn은 해당 task를 실행하기 전에 선 수행해야하는 task 목록을 지정하여 선 수행시켜주는 역할을 합니다. 
+// dependsOn에 명시된 task들은 명시된 순서대로 수행됩니다. 
+task npmBuild(type: NpmTask, dependsOn: ['deleteVueArtifact'/*, 'npmInstall'*/]) { 
+    args = ["run", "build"] 
+}
+
+// gradle build 시 수행되는 processResources task가 실행되기 전에 npmBuild task를 실행하라. 
+//processResources.dependsOn 'npmBuild'
+
+group = 'com.wsys'
+//version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+bootWar.enabled = false
+war.enabled = true
+war{
+	baseName = 'ROOT'
+	// destinationDir new File("C:/Users/user/OneDrive/바탕 화면")
+//	destinationDir new File("D:/log")
+	
+}
+tasks.withType(Tar).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+
+tasks.withType(Zip).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+repositories {
+	mavenCentral()
+	maven { url "https://repo.spring.io/milestone" }
+	maven { url 'https://repo.spring.io/snapshot' }
+}
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.4'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+	
+	implementation 'javax.servlet:jstl'
+	implementation 'net.sf.json-lib:json-lib:2.4:jdk15'
+	implementation 'org.springframework:spring-context-support'
+	implementation 'com.sun.mail:javax.mail:1.6.2'
+	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+	implementation 'javax.validation:validation-api:2.0.0.Final'	
+	runtimeOnly 'mysql:mysql-connector-java'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok:1.18.20'
+	compileOnly 'org.projectlombok:lombok:1.18.20'
+	implementation 'com.itextpdf:itextpdf:5.0.6'
+	implementation 'net.sourceforge.barbecue:barbecue:1.5-beta1'
+	
+	//developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	//디플로이 할때 주석 처리 할 것
+    providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    
+	implementation 'org.springframework.mobile:spring-mobile-starter:2.0.0.M2'
+	
+    //implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    
+ 	//implementation 'org.apache.poi:poi:3.10-FINAL'
+	//implementation 'org.apache.poi:poi-ooxml:3.10-FINAL'
+    implementation 'org.apache.poi:poi:4.1.2'
+	implementation 'org.apache.poi:poi-ooxml:4.1.2'
+	
+	implementation 'com.google.zxing:core:3.4.1'
+	implementation 'com.google.zxing:javase:3.4.1'
+    
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.0'
+	implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.0'
+	implementation group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.17.0'
+	implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.17.0'
+	implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32'
+	implementation group: 'org.slf4j', name: 'jul-to-slf4j', version: '1.7.32'
+    
+}
+
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+
+test {
+	useJUnitPlatform()
+}

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="sysconf">
+	<resultMap id="result" type="sysconf">
+		<result property="unique_id" 		column="unique_id" 		javaType="java.lang.Long" />
+		<result property="sys_code" 		column="sys_code" />
+		<result property="sys_value" 		column="sys_value" />
+		<result property="del_yn" 			column="del_yn" />
+		<result property="creator" 			column="creator" />
+		<result property="creator_uid" 		column="creator_uid" 	javaType="java.lang.Long" />
+		<result property="create_date" 		column="create_date" 	javaType="java.util.Date" />
+		<result property="changer" 			column="changer" />
+		<result property="changer_uid" 		column="changer_uid" 	javaType="java.lang.Long" />
+		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
+	</resultMap>
+	
+	<insert id="insert-sysconf" parameterType="sysconf">
+		INSERT INTO TB_SYSCONF
+			(
+			 unique_id, sys_code, sys_value,
+			 creator_uid, creator, create_date
+			)
+		VALUES
+		 	(
+		 	 #{unique_id}, #{sys_code}, #{sys_value},
+		 	 #{creator_uid}, #{creator}, #{create_date}
+		 	)
+	</insert>
+	
+	<sql id="select-sysconf-fields">
+		sysconf.unique_id, sysconf.sys_code, sysconf.sys_value,
+		sysconf.del_yn, sysconf.creator, sysconf.creator_uid, sysconf.create_date, sysconf.changer, sysconf.changer_uid, sysconf.change_date
+	</sql>
+	
+	<sql id="select-sysconf-join">
+		FROM TB_SYSCONF sysconf
+	</sql>
+	
+   <sql id="select-sysconf-where">
+		WHERE sysconf.del_yn='N'
+		<if test="sys_code">		AND sysconf.sys_code 		= 		#{sys_code}</if>
+		<if test="sys_value">		AND sysconf.sys_value 		= 		#{sys_value}</if>
+		<if test="creator_uid">		AND	sysconf.creator_uid 	= 		#{creator_uid}</if>
+		<if test="creator">			AND	sysconf.creator 		like 	#{creator}</if>
+		<if test="create_date">		AND DATE_FORMAT(sysconf.create_date, '%Y-%m-%d') BETWEEN #{create_date_s} AND #{create_date_e}</if>
+		<if test="changer_uid">		AND	sysconf.changer_uid 	= 		#{changer_uid}</if>
+		<if test="changer">			AND	sysconf.changer 		like 	#{changer}</if>
+		<if test="change_date">		AND DATE_FORMAT(sysconf.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
+		
+		<if test="unique_id">		AND	sysconf.unique_id 		= 		#{unique_id}</if>
+		
+	</sql>	
+	
+	<select id="selectuid-sysconf" parameterType="java.lang.Long" resultMap="result">
+		/*selectcond-sysconf*/SELECT
+		<include refid="select-sysconf-fields" />
+		<include refid="select-sysconf-join" />
+		WHERE sysconf.del_yn='N' AND sysconf.unique_id=#{value}
+	</select>
+	
+	<select id="selectcond-sysconf" parameterType="map" resultMap="result">
+		/*selectcond-sysconf*/SELECT
+		<include refid="select-sysconf-fields" />
+		<include refid="select-sysconf-join" />
+		<include refid="select-sysconf-where" />
+	</select>
+	
+	<select id="selectcond-sysconf-count" parameterType="map" resultType="Integer">
+		/*selectcond-sysconf-count*/SELECT
+		COUNT(*) AS result
+		<include refid="select-sysconf-join" />
+		<include refid="select-sysconf-where" />
+	</select>
+	
+	<select id="selectcond-sysconf-page" parameterType="map" resultMap="result">
+		/*selectcond-sysconf-page*/SELECT
+		<include refid="select-sysconf-fields" />
+		<include refid="select-sysconf-join" />
+		<include refid="select-sysconf-where" />
+		ORDER BY sysconf.seq_no ASC
+		limit ${start_point} , ${end_point}
+	</select>
+     
+	<sql id= "update-bymap-sysconf-set" >
+		SET
+			del_yn='N'
+			<if test= "changer_uid"> 	,changer_uid 	= #{changer_uid} </if>
+			<if test= "changer"> 		,changer 		= #{changer} </if>
+			<if test= "change_date"> 	,change_date 	= #{change_date} </if>
+			<if test= "sys_code"> 		,sys_code 		= #{sys_code} </if>
+			<if test= "sys_value"> 		,sys_value 		= #{sys_value} </if>
+	</sql>
+
+	<update id= "update-bymap-sysconf" parameterType = "map">
+      /*update-bymap-sysconf*/
+      UPDATE TB_SYSCONF
+      	<include refid= "update-bymap-sysconf-set" />
+      WHERE 
+      	unique_id = #{unique_id} 
+      	AND del_yn='N'
+	</update >
+   
+	<update id="delete-bymap-sysconf" parameterType="map">
+		UPDATE TB_SYSCONF 
+		SET 
+			changer_uid = #{changer_uid},
+			changer = #{changer},
+			change_date=#{change_date},
+			del_yn = 'Y' 
+		where unique_id=#{unique_id}
+	</update>
+   
+</mapper>

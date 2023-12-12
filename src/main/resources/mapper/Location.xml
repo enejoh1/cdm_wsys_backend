@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="location">
+	<resultMap id="result" type="location">
+		<result property="unique_id" 		column="unique_id" 			javaType="java.lang.Long" />
+		<result property="uid_company" 		column="uid_company" 		javaType="java.lang.Long" />
+		<result property="uid_bin" 			column="uid_bin" 		javaType="java.lang.Long" />
+		<result property="uid_item" 		column="uid_item" 		javaType="java.lang.Long" />
+		<result property="quan" 			column="quan" 			javaType="java.lang.Double" />
+		<result property="last_in_date" 	column="last_in_date" 	javaType="java.util.Date" />
+		<result property="last_out_date" 	column="last_out_date" 	javaType="java.util.Date" />
+		<result property="remark" 			column="remark" />
+		
+		<result property="del_yn" 			column="del_yn" />
+		<result property="creator" 			column="creator" />
+		<result property="creator_uid" 		column="creator_uid" 	javaType="java.lang.Long" />
+		<result property="create_date" 		column="create_date" 	javaType="java.util.Date" />
+		<result property="changer" 			column="changer" />
+		<result property="changer_uid" 		column="changer_uid" 	javaType="java.lang.Long" />
+		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
+		
+		<result property="item_code" 		column="item_code" />
+		<result property="item_name" 		column="item_name" />
+		<result property="specification" 	column="specification" />
+		<result property="detail_info" 		column="detail_info" />
+		<result property="unit_code" 		column="unit_code" />
+		<result property="bin_code" 		column="bin_code" />
+		<result property="bin_name" 		column="bin_name" />
+		<result property="bin_row" 			column="bin_row" 	javaType="java.lang.Integer" />
+		<result property="bin_col" 			column="bin_col" 	javaType="java.lang.Integer" />
+		<result property="rack_code" 		column="rack_code" />
+		<result property="rack_name" 		column="rack_name" />
+		<result property="wh_code" 			column="wh_code" />
+		<result property="wh_name" 			column="wh_name" />
+		
+		<result property="sum_location_quan" 	column="sum_location_quan" 	javaType="java.lang.Double" />
+		
+		<result property="lotno" 			column="lotno" /> <!-- ##DBG lotno 추가 -->
+	</resultMap>
+	
+	<resultMap id="result-sum-rack-location" type="location">
+		<result property="uid_item" 		column="uid_item" 		javaType="java.lang.Long" />
+		<result property="sum_quan" 		column="sum_quan" 		javaType="java.lang.Double" />
+	</resultMap>
+	
+	<insert id="insert-location" parameterType="location">
+		<!-- ##DBG lotno 수정.추가 -->
+		/*insert-location*/
+		INSERT INTO TB_LOCATION
+			(
+			 unique_id, uid_company, uid_bin, uid_item, quan, last_in_date, last_out_date, remark,
+			 creator_uid, creator, create_date, lotno
+			)
+		VALUES
+		 	(
+		 	 #{unique_id}, #{uid_company}, #{uid_bin}, #{uid_item}, #{quan}, #{last_in_date}, #{last_out_date}, #{remark},
+		 	 #{creator_uid}, #{creator}, #{create_date}, #{lotno}
+		 	)
+		 ON DUPLICATE KEY UPDATE
+		 	quan = quan + #{quan}
+		 	<if test="last_in_date">, last_in_date = #{last_in_date}</if>
+		 	<if test="last_out_date">, last_out_date = #{last_out_date}</if>
+	</insert>
+	
+	<!-- ##DBG lotno 수정.추가 -->
+	<insert id="insert-location-upload" parameterType="location">
+		/*insert-location-upload*/
+		INSERT INTO TB_LOCATION
+			(
+			 unique_id, uid_company, uid_bin, uid_item, quan, last_in_date, last_out_date, remark,
+			 creator_uid, creator, create_date, lotno
+			)
+		VALUES
+		 	(
+		 	 #{unique_id}, #{uid_company}, #{uid_bin}, #{uid_item}, #{quan}, #{last_in_date}, #{last_out_date}, #{remark},
+		 	 #{creator_uid}, #{creator}, #{create_date},#{lotno}
+		 	)
+		 ON DUPLICATE KEY UPDATE
+		 	quan = #{quan}, last_in_date = now()
+	</insert>
+	
+	<!-- ##DBG lotno 수정.추가 -->
+	<insert id="insert-location-excel-upload" parameterType="location">
+		/*insert-location-excel-upload*/
+		INSERT INTO TB_LOCATION
+			(
+			 unique_id, uid_company, uid_bin, uid_item, quan, last_in_date, last_out_date, remark,
+			 creator_uid, creator, create_date, lotno
+			)
+		VALUES
+		 	(
+		 	 #{unique_id}, #{uid_company}, #{uid_bin}, #{uid_item}, #{quan}, #{last_in_date}, #{last_out_date}, #{remark},
+		 	 #{creator_uid}, #{creator}, #{create_date}, #{lotno}
+		 	)
+		 ON DUPLICATE KEY UPDATE
+		 	quan = quan + #{quan}, last_in_date = now()
+	</insert>
+	
+	<!-- //##DBG lotno 수정.추가,  ##DBG 추가 아래 셀레트 sql에 location.lotno, 추가 -->
+	<sql id="select-location-fields">
+		location.lotno,
+		location.unique_id, location.uid_company, location.uid_bin, location.uid_item, location.quan, location.last_in_date, location.last_out_date, location.remark,
+		location.del_yn, location.creator, location.creator_uid, location.create_date, location.changer, location.changer_uid, location.change_date,
+		
+		item.item_code, item.item_name, item.specification, item.detail_info, item.unit_code,
+		bin.bin_code, bin.bin_name, bin.bin_row, bin.bin_col,
+		rack.rack_code, rack.rack_name,
+		whouse.wh_code, whouse.wh_name
+	</sql>
+	
+	<sql id="select-location-join">
+		FROM TB_LOCATION location
+		INNER JOIN TB_ITEM item on item.unique_id = location.uid_item
+		INNER JOIN TB_BIN bin on bin.unique_id = location.uid_bin
+		INNER JOIN TB_RACK rack on rack.unique_id = bin.uid_rack
+		INNER JOIN TB_WHOUSE whouse on whouse.unique_id = rack.uid_whouse	
+	</sql>
+	
+   <sql id="select-location-where">
+		WHERE location.del_yn='N'
+		<if test="uid_company">		AND location.uid_company 		= 		#{uid_company}</if>
+		<if test="uid_bin">			AND location.uid_bin 			= 		#{uid_bin}</if>
+		<if test="uid_item">		AND location.uid_item 			= 		#{uid_item}</if>
+		<if test="quan">			AND location.quan 				= 		#{quan}</if>
+		<if test="last_in_date">	AND location.last_in_date 		= 		#{last_in_date}</if>
+		<if test="last_out_date">	AND location.last_out_date 		= 		#{last_out_date}</if>
+		<if test="remark">			AND location.remark 			= 		#{remark}</if>
+		<!-- <if test="over_quan_zero">	AND location.quan 				> 		0</if> -->
+		<if test="over_quan_zero">	AND (location.quan IS NOT NULL AND location.quan != 0)</if>
+		
+		<if test="creator_uid">		AND	location.creator_uid 	= 		#{creator_uid}</if>
+		<if test="creator">			AND	location.creator 		like 	#{creator}</if>
+		<if test="create_date">		AND DATE_FORMAT(location.create_date, '%Y-%m-%d') BETWEEN #{create_date_s} AND #{create_date_e}</if>
+		<if test="changer_uid">		AND	location.changer_uid 	= 		#{changer_uid}</if>
+		<if test="changer">			AND	location.changer 		like 	#{changer}</if>
+		<if test="change_date">		AND DATE_FORMAT(location.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
+		
+		<if test="item_code">		AND	upper(item.item_code) 	like 	upper(#{item_code})</if>
+		<if test="item_name">		AND	upper(item.item_name) 	like 	upper(#{item_name})</if>
+		<if test="bin_code">		AND	upper(bin.bin_code) 	like 	upper(#{bin_code})</if>
+		<if test="lotno">		    AND	upper(location.lotno) 	    like 	upper(#{lotno})</if>
+		
+		<if test="unique_id">		AND	location.unique_id 		= 		#{unique_id}</if>
+		
+	</sql>	
+	
+	<select id="selectuid-location" parameterType="java.lang.Long" resultMap="result">
+		/*selectuid-location*/SELECT
+		<include refid="select-location-fields" />
+		<include refid="select-location-join" />
+		WHERE location.del_yn='N' AND location.unique_id=#{value}
+	</select>
+	
+	<select id="selectcond-location" parameterType="map" resultMap="result">
+		/*selectcond-location*/SELECT
+		<include refid="select-location-fields" />
+		<include refid="select-location-join" />
+		<include refid="select-location-where" />
+	</select>
+	
+	<select id="selectcond-location-count" parameterType="map" resultType="Integer">
+		/*selectcond-location-count*/SELECT
+		COUNT(*) AS result
+		<include refid="select-location-join" />
+		<include refid="select-location-where" />
+	</select>
+	
+	<select id="selectcond-location-page" parameterType="map" resultMap="result">
+		/*selectcond-location-page*/SELECT
+		<include refid="select-location-fields" />
+		<include refid="select-location-join" />
+		<include refid="select-location-where" />
+		${order_by}
+		limit ${start_point} , ${end_point}
+	</select>
+     
+	<sql id= "update-bymap-location-set" >
+		SET
+			del_yn='N'
+			<if test= "changer_uid"> 	,changer_uid 	= #{changer_uid} </if>
+			<if test= "changer"> 		,changer 		= #{changer} </if>
+			<if test= "change_date"> 	,change_date 	= #{change_date} </if>
+			
+			<if test= "uid_bin"> 		,uid_bin 		= #{uid_bin} </if>
+			<if test= "uid_item"> 		,uid_item 		= #{uid_item} </if>
+			<if test= "quan"> 			,quan 			= #{quan} </if>
+			<if test= "last_in_date"> 	,last_in_date 	= #{last_in_date} </if>
+			<if test= "last_out_date"> 	,last_out_date 	= #{last_out_date} </if>
+			<if test= "remark"> 		,remark 		= #{remark} </if>
+			<if test= "lotno"> 		    ,lotno 		    = #{lotno} </if> <!-- ##DBG lotno 추가 -->
+			
+			<if test= "calculate_quan"> ,quan 			= quan + #{calculate_quan} </if>
+	</sql>
+
+	<update id= "update-bymap-location" parameterType = "map">
+      /*update-bymap-location*/
+      UPDATE TB_LOCATION
+      	<include refid= "update-bymap-location-set" />
+      WHERE 
+      	unique_id = #{unique_id}
+      	<if test="uid_company">AND uid_company = #{uid_company}</if>
+      	AND del_yn='N'
+	</update >
+   
+	<update id="delete-bymap-location" parameterType="map">
+		UPDATE TB_LOCATION 
+		SET 
+			changer_uid = #{changer_uid},
+			changer = #{changer},
+			change_date=#{change_date},
+			del_yn = 'Y' 
+		where unique_id=#{unique_id}
+	</update>
+	
+	<update id="PC_EXEC_MOVE" parameterType="map"
+		statementType="CALLABLE">
+		{call PC_EXEC_MOVE(#{uid_company}, #{user_uid}, #{user_id}, #{user_name}, #{bin_uid}, #{location_uid}, #{location_quan}, #{lotno} )} <!-- ##DBG lotno 수정.추가 -->
+	</update>
+	
+	<select id="getSumRackLocation" parameterType="map" resultMap="result-sum-rack-location">
+		/*getSumRackLocation*/SELECT
+		location.uid_item, SUM(location.quan) as sum_quan
+		FROM TB_LOCATION location
+		INNER JOIN TB_BIN bin on bin.unique_id = location.uid_bin
+		INNER JOIN TB_RACK rack on rack.unique_Id = bin.uid_rack
+		INNER JOIN TB_WHOUSE whouse on whouse.unique_id = rack.uid_whouse
+		WHERE location.del_yn = 'N' AND bin.del_yn = 'N' AND rack.del_yn = 'N' 
+		AND whouse.del_yn = 'N' 
+		AND location.uid_company = #{uid_company}
+		AND bin.uid_company = #{uid_company}
+		AND rack.uid_company = #{uid_company}
+		AND whouse.uid_company = #{uid_company}
+		<if test="wh_code">AND whouse.wh_code = #{wh_code}</if>
+		<if test="rack_code">AND rack.rack_code = #{rack_code}</if>
+		<if test="bin_code">AND bin.bin_code = #{bin_code}</if>
+		GROUP BY location.uid_item
+	</select>
+	
+	<sql id="select-location-item-group-fields">
+		item.unique_id, item.item_code, item.item_name, item.specification, item.detail_info, item.unit_code,
+		SUM(location.quan) as sum_location_quan,
+		bin.bin_code
+	</sql>
+	
+	<sql id="select-location-item-group-join">
+		FROM TB_LOCATION location
+		INNER JOIN TB_ITEM item on item.unique_id = location.uid_item
+		INNER JOIN TB_BIN bin on bin.unique_id = location.uid_bin
+		INNER JOIN TB_RACK rack on rack.unique_Id = bin.uid_rack
+		INNER JOIN TB_WHOUSE whouse on whouse.unique_id = rack.uid_whouse
+	</sql>
+	
+   <sql id="select-location-item-group-where">
+		WHERE location.del_yn='N' AND item.del_yn='N' AND bin.del_yn='N' AND rack.del_yn='N' AND whouse.del_yn='N'
+		AND location.uid_company = #{uid_company} AND item.uid_company = #{uid_company} 
+		AND bin.uid_company = #{uid_company} AND rack.uid_company = #{uid_company} 
+		AND whouse.uid_company = #{uid_company}
+		<if test="uid_bin">			AND location.uid_bin 			= 		#{uid_bin}</if>
+		<if test="uid_item">		AND location.uid_item 			= 		#{uid_item}</if>
+		<if test="quan">			AND location.quan 				= 		#{quan}</if>
+		<if test="last_in_date">	AND location.last_in_date 		= 		#{last_in_date}</if>
+		<if test="last_out_date">	AND location.last_out_date 		= 		#{last_out_date}</if>
+		<if test="remark">			AND location.remark 			= 		#{remark}</if>
+		<!-- <if test="over_quan_zero">	AND location.quan 				> 		0</if> -->
+		<if test="over_quan_zero">	AND (location.quan IS NOT NULL AND location.quan != 0)</if>
+		
+		<if test="creator_uid">		AND	location.creator_uid 	= 		#{creator_uid}</if>
+		<if test="creator">			AND	location.creator 		like 	#{creator}</if>
+		<if test="create_date">		AND DATE_FORMAT(location.create_date, '%Y-%m-%d') BETWEEN #{create_date_s} AND #{create_date_e}</if>
+		<if test="changer_uid">		AND	location.changer_uid 	= 		#{changer_uid}</if>
+		<if test="changer">			AND	location.changer 		like 	#{changer}</if>
+		<if test="change_date">		AND DATE_FORMAT(location.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
+		
+		<if test="item_code">		AND	upper(item.item_code) 	like 	upper(#{item_code})</if>
+		<if test="item_name">		AND	upper(item.item_name) 	like 	upper(#{item_name})</if>
+		<if test="bin_code">		AND	upper(bin.bin_code) 	like 	upper(#{bin_code})</if>
+		
+		<if test="wh_code">			AND whouse.wh_code = #{wh_code}</if>
+		<if test="rack_code">		AND rack.rack_code = #{rack_code}</if>
+		
+		<if test="unique_id">		AND	location.unique_id 		= 		#{unique_id}</if>
+		
+	</sql>	
+	
+	<select id="selectcond-location-item-group" parameterType="map" resultMap="result">
+		/*selectcond-location-item-group*/SELECT
+		<include refid="select-location-item-group-fields" />
+		<include refid="select-location-item-group-join" />
+		<include refid="select-location-item-group-where" />
+		GROUP BY item.unique_id
+	</select>
+	
+	<select id="selectcond-location-item-group-count" parameterType="map" resultType="Integer">
+		/*selectcond-location-item-group-count*/SELECT
+		COUNT(*) AS result
+		<include refid="select-location-item-group-join" />
+		<include refid="select-location-item-group-where" />
+	</select>
+	
+	<select id="selectcond-location-item-group-page" parameterType="map" resultMap="result">
+		/*selectcond-location-item-group-page*/SELECT
+		<include refid="select-location-item-group-fields" />
+		<include refid="select-location-item-group-join" />
+		<include refid="select-location-item-group-where" />
+		GROUP BY item.unique_id
+		${order_by}
+		limit ${start_point} , ${end_point}
+	</select>
+   
+	<update id="updateLocationByUniqueData" parameterType="map">
+	/*updateLocationByUniqueData*/
+		UPDATE TB_LOCATION 
+		SET 
+			changer_uid = #{changer_uid},
+			changer = #{changer},
+			change_date=#{change_date},
+			quan = quan + #{quan},
+			lotno=#{lotno}
+			<if test="last_in_date">, last_in_date = #{last_in_date}</if>
+			<if test="last_out_date">, last_out_date = #{last_out_date}</if>
+		where del_yn = 'N'
+		AND uid_company = #{uid_company}
+		AND unique_id = #{unique_id}
+	</update>
+   
+</mapper>
