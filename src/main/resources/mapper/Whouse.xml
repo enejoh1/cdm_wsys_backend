@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
  <mapper namespace="whouse">
 	<resultMap id="result" type="whouse">
 		<result property="unique_id" 		column="unique_id" 			javaType="java.lang.Long" />
@@ -8,7 +8,7 @@
 		<result property="wh_code" 			column="wh_code" />
 		<result property="wh_name" 			column="wh_name" />
 		<result property="remark" 			column="remark" />
-		
+
 		<result property="del_yn" 			column="del_yn" />
 		<result property="creator" 			column="creator" />
 		<result property="creator_uid" 		column="creator_uid" 	javaType="java.lang.Long" />
@@ -17,7 +17,7 @@
 		<result property="changer_uid" 		column="changer_uid" 	javaType="java.lang.Long" />
 		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
 	</resultMap>
-	
+
 	<insert id="insert-whouse" parameterType="whouse">
 		INSERT INTO TB_WHOUSE
 			(
@@ -30,55 +30,55 @@
 		 	 #{creator_uid}, #{creator}, #{create_date}
 		 	)
 	</insert>
-	
+
 	<sql id="select-whouse-fields">
 		whouse.unique_id, whouse.uid_company, whouse.wh_code, whouse.wh_name, whouse.remark,
 		whouse.del_yn, whouse.creator, whouse.creator_uid, whouse.create_date, whouse.changer, whouse.changer_uid, whouse.change_date
 	</sql>
-	
+
 	<sql id="select-whouse-join">
 		FROM TB_WHOUSE whouse
 	</sql>
-	
+
    <sql id="select-whouse-where">
 		WHERE whouse.del_yn='N'
 		<if test="uid_company">		AND whouse.uid_company 		= 		#{uid_company}</if>
 		<if test="wh_code">			AND UPPER(whouse.wh_code) 	LIKE 	UPPER(#{wh_code})</if>
 		<if test="wh_name">			AND UPPER(whouse.wh_name) 	LIKE 	UPPER(#{wh_name})</if>
 		<if test="remark">			AND whouse.remark 			= 		#{remark}</if>
-		
+
 		<if test="creator_uid">		AND	whouse.creator_uid 	= 		#{creator_uid}</if>
 		<if test="creator">			AND	whouse.creator 		like 	#{creator}</if>
 		<if test="create_date">		AND DATE_FORMAT(whouse.create_date, '%Y-%m-%d') BETWEEN #{create_date_s} AND #{create_date_e}</if>
 		<if test="changer_uid">		AND	whouse.changer_uid 	= 		#{changer_uid}</if>
 		<if test="changer">			AND	whouse.changer 		like 	#{changer}</if>
 		<if test="change_date">		AND DATE_FORMAT(whouse.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
-		
+
 		<if test="unique_id">		AND	whouse.unique_id 		= 		#{unique_id}</if>
-		
-	</sql>	
-	
+
+	</sql>
+
 	<select id="selectuid-whouse" parameterType="java.lang.Long" resultMap="result">
 		/*selectcond-whouse*/SELECT
 		<include refid="select-whouse-fields" />
 		<include refid="select-whouse-join" />
 		WHERE whouse.del_yn='N' AND whouse.unique_id=#{value}
 	</select>
-	
+
 	<select id="selectcond-whouse" parameterType="map" resultMap="result">
 		/*selectcond-whouse*/SELECT
 		<include refid="select-whouse-fields" />
 		<include refid="select-whouse-join" />
 		<include refid="select-whouse-where" />
 	</select>
-	
+
 	<select id="selectcond-whouse-count" parameterType="map" resultType="Integer">
 		/*selectcond-whouse-count*/SELECT
 		COUNT(*) AS result
 		<include refid="select-whouse-join" />
 		<include refid="select-whouse-where" />
 	</select>
-	
+
 	<select id="selectcond-whouse-page" parameterType="map" resultMap="result">
 		/*selectcond-whouse-page*/SELECT
 		<include refid="select-whouse-fields" />
@@ -87,14 +87,14 @@
 		${order_by}
 		limit ${start_point} , ${end_point}
 	</select>
-     
+
 	<sql id= "update-bymap-whouse-set" >
 		SET
 			del_yn='N'
 			<if test= "changer_uid"> 	,changer_uid 	= #{changer_uid} </if>
 			<if test= "changer"> 		,changer 		= #{changer} </if>
 			<if test= "change_date"> 	,change_date 	= #{change_date} </if>
-			
+
 			<if test= "wh_code"> 		,wh_code 		= #{wh_code} </if>
 			<if test= "wh_name"> 		,wh_name 		= #{wh_name} </if>
 			<if test= "remark"> 		,remark 		= #{remark} </if>
@@ -104,19 +104,19 @@
       /*update-bymap-whouse*/
       UPDATE TB_WHOUSE
       	<include refid= "update-bymap-whouse-set" />
-      WHERE 
-      	unique_id = #{unique_id} 
+      WHERE
+      	unique_id = #{unique_id}
       	AND del_yn='N'
 	</update >
-   
+
 	<update id="delete-bymap-whouse" parameterType="map">
-		UPDATE TB_WHOUSE 
-		SET 
+		UPDATE TB_WHOUSE
+		SET
 			changer_uid = #{changer_uid},
 			changer = #{changer},
 			change_date=#{change_date},
-			del_yn = 'Y' 
+			del_yn = 'Y'
 		where unique_id=#{unique_id}
 	</update>
-   
+
 </mapper>

@@ -32,7 +32,7 @@ function logout() {
                 text: "예", handler: function () {
 	                Ext.getBody().mask('종료중입니다.');
 	                this.up('window').close();
-	                
+
 	                var action_para = vCONTEXT_PATH + '/index/login.do?method=logout';
 	                document.GeneralBaseForm1.action = action_para;
 	                document.GeneralBaseForm1.submit();

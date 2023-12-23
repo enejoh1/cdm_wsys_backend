@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
  <mapper namespace="menu">
 	<resultMap id="result" type="menu">
 		<result property="unique_id" 		column="unique_id" 			javaType="java.lang.Long" />
@@ -14,7 +14,7 @@
 		<result property="menu_link" 		column="menu_link" />
 		<result property="menu_auth" 		column="menu_auth" />
 		<result property="icon_url" 		column="icon_url" />
-		
+
 		<result property="del_yn" 			column="del_yn" />
 		<result property="creator" 			column="creator" />
 		<result property="creator_uid" 		column="creator_uid" 	javaType="java.lang.Long" />
@@ -23,7 +23,7 @@
 		<result property="changer_uid" 		column="changer_uid" 	javaType="java.lang.Long" />
 		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
 	</resultMap>
-	
+
 	<insert id="insert-menu" parameterType="menu">
 		INSERT INTO TB_MENU
 			(
@@ -36,16 +36,16 @@
 		 	 #{creator_uid}, #{creator}, #{create_date}
 		 	)
 	</insert>
-	
+
 	<sql id="select-menu-fields">
 		menu.unique_id, menu.uid_company, menu.type, menu.is_menu, menu.sort_no, menu.parent_code, menu.menu_code, menu.menu_name, menu.menu_link, menu.menu_auth, menu.icon_url,
 		menu.del_yn, menu.creator, menu.creator_uid, menu.create_date, menu.changer, menu.changer_uid, menu.change_date
 	</sql>
-	
+
 	<sql id="select-menu-join">
 		FROM TB_MENU menu
 	</sql>
-	
+
    <sql id="select-menu-where">
 		WHERE menu.del_yn='N'
 		<if test="uid_company">		AND menu.uid_company 	= 		#{uid_company}</if>
@@ -58,39 +58,39 @@
 		<if test="menu_link">		AND menu.menu_link 		= 		#{menu_link}</if>
 		<if test="menu_auth">		AND menu.menu_auth 		= 		#{menu_auth}</if>
 		<if test="icon_url">		AND menu.icon_url 		= 		#{icon_url}</if>
-		
+
 		<if test="creator_uid">		AND	menu.creator_uid 	= 		#{creator_uid}</if>
 		<if test="creator">			AND	menu.creator 		like 	#{creator}</if>
 		<if test="create_date">		AND DATE_FORMAT(menu.create_date, '%Y-%m-%d') BETWEEN #{create_date_s} AND #{create_date_e}</if>
 		<if test="changer_uid">		AND	menu.changer_uid 	= 		#{changer_uid}</if>
 		<if test="changer">			AND	menu.changer 		like 	#{changer}</if>
 		<if test="change_date">		AND DATE_FORMAT(menu.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
-		
+
 		<if test="unique_id">		AND	menu.unique_id 		= 		#{unique_id}</if>
-		
-	</sql>	
-	
+
+	</sql>
+
 	<select id="selectuid-menu" parameterType="java.lang.Long" resultMap="result">
 		/*selectcond-menu*/SELECT
 		<include refid="select-menu-fields" />
 		<include refid="select-menu-join" />
 		WHERE menu.del_yn='N' AND menu.unique_id=#{value}
 	</select>
-	
+
 	<select id="selectcond-menu" parameterType="map" resultMap="result">
 		/*selectcond-menu*/SELECT
 		<include refid="select-menu-fields" />
 		<include refid="select-menu-join" />
 		<include refid="select-menu-where" />
 	</select>
-	
+
 	<select id="selectcond-menu-count" parameterType="map" resultType="Integer">
 		/*selectcond-menu-count*/SELECT
 		COUNT(*) AS result
 		<include refid="select-menu-join" />
 		<include refid="select-menu-where" />
 	</select>
-	
+
 	<select id="selectcond-menu-page" parameterType="map" resultMap="result">
 		/*selectcond-menu-page*/SELECT
 		<include refid="select-menu-fields" />
@@ -99,7 +99,7 @@
 		ORDER BY menu.sort_no ASC
 		limit ${start_point} , ${end_point}
 	</select>
-	
+
 	<select id="getTotalMenu" parameterType="map" resultMap="result">
 		/*getTotalMenu*/SELECT
 		<include refid="select-menu-fields" />
@@ -107,14 +107,14 @@
 		<include refid="select-menu-where" />
 		ORDER BY menu.sort_no ASC
 	</select>
-     
+
 	<sql id= "update-bymap-menu-set" >
 		SET
 			del_yn='N'
 			<if test= "changer_uid"> 	,changer_uid 	= #{changer_uid} </if>
 			<if test= "changer"> 		,changer 		= #{changer} </if>
 			<if test= "change_date"> 	,change_date 	= #{change_date} </if>
-			
+
 			<if test= "type"> 			,type 			= #{type} </if>
 			<if test= "is_menu"> 		,is_menu 		= #{is_menu} </if>
 			<if test= "sort_no"> 		,sort_no 		= #{sort_no} </if>
@@ -130,19 +130,19 @@
       /*update-bymap-menu*/
       UPDATE TB_MENU
       	<include refid= "update-bymap-menu-set" />
-      WHERE 
-      	unique_id = #{unique_id} 
+      WHERE
+      	unique_id = #{unique_id}
       	AND del_yn='N'
 	</update >
-   
+
 	<update id="delete-bymap-menu" parameterType="map">
-		UPDATE TB_MENU 
-		SET 
+		UPDATE TB_MENU
+		SET
 			changer_uid = #{changer_uid},
 			changer = #{changer},
 			change_date=#{change_date},
-			del_yn = 'Y' 
+			del_yn = 'Y'
 		where unique_id=#{unique_id}
 	</update>
-   
+
 </mapper>

@@ -598,6 +598,7 @@ public class StockController extends BaseAbstractController {
 		String his_s_date = this.getRequestString(request, "his_s_date");
 		String his_e_date = this.getRequestString(request, "his_e_date");
 		String lotno = this.getRequestString(request, "lotno");
+		String is_exp_date = this.getRequestString(request, "is_exp_date");
 		System.out.println("--2----##DBG------String readLocationHistory(HttpServletRequest request, HttpServletResponse response) throws Exception ------");
 
 		Map cond = new HashMap();
@@ -611,6 +612,7 @@ public class StockController extends BaseAbstractController {
 		if(item_name!=null && item_name.length()>0) cond.put("item_name", "%" + item_name + "%");
 		if(bin_code!=null && bin_code.length()>0) cond.put("bin_code", "%" + bin_code + "%");
 		if(lotno!=null && lotno.length()>0) cond.put("lotno", "%" + lotno + "%");
+		if(is_exp_date!=null && is_exp_date.length()>0) cond.put("is_exp_date", is_exp_date);
 
 		if(his_s_date!=null && his_s_date.length()>0 &&
 				his_e_date!=null && his_e_date.length()>0) {
@@ -1228,5 +1230,17 @@ public class StockController extends BaseAbstractController {
 		return null;
 	}
 
+	public void condSetDate(Map cond, String param_name, String date) {
+		String[] split_date = date.split("~");
 
+		if(split_date.length>1) {
+			cond.put(param_name, "true");
+			cond.put(param_name+"_s", split_date[0]);
+			cond.put(param_name+"_e", split_date[1]);
+		}else {
+			cond.put(param_name, "true");
+			cond.put(param_name+"_s", split_date[0]);
+			cond.put(param_name+"_e", split_date[0]);
+		}
+	}
 }

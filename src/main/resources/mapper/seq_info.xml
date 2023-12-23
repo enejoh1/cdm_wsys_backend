@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
+
 <mapper namespace="seq_info">
 	<select id="getCurSeqId" parameterType="map" resultType="java.lang.Long">SELECT LASTVAL(${seq_name})</select>
 	<select id="getNextSeqId" parameterType="map" resultType="java.lang.Long">SELECT NEXTVAL(${seq_name})</select>
 	<select id="getTableLastUid" parameterType="map" resultType="java.lang.Long">SELECT MAX(unique_id) from ${table_name}</select>
 	<update id="updateLastSeqId" parameterType="map"> ALTER SEQUENCE ${seq_name} RESTART ${lastSeqId}</update>
-	
+
 	<select id="getNextCode" parameterType="map" resultType="String">
-		SELECT 
+		SELECT
 			CONCAT('${first_code}',DATE_FORMAT(NOW(),'%y%m%d'), '-', LPAD( NVL(RIGHT(MAX(${column_name}), ${length}), 0)+1, ${length}, 0)) as next_code
 		FROM ${table_name}
-		WHERE 
+		WHERE
 			del_yn = 'N' AND ${column_name} LIKE CONCAT('${first_code}', DATE_FORMAT(NOW(),'%y%m%d'), '%')
 			<if test="commst_uid">AND commst_uid = #{commst_uid}</if>
 	</select>
-	
+
 	<select id="getAutoCode" parameterType="map" resultType="String">
-		SELECT 
+		SELECT
 			CONCAT('${first_code}', LPAD( NVL(RIGHT(MAX(${column_name}), ${length}), 0)+1, ${length}, 0)) as next_code
 		FROM ${table_name}
-		WHERE 
+		WHERE
 			del_yn = 'N' AND ${column_name} LIKE CONCAT('${first_code}', '%')
 			<if test="commst_uid">AND commst_uid = #{commst_uid}</if>
 	</select>
-	
+
 	<select id="getNextSortNo" parameterType="map" resultType="java.lang.Integer">
-		SELECT 
+		SELECT
 			NVL(MAX(${column_name})+1, 1)
 		FROM ${table_name}
-		WHERE 
+		WHERE
 			del_yn = 'N'
 			AND ${where_name} = #{where_value}
 			<if test="commst_uid">AND commst_uid = #{commst_uid}</if>
 			<if test="owner_uid">AND owner_uid = #{owner_uid}</if>
 			<if test="aprvtmp_name">AND aprvtmp_name = #{aprvtmp_name}</if>
 			<if test="not_in_aprv_type">	AND	aprv_type 		not in (#{not_in_aprv_type})</if>
-			
+
 	</select>
-	
+
 	<select id="duplicateCodeCheck" parameterType="map" resultType="java.lang.Long">
-		SELECT 
+		SELECT
 			count(${column_name}) as cnt
 		FROM ${table_name}
-		WHERE 
+		WHERE
 			del_yn = del_yn AND ${column_name} LIKE '${code}'
 			<if test="commst_uid">AND commst_uid = #{commst_uid}</if>
 	</select>
-	
-   
+
+
 </mapper>

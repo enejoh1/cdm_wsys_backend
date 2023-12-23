@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
  <mapper namespace="history">
 	<resultMap id="result" type="history">
 		<result property="unique_id" 		column="unique_id" 			javaType="java.lang.Long" />
@@ -10,7 +10,7 @@
 		<result property="his_quan" 		column="his_quan" 			javaType="java.lang.Double" />
 		<result property="his_date" 		column="his_date" 			javaType="java.util.Date" />
 		<result property="remark" 			column="remark" />
-		
+
 		<result property="quan" 			column="quan" 				javaType="java.lang.Double" />
 		<result property="last_in_date" 	column="last_in_date" 		javaType="java.util.Date" />
 		<result property="bin_code" 		column="bin_code" />
@@ -20,7 +20,7 @@
 		<result property="specification" 	column="specification" />
 		<result property="detail_info" 		column="detail_info" />
 		<result property="unit_code" 		column="unit_code" />
-		
+
 		<result property="del_yn" 			column="del_yn" />
 		<result property="creator" 			column="creator" />
 		<result property="creator_uid" 		column="creator_uid" 	javaType="java.lang.Long" />
@@ -31,8 +31,9 @@
 
 		<result property="lotno" 			column="lotno" /> <!-- ##DBG lotno 추가 -->
 		<result property="lotno" 			column="set_lotno" /> <!-- ##DBG lotno 추가 -->
-	</resultMap> 
-	
+		<result property="is_exp_date" 		column="is_exp_date" />
+	</resultMap>
+
 	<insert id="insert-history" parameterType="history">
 		<!-- ##DBG lotno 수정.추가 -->
 		INSERT INTO TB_HISTORY
@@ -46,25 +47,25 @@
 		 	 #{creator_uid}, #{creator}, #{create_date}, #{lotno}
 		 	)
 	</insert>
-	
+
 	<!-- //##DBG lotno 수정.추가,  아래 셀레트 sql에 history.lotno, 추가 -->
 	<sql id="select-history-fields">
 		history.lotno,
 		history.unique_id, history.uid_company, history.uid_location, history.is_inout, history.his_quan, history.his_date, history.remark,
 		history.del_yn, history.creator, history.creator_uid, history.create_date, history.changer, history.changer_uid, history.change_date,
-		
-		location.quan, location.last_in_date,
+
+		location.quan, location.last_in_date, location.exp_date,
 		bin.bin_code, bin.bin_name,
 		item.item_code, item.item_name, item.specification, item.detail_info, item.unit_code
 	</sql>
-	
+
 	<sql id="select-history-join">
 		FROM TB_HISTORY history
 		INNER JOIN TB_LOCATION location on location.unique_id = history.uid_location
 		INNER JOIN TB_BIN bin on bin.unique_id = location.uid_bin
 		INNER JOIN TB_ITEM item on item.unique_id = location.uid_item
 	</sql>
-	
+
    <sql id="select-history-where">
 		WHERE history.del_yn='N'
 		<if test="uid_company">		AND history.uid_company 		= 		#{uid_company}</if>
@@ -73,50 +74,51 @@
 		<if test="his_quan">		AND history.his_quan 			= 		#{his_quan}</if>
 		<if test="his_date">		AND history.his_date 			= 		#{his_date}</if>
 		<if test="remark">			AND history.remark 				= 		#{remark}</if>
-		
+
 		<if test="creator_uid">		AND	history.creator_uid 		= 		#{creator_uid}</if>
 		<if test="creator">			AND	history.creator 			like 	#{creator}</if>
 		<if test="create_date">		AND DATE_FORMAT(history.create_date, '%Y-%m-%d') BETWEEN #{create_date_s} AND #{create_date_e}</if>
 		<if test="changer_uid">		AND	history.changer_uid 		= 		#{changer_uid}</if>
 		<if test="changer">			AND	history.changer 			like 	#{changer}</if>
 		<if test="change_date">		AND DATE_FORMAT(history.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
-		
+
 		<if test="select_date">		AND DATE_FORMAT(history.his_date, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{start_date}, '%Y-%m-%d') AND DATE_FORMAT(#{end_date}, '%Y-%m-%d')</if>
 		<if test="his_date_range">	AND DATE_FORMAT(history.his_date, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{his_s_date}, '%Y-%m-%d') AND DATE_FORMAT(#{his_e_date}, '%Y-%m-%d')</if>
 		<if test="uid_bin"> 		AND location.uid_bin 			= 		#{uid_bin}</if>
 		<if test="uid_item"> 		AND location.uid_item 			= 		#{uid_item}</if>
-		
+
 		<if test="bin_code"> 		AND UPPER(bin.bin_code) 		like 	UPPER(#{bin_code})</if>
-		
+
 		<if test="item_code"> 		AND UPPER(item.item_code) 		like 	UPPER(#{item_code})</if>
 		<if test="item_name"> 		AND UPPER(item.item_name) 		like 	UPPER(#{item_name})</if>
-		
+
 		<if test="unique_id">		AND	history.unique_id 			= 		#{unique_id}</if>
 		<if test="lotno">		    AND	UPPER(history.lotno) 		like	UPPER(#{lotno})</if>
-		
-	</sql>	
-	
+		<if test="is_exp_date">		AND CURDATE() > DATE_FORMAT(location.exp_date, '%Y-%m-%d')</if>
+
+	</sql>
+
 	<select id="selectuid-history" parameterType="java.lang.Long" resultMap="result">
 		/*selectcond-history*/SELECT
 		<include refid="select-history-fields" />
 		<include refid="select-history-join" />
 		WHERE history.del_yn='N' AND history.unique_id=#{value}
 	</select>
-	
+
 	<select id="selectcond-history" parameterType="map" resultMap="result">
 		/*selectcond-history*/SELECT
 		<include refid="select-history-fields" />
 		<include refid="select-history-join" />
 		<include refid="select-history-where" />
 	</select>
-	
+
 	<select id="selectcond-history-count" parameterType="map" resultType="Integer">
 		/*selectcond-history-count*/SELECT
 		COUNT(*) AS result
 		<include refid="select-history-join" />
 		<include refid="select-history-where" />
 	</select>
-	
+
 	<select id="selectcond-history-page" parameterType="map" resultMap="result">
 		/*selectcond-history-page*/SELECT
 		<include refid="select-history-fields" />
@@ -125,14 +127,14 @@
 		${order_by}
 		limit ${start_point} , ${end_point}
 	</select>
-     
+
 	<sql id= "update-bymap-history-set" >
 		SET
 			del_yn='N'
 			<if test= "changer_uid"> 	,changer_uid 	= #{changer_uid} </if>
 			<if test= "changer"> 		,changer 		= #{changer} </if>
 			<if test= "change_date"> 	,change_date 	= #{change_date} </if>
-			
+
 			<if test= "uid_location"> 	,uid_location 		= #{uid_location} </if>
 			<if test= "is_inout"> 		,is_inout 		= #{is_inout} </if>
 			<if test= "his_quan"> 		,his_quan 	    = #{his_quan} </if>
@@ -144,19 +146,19 @@
       /*update-bymap-history*/
       UPDATE TB_HISTORY
       	<include refid= "update-bymap-history-set" />
-      WHERE 
-      	unique_id = #{unique_id} 
+      WHERE
+      	unique_id = #{unique_id}
       	AND del_yn='N'
 	</update >
-   
+
 	<update id="delete-bymap-history" parameterType="map">
-		UPDATE TB_HISTORY 
-		SET 
+		UPDATE TB_HISTORY
+		SET
 			changer_uid = #{changer_uid},
 			changer = #{changer},
 			change_date=#{change_date},
-			del_yn = 'Y' 
+			del_yn = 'Y'
 		where unique_id=#{unique_id}
 	</update>
-   
+
 </mapper>

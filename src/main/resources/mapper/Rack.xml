@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
  <mapper namespace="rack">
 	<resultMap id="result" type="rack">
 		<result property="unique_id" 		column="unique_id" 			javaType="java.lang.Long" />
@@ -11,10 +11,10 @@
 		<result property="row_cnt" 			column="row_cnt" 			javaType="java.lang.Integer" />
 		<result property="col_cnt" 			column="col_cnt" 			javaType="java.lang.Integer" />
 		<result property="remark" 			column="remark" />
-		
+
 		<result property="wh_code" 			column="wh_code" />
 		<result property="wh_name" 			column="wh_name" />
-		
+
 		<result property="del_yn" 			column="del_yn" />
 		<result property="creator" 			column="creator" />
 		<result property="creator_uid" 		column="creator_uid" 	javaType="java.lang.Long" />
@@ -23,7 +23,7 @@
 		<result property="changer_uid" 		column="changer_uid" 	javaType="java.lang.Long" />
 		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
 	</resultMap>
-	
+
 	<insert id="insert-rack" parameterType="rack">
 		INSERT INTO TB_RACK
 			(
@@ -37,28 +37,28 @@
 		 	)
 		ON DUPLICATE KEY UPDATE
 		 	unique_id = #{unique_id},
-			uid_company = #{uid_company}, 
-			uid_whouse = #{uid_whouse}, 
-			rack_code = #{rack_code}, 
-			rack_name = #{rack_name}, 
-			row_cnt = #{row_cnt}, 
-			col_cnt = #{col_cnt}, 
+			uid_company = #{uid_company},
+			uid_whouse = #{uid_whouse},
+			rack_code = #{rack_code},
+			rack_name = #{rack_name},
+			row_cnt = #{row_cnt},
+			col_cnt = #{col_cnt},
 			remark = #{remark},
-		 	creator_uid = #{creator_uid}, 
+		 	creator_uid = #{creator_uid},
 		 	creator = #{creator},
-		 	del_yn = 'N', 
+		 	del_yn = 'N',
 		 	change_date = now()
 	</insert>
-	
+
 	<sql id="select-rack-fields">
 		rack.unique_id, rack.uid_company, rack.uid_whouse, rack.rack_code, rack.rack_name, rack.row_cnt, rack.col_cnt, rack.remark,
 		rack.del_yn, rack.creator, rack.creator_uid, rack.create_date, rack.changer, rack.changer_uid, rack.change_date
 	</sql>
-	
+
 	<sql id="select-rack-join">
 		FROM TB_RACK rack
 	</sql>
-	
+
    <sql id="select-rack-where">
 		WHERE rack.del_yn='N'
 		<if test="uid_company">		AND rack.uid_company 		= 		#{uid_company}</if>
@@ -68,39 +68,39 @@
 		<if test="row_cnt">			AND rack.row_cnt 			= 		#{row_cnt}</if>
 		<if test="col_cnt">			AND rack.col_cnt 			= 		#{col_cnt}</if>
 		<if test="remark">			AND rack.remark 			= 		#{remark}</if>
-		
+
 		<if test="creator_uid">		AND	rack.creator_uid 	= 		#{creator_uid}</if>
 		<if test="creator">			AND	rack.creator 		like 	#{creator}</if>
 		<if test="create_date">		AND DATE_FORMAT(rack.create_date, '%Y-%m-%d') BETWEEN #{create_date_s} AND #{create_date_e}</if>
 		<if test="changer_uid">		AND	rack.changer_uid 	= 		#{changer_uid}</if>
 		<if test="changer">			AND	rack.changer 		like 	#{changer}</if>
 		<if test="change_date">		AND DATE_FORMAT(rack.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
-		
+
 		<if test="unique_id">		AND	rack.unique_id 		= 		#{unique_id}</if>
-		
-	</sql>	
-	
+
+	</sql>
+
 	<select id="selectuid-rack" parameterType="java.lang.Long" resultMap="result">
 		/*selectcond-rack*/SELECT
 		<include refid="select-rack-fields" />
 		<include refid="select-rack-join" />
 		WHERE rack.del_yn='N' AND rack.unique_id=#{value}
 	</select>
-	
+
 	<select id="selectcond-rack" parameterType="map" resultMap="result">
 		/*selectcond-rack*/SELECT
 		<include refid="select-rack-fields" />
 		<include refid="select-rack-join" />
 		<include refid="select-rack-where" />
 	</select>
-	
+
 	<select id="selectcond-rack-count" parameterType="map" resultType="Integer">
 		/*selectcond-rack-count*/SELECT
 		COUNT(*) AS result
 		<include refid="select-rack-join" />
 		<include refid="select-rack-where" />
 	</select>
-	
+
 	<select id="selectcond-rack-page" parameterType="map" resultMap="result">
 		/*selectcond-rack-page*/SELECT
 		<include refid="select-rack-fields" />
@@ -109,21 +109,21 @@
 		${order_by}
 		limit ${start_point} , ${end_point}
 	</select>
-     
+
 	<sql id= "update-bymap-rack-set" >
 		SET
 			del_yn='N'
 			<if test= "changer_uid"> 	,changer_uid 	= #{changer_uid} </if>
 			<if test= "changer"> 		,changer 		= #{changer} </if>
 			<if test= "change_date"> 	,change_date 	= #{change_date} </if>
-			
+
 			<if test= "uid_whouse"> 	,uid_whouse 	= #{uid_whouse} </if>
 			<if test= "rack_code"> 		,rack_code 		= #{rack_code} </if>
 			<if test= "rack_name"> 		,rack_name 		= #{rack_name} </if>
 			<if test= "row_cnt"> 		,row_cnt 		= #{row_cnt} </if>
 			<if test= "col_cnt"> 		,col_cnt 		= #{col_cnt} </if>
 			<if test= "remark"> 		,remark 		= #{remark} </if>
-			
+
 			<if test= "del_rack_code"> 	,rack_code 		= CONCAT(rack_code,'-',unique_id)</if>
 	</sql>
 
@@ -131,21 +131,21 @@
       /*update-bymap-rack*/
       UPDATE TB_RACK
       	<include refid= "update-bymap-rack-set" />
-      WHERE 
-      	unique_id = #{unique_id} 
+      WHERE
+      	unique_id = #{unique_id}
       	AND del_yn='N'
 	</update >
-   
+
 	<update id="delete-bymap-rack" parameterType="map">
-		UPDATE TB_RACK 
-		SET 
+		UPDATE TB_RACK
+		SET
 			changer_uid = #{changer_uid},
 			changer = #{changer},
 			change_date=#{change_date},
-			del_yn = 'Y' 
+			del_yn = 'Y'
 		where unique_id=#{unique_id}
 	</update>
-	
+
 	<select id="getRackListByUidBIN" parameterType="map" resultMap="result">
 		/*getRackListByUidBIN*/SELECT
 		rack.unique_id, rack.uid_company, rack.uid_whouse, rack.rack_code, rack.rack_name, rack.row_cnt, rack.col_cnt,
@@ -154,15 +154,15 @@
 		FROM tb_rack rack
 		INNER JOIN tb_whouse whouse on whouse.unique_id = rack.uid_whouse
 		WHERE rack.del_yn = 'N' AND rack.uid_company = #{uid_company}
-		AND rack.uid_whouse = 
-		(SELECT 
-		 uid_whouse 
-		 FROM tb_rack 
+		AND rack.uid_whouse =
+		(SELECT
+		 uid_whouse
+		 FROM tb_rack
 		 where del_yn = 'N' AND uid_company = #{uid_company}
 		 AND unique_id = (SELECT uid_rack FROM tb_bin where del_yn = 'N' AND uid_company = #{uid_company} AND unique_id = #{uid_bin})
 		)
 	</select>
-	
+
 	<select id="getRackListByUidWhouse" parameterType="map" resultMap="result">
 		/*getRackListByUidWhouse*/SELECT
 		rack.unique_id, rack.uid_company, rack.uid_whouse, rack.rack_code, rack.rack_name, rack.row_cnt, rack.col_cnt,
@@ -173,32 +173,32 @@
 		WHERE rack.del_yn = 'N' AND rack.uid_company = #{uid_company}
 		AND rack.uid_whouse = #{uid_whouse}
 	</select>
-   
+
 	<update id="deleteLocationByRackUid" parameterType="map">
 	/*deleteLocationByRackUid*/
 		UPDATE TB_RACK rack
 		INNER JOIN TB_BIN bin on bin.uid_rack = rack.unique_id
 		INNER JOIN TB_LOCATION location on location.uid_bin = bin.unique_id
-		SET location.del_yn = 'Y', 
+		SET location.del_yn = 'Y',
 			location.changer = #{changer}, location.changer_uid = #{changer_uid}, location.change_date = now()
 		WHERE rack.unique_id = #{uid_rack}
 	</update>
-   
+
 	<update id="deleteBinByRackUid" parameterType="map">
 	/*deleteBinByRackUid*/
 		UPDATE TB_RACK rack
 		INNER JOIN TB_BIN bin on bin.uid_rack = rack.unique_id
-		SET bin.del_yn = 'Y', 
+		SET bin.del_yn = 'Y',
 			bin.changer = #{changer}, bin.changer_uid = #{changer_uid}, bin.change_date = now()
 		WHERE rack.unique_id = #{uid_rack}
 	</update>
-   
+
 	<update id="deleteRackByRackUid" parameterType="map">
 	/*deleteRackByRackUid*/
 		UPDATE TB_RACK rack
-		SET rack.del_yn = 'Y', 
+		SET rack.del_yn = 'Y',
 			rack.changer = #{changer}, rack.changer_uid = #{changer_uid}, rack.change_date = now()
 		WHERE rack.unique_id = #{uid_rack}
 	</update>
-   
+
 </mapper>

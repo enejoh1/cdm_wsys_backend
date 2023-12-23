@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
  <mapper namespace="author">
 	<resultMap id="result" type="author">
 		<result property="unique_id" 		column="unique_id" 		javaType="java.lang.Long" />
@@ -8,7 +8,7 @@
 		<result property="auth_code" 		column="auth_code" />
 		<result property="auth_name" 		column="auth_name" />
 		<result property="remark" 			column="remark" />
-		
+
 		<result property="del_yn" 			column="del_yn" />
 		<result property="creator" 			column="creator" />
 		<result property="creator_uid" 		column="creator_uid" 	javaType="java.lang.Long" />
@@ -17,7 +17,7 @@
 		<result property="changer_uid" 		column="changer_uid" 	javaType="java.lang.Long" />
 		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
 	</resultMap>
-	
+
 	<insert id="insert-author" parameterType="author">
 		INSERT INTO TB_AUTHOR
 			(
@@ -30,16 +30,16 @@
 		 	 #{creator_uid}, #{creator}, #{create_date}
 		 	)
 	</insert>
-	
+
 	<sql id="select-author-fields">
 		author.unique_id, author.uid_company, author.auth_code, author.auth_name, author.remark,
 		author.del_yn, author.creator, author.creator_uid, author.create_date, author.changer, author.changer_uid, author.change_date
 	</sql>
-	
+
 	<sql id="select-author-join">
 		FROM TB_AUTHOR author
 	</sql>
-	
+
    <sql id="select-author-where">
 		WHERE author.del_yn='N'
 		<if test="uid_company">		AND author.uid_company 		= 		#{uid_company}</if>
@@ -52,32 +52,32 @@
 		<if test="changer_uid">		AND	author.changer_uid 	= 		#{changer_uid}</if>
 		<if test="changer">			AND	author.changer 		like 	#{changer}</if>
 		<if test="change_date">		AND DATE_FORMAT(author.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
-		
+
 		<if test="unique_id">		AND	author.unique_id 		= 		#{unique_id}</if>
-		
-	</sql>	
-	
+
+	</sql>
+
 	<select id="selectuid-author" parameterType="java.lang.Long" resultMap="result">
 		/*selectcond-author*/SELECT
 		<include refid="select-author-fields" />
 		<include refid="select-author-join" />
 		WHERE author.del_yn='N' AND author.unique_id=#{value}
 	</select>
-	
+
 	<select id="selectcond-author" parameterType="map" resultMap="result">
 		/*selectcond-author*/SELECT
 		<include refid="select-author-fields" />
 		<include refid="select-author-join" />
 		<include refid="select-author-where" />
 	</select>
-	
+
 	<select id="selectcond-author-count" parameterType="map" resultType="Integer">
 		/*selectcond-author-count*/SELECT
 		COUNT(*) AS result
 		<include refid="select-author-join" />
 		<include refid="select-author-where" />
 	</select>
-	
+
 	<select id="selectcond-author-page" parameterType="map" resultMap="result">
 		/*selectcond-author-page*/SELECT
 		<include refid="select-author-fields" />
@@ -86,14 +86,14 @@
 		ORDER BY author.seq_no ASC
 		limit ${start_point} , ${end_point}
 	</select>
-     
+
 	<sql id= "update-bymap-author-set" >
 		SET
 			del_yn='N'
 			<if test= "changer_uid"> 	,changer_uid 	= #{changer_uid} </if>
 			<if test= "changer"> 		,changer 		= #{changer} </if>
 			<if test= "change_date"> 	,change_date 	= #{change_date} </if>
-			
+
 			<if test= "uid_company"> 	,uid_company 	= #{uid_company} </if>
 			<if test= "auth_code"> 		,auth_code 		= #{auth_code} </if>
 			<if test= "auth_name"> 		,auth_name 		= #{auth_name} </if>
@@ -104,19 +104,19 @@
       /*update-bymap-author*/
       UPDATE TB_AUTHOR
       	<include refid= "update-bymap-author-set" />
-      WHERE 
-      	unique_id = #{unique_id} 
+      WHERE
+      	unique_id = #{unique_id}
       	AND del_yn='N'
 	</update >
-   
+
 	<update id="delete-bymap-author" parameterType="map">
-		UPDATE TB_AUTHOR 
-		SET 
+		UPDATE TB_AUTHOR
+		SET
 			changer_uid = #{changer_uid},
 			changer = #{changer},
 			change_date=#{change_date},
-			del_yn = 'Y' 
+			del_yn = 'Y'
 		where unique_id=#{unique_id}
 	</update>
-   
+
 </mapper>

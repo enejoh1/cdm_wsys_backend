@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -136,17 +137,18 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 	@Override
 	// ##DBG lotno 수정.추가
 	public void execWearing(String lotno, Long uid_company, Long user_uid, String user_id, String user_name,
-			List<Long> item_uids, List<Double> item_quans, Long bin_uid, Date exp_date) throws Exception {
+			List<Long> item_uids, List<Double> item_quans, Long bin_uid, String exp_date) throws Exception {
 		Date now = new Date();
 		Location location = new Location();
 		location.setUid_bin(bin_uid);
 		location.setLast_in_date(now);
-		location.setExp_date(exp_date);
+		location.setExp_date(String2Date(exp_date));
 
 		Map cond = new HashMap();
 		cond.put("uid_company", uid_company);
 		cond.put("uid_bin", bin_uid);
 		cond.put("lotno", lotno);// ##DBG lotno 추가
+		cond.put("exp_date", String2Date(exp_date));// ##DBG lotno 추가
 
 		System.out.println("----:a6----");
 		System.out.println(lotno);
@@ -2910,4 +2912,21 @@ System.out.println("##DBG--------1-");
 		}
 		return barcodePath;
 	}
+
+	public Date String2Date(String value) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String ret= value;
+
+		if(value.isEmpty()) {
+			return null;
+		}
+		Date date = null;
+		try {
+			ret = ret.replaceAll("/", "-");
+			date = dateFormat.parse(ret);
+		} catch (ParseException e) {}
+
+		return date;
+	}
+
 }

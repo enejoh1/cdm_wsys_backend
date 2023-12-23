@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
  <mapper namespace="binMan">
 	<resultMap id="result" type="binMan">
 		<result property="unique_id" 		column="unique_id" 			javaType="java.lang.Long" />
@@ -11,12 +11,12 @@
 		<result property="bin_row" 		column="bin_row" 			javaType="java.lang.Integer" />
 		<result property="bin_col" 		column="bin_col" 			javaType="java.lang.Integer" />
 		<result property="remark" 			column="remark" />
-		
+
 		<result property="rack_code" 		column="rack_code" />
 		<result property="rack_name" 		column="rack_name" />
 		<result property="wh_code" 			column="wh_code" />
 		<result property="wh_name" 			column="wh_name" />
-		
+
 		<result property="del_yn" 			column="del_yn" />
 		<result property="creator" 			column="creator" />
 		<result property="creator_uid" 		column="creator_uid" 	javaType="java.lang.Long" />
@@ -26,8 +26,8 @@
 		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
 		<result property="lotno" 		column="lotno" 	javaType="java.util.Date" />
 	</resultMap>
-	
-	<insert id="insert-binMan" parameterType="binMan"> 
+
+	<insert id="insert-binMan" parameterType="binMan">
 		INSERT INTO TB_BIN
 			(
 			 unique_id, uid_company, uid_rack, bin_code, bin_name, bin_row, bin_col, remark,
@@ -41,15 +41,15 @@
 		ON DUPLICATE KEY UPDATE
 		unique_id = unique_id
 	</insert>
-	
+
 	<sql id="select-binMan-fields">
-		bin.unique_id, bin.uid_company, bin.uid_rack, bin.bin_code, 
-       	bin.bin_name, bin.bin_row, bin.bin_col, bin.remark, bin.del_yn, bin.creator, 
-       	bin.creator_uid, bin.create_date, bin.changer, bin.changer_uid, bin.change_date, 
-       	item.item_code, item.item_name, item.specification, item.detail_info, item.unit_code, 
+		bin.unique_id, bin.uid_company, bin.uid_rack, bin.bin_code,
+       	bin.bin_name, bin.bin_row, bin.bin_col, bin.remark, bin.del_yn, bin.creator,
+       	bin.creator_uid, bin.create_date, bin.changer, bin.changer_uid, bin.change_date,
+       	item.item_code, item.item_name, item.specification, item.detail_info, item.unit_code,
        	item.safe_quan, location.quan, rack.rack_code, rack.rack_name, whouse.wh_code, whouse.wh_name
 	</sql>
-	
+
 	<sql id="select-binMan-join">
 		FROM tb_bin bin
 		LEFT JOIN tb_rack rack ON bin.uid_rack = rack.unique_id
@@ -57,7 +57,7 @@
 		LEFT JOIN tb_location location ON location.uid_bin = bin.unique_id
 		LEFT JOIN tb_item item ON item.unique_id = location.uid_item
 	</sql>
-	
+
    <sql id="select-binMan-where">
 		WHERE bin.del_yn='N'
 		<if test="uid_company">		AND bin.uid_company 		= 		#{uid_company}</if>
@@ -67,49 +67,49 @@
 		<if test="bin_row">		    AND bin.bin_row 			= 		#{bin_row}</if>
 		<if test="bin_col">		    AND bin.bin_col 			= 		#{bin_col}</if>
 		<if test="remark">			AND bin.remark 			= 		#{remark}</if>
-		
+
 		<if test="creator_uid">		AND	bin.creator_uid 	= 		#{creator_uid}</if>
 		<if test="creator">			AND	bin.creator 		like 	#{creator}</if>
 		<if test="create_date">		AND DATE_FORMAT(bin.create_date, '%Y-%m-%d') BETWEEN #{create_date_s} AND #{create_date_e}</if>
 		<if test="changer_uid">		AND	bin.changer_uid 	= 		#{changer_uid}</if>
 		<if test="changer">			AND	bin.changer 		like 	#{changer}</if>
 		<if test="change_date">		AND DATE_FORMAT(bin.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
-		
+
 		<if test="uid_whouse">		AND whouse.unique_id	= 		#{uid_whouse}</if>
-		
+
 		<if test="barcode">			AND	bin.bin_code 		= 		#{barcode}</if>
 		<if test="unique_id">		AND	bin.unique_id 		= 		#{unique_id}</if>
-		
+
 		<if test="wh_code">			AND	UPPER(whouse.wh_code) 		like 	UPPER(#{wh_code})</if>
 		<if test="rack_code">		AND	UPPER(rack.rack_code) 	    like 		UPPER(#{rack_code})</if>
 		<if test="lotno">		    AND	location.lotno 		= 		#{lotno}</if>
 
-	</sql>	
+	</sql>
 
 
-	
+
 	<select id="selectuid-binMan" parameterType="java.lang.Long" resultMap="result">
 		/*selectcond-binMan*/SELECT
 		<include refid="select-binMan-fields" />
 		<include refid="select-binMan-join" />
 		WHERE bin.del_yn='N' AND bin.unique_id=#{value}
 	</select>
-	
+
 	<select id="selectcond-binMan" parameterType="map" resultMap="result">
 		/*selectcond-binMan*/SELECT
 		<include refid="select-binMan-fields" />
 		<include refid="select-binMan-join" />
 		<include refid="select-binMan-where" />
-		
+
 	</select>
-	
+
 	<select id="selectcond-binMan-count" parameterType="map" resultType="Integer">
 		/*selectcond-binMan-count*/SELECT
 		COUNT(*) AS result
 		<include refid="select-binMan-join" />
 		<include refid="select-binMan-where" />
 	</select>
-	
+
 	<select id="selectcond-binMan-page" parameterType="map" resultMap="result">
 		/*selectcond-binMan-page*/SELECT
 		<include refid="select-binMan-fields" />
@@ -118,14 +118,14 @@
 		${order_by}
 		limit ${start_point} , ${end_point}
 	</select>
-     
+
 	<sql id= "update-bymap-binMan-set" >
 		SET
 			del_yn='N'
 			<if test= "changer_uid"> 	,changer_uid 	= #{changer_uid} </if>
 			<if test= "changer"> 		,changer 		= #{changer} </if>
 			<if test= "change_date"> 	,change_date 	= #{change_date} </if>
-			
+
 			<if test= "uid_rack"> 		,uid_rack 		= #{uid_rack} </if>
 			<if test= "bin_code"> 		,bin_code 		= #{bin_code} </if>
 			<if test= "bin_name"> 		,bin_name 		= #{bin_name} </if>
@@ -138,21 +138,21 @@
       /*update-bymap-BinMan*/
       UPDATE TB_BIN
       	<include refid= "update-bymap-binMan-set" />
-      WHERE 
-      	unique_id = #{unique_id} 
+      WHERE
+      	unique_id = #{unique_id}
       	AND del_yn='N'
 	</update >
-   
+
 	<update id="delete-bymap-binMan" parameterType="map">
-		UPDATE TB_BIN 
-		SET 
+		UPDATE TB_BIN
+		SET
 			changer_uid = #{changer_uid},
 			changer = #{changer},
 			change_date=#{change_date},
-			del_yn = 'Y' 
+			del_yn = 'Y'
 		where unique_id=#{unique_id}
 	</update>
-	
+
 	<select id="getUsingbinManList" parameterType="map" resultMap="result">
 		/*getUsingBinManList*/SELECT
 		bin.unique_id, bin.uid_company, bin.uid_rack, bin.bin_code, bin.bin_name,
@@ -166,7 +166,7 @@
 		GROUP BY bin.unique_id
 		ORDER BY bin.bin_code ASC
 	</select>
-	
+
 	<select id="getUsingBinListByWhouseUid" parameterType="map" resultMap="result">
 		/*getUsingBinListByWhouseUid*/SELECT
 		bin.unique_id, bin.uid_company, bin.uid_rack, bin.bin_code, bin.bin_name,
@@ -182,7 +182,7 @@
 		GROUP BY bin.unique_id
 		ORDER BY bin.bin_code ASC
 	</select>
-	
+
 	<select id="getUidBinByItemCode" parameterType="map" resultType="Long">
 		/*getUidBinByItemCode*/SELECT
 		unique_id as result
@@ -191,7 +191,7 @@
 		AND uid_company = #{uid_company}
 		AND bin_code = #{bin_code}
 	</select>
-	
+
 	<select id="getUidBinManByBinCode" parameterType="map" resultType="Long">
 		/*getUidBinManByBinCode*/SELECT
 		unique_id as result
@@ -200,11 +200,11 @@
 		AND uid_company = #{uid_company}
 		AND bin_code = #{bin_code}
 	</select>
-	
+
 	<resultMap type="HashMap" id="whouseGroupMap">
 		<id column="rack_code" property="rack_code" />
 	</resultMap>
-	
+
 	<select id="getRackGroup" parameterType="map" resultMap="whouseGroupMap">
 		/*getRackGroup*/SELECT
 		rack_code
@@ -216,5 +216,5 @@
 		AND whouse.unique_id = #{uid_whouse}
 		GROUP BY rack.unique_id
 	</select>
-   
+
 </mapper>

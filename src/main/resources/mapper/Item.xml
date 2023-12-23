@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
  <mapper namespace="item">
 	<resultMap id="result" type="item">
 		<result property="unique_id" 		column="unique_id" 			javaType="java.lang.Long" />
@@ -13,7 +13,7 @@
 		<result property="safe_quan" 		column="safe_quan" 			javaType="java.lang.Double" />
 		<result property="remark" 			column="remark" />
 		<result property="sum_quan" 		column="sum_quan" 			javaType="java.lang.Double" />
-		
+
 		<result property="del_yn" 			column="del_yn" />
 		<result property="creator" 			column="creator" />
 		<result property="creator_uid" 		column="creator_uid" 	javaType="java.lang.Long" />
@@ -22,7 +22,7 @@
 		<result property="changer_uid" 		column="changer_uid" 	javaType="java.lang.Long" />
 		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
 	</resultMap>
-	
+
 	<insert id="insert-item" parameterType="user">
 		INSERT INTO TB_ITEM
 			(
@@ -38,16 +38,16 @@
 		 	change_date = now(),
 		 	del_yn = 'N',
 		 	item_name = #{item_name},
-		 	specification = #{specification}, 
-		 	detail_info = #{detail_info}, 
-		 	unit_code = #{unit_code}, 
-		 	safe_quan = #{safe_quan}, 
+		 	specification = #{specification},
+		 	detail_info = #{detail_info},
+		 	unit_code = #{unit_code},
+		 	safe_quan = #{safe_quan},
 		 	remark = #{remark},
-		 	creator_uid = #{creator_uid}, 
+		 	creator_uid = #{creator_uid},
 		 	creator = #{creator}
-		 	
+
 	</insert>
-	
+
 	<insert id="insert-item-upload" parameterType="user">
 		INSERT INTO TB_ITEM
 			(
@@ -63,26 +63,26 @@
 		 	change_date = now(),
 		 	del_yn = 'N
 		 	item_name = #{item_name},
-		 	specification = #{specification}, 
-		 	detail_info = #{detail_info}, 
-		 	unit_code = #{unit_code}, 
-		 	safe_quan = #{safe_quan}, 
+		 	specification = #{specification},
+		 	detail_info = #{detail_info},
+		 	unit_code = #{unit_code},
+		 	safe_quan = #{safe_quan},
 		 	remark = #{remark},
-		 	creator_uid = #{creator_uid}, 
+		 	creator_uid = #{creator_uid},
 		 	creator = #{creator}
 
 	</insert>
-	
+
 	<sql id="select-item-fields">
 		item.unique_id, item.uid_company, item.item_code, item.item_name, item.specification, item.detail_info, item.unit_code, item.safe_quan, item.remark,
 		item.del_yn, item.creator, item.creator_uid, item.create_date, item.changer, item.changer_uid, item.change_date,
 		NVL((SELECT SUM(quan) FROM tb_location where del_yn = 'N' AND uid_item = item.unique_id GROUP BY uid_item), 0) as sum_quan
 	</sql>
-	
+
 	<sql id="select-item-join">
 		FROM TB_ITEM item
 	</sql>
-	
+
    <sql id="select-item-where">
 		WHERE item.del_yn='N'
 		<if test="uid_company">		AND item.uid_company 		= 		#{uid_company}</if>
@@ -93,48 +93,48 @@
 		<if test="unit_code">		AND UPPER(item.unit_code) 	LIKE 	UPPER(#{unit_code})</if>
 		<if test="safe_quan">		AND item.safe_quan 			= 		#{safe_quan}</if>
 		<if test="remark">			AND item.remark 			= 		#{remark}</if>
-		
+
 		<if test="barcode">			AND item.item_code 			= 		#{barcode}</if>
-		
+
 		<if test="creator_uid">		AND	item.creator_uid 	= 		#{creator_uid}</if>
 		<if test="creator">			AND	item.creator 		like 	#{creator}</if>
 		<if test="create_date">		AND DATE_FORMAT(item.create_date, '%Y-%m-%d') BETWEEN #{create_date_s} AND #{create_date_e}</if>
 		<if test="changer_uid">		AND	item.changer_uid 	= 		#{changer_uid}</if>
 		<if test="changer">			AND	item.changer 		like 	#{changer}</if>
 		<if test="change_date">		AND DATE_FORMAT(item.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
-		
+
 		<if test="search_item">
 			AND (
 				UPPER(item.item_name) LIKE UPPER(#{search_item}) OR
 				UPPER(item.item_code) LIKE UPPER(#{search_item})
 			)
 		</if>
-		
+
 		<if test="unique_id">		AND	item.unique_id 		= 		#{unique_id}</if>
-		
-	</sql>	
-	
+
+	</sql>
+
 	<select id="selectuid-item" parameterType="java.lang.Long" resultMap="result">
 		/*selectcond-item*/SELECT
 		<include refid="select-item-fields" />
 		<include refid="select-item-join" />
 		WHERE item.del_yn='N' AND item.unique_id=#{value}
 	</select>
-	
+
 	<select id="selectcond-item" parameterType="map" resultMap="result">
 		/*selectcond-item*/SELECT
 		<include refid="select-item-fields" />
 		<include refid="select-item-join" />
 		<include refid="select-item-where" />
 	</select>
-	
+
 	<select id="selectcond-item-count" parameterType="map" resultType="Integer">
 		/*selectcond-item-count*/SELECT
 		COUNT(*) AS result
 		<include refid="select-item-join" />
 		<include refid="select-item-where" />
 	</select>
-	
+
 	<select id="selectcond-item-page" parameterType="map" resultMap="result">
 		/*selectcond-item-page*/SELECT
 		<include refid="select-item-fields" />
@@ -143,14 +143,14 @@
 		${order_by}
 		limit ${start_point} , ${end_point}
 	</select>
-     
+
 	<sql id= "update-bymap-item-set" >
 		SET
 			del_yn='N'
 			<if test= "changer_uid"> 	,changer_uid 	= #{changer_uid} </if>
 			<if test= "changer"> 		,changer 		= #{changer} </if>
 			<if test= "change_date"> 	,change_date 	= #{change_date} </if>
-			
+
 			<if test= "item_code"> 		,item_code 		= #{item_code} </if>
 			<if test= "item_name"> 		,item_name 		= #{item_name} </if>
 			<if test= "specification"> 	,specification 	= #{specification} </if>
@@ -164,21 +164,21 @@
       /*update-bymap-item*/
       UPDATE TB_ITEM
       	<include refid= "update-bymap-item-set" />
-      WHERE 
-      	unique_id = #{unique_id} 
+      WHERE
+      	unique_id = #{unique_id}
       	AND del_yn='N'
 	</update >
-   
+
 	<update id="delete-bymap-item" parameterType="map">
-		UPDATE TB_ITEM 
-		SET 
+		UPDATE TB_ITEM
+		SET
 			changer_uid = #{changer_uid},
 			changer = #{changer},
 			change_date=#{change_date},
-			del_yn = 'Y' 
+			del_yn = 'Y'
 		where unique_id=#{unique_id}
 	</update>
-	
+
 	<select id="getUidItemByItemCode" parameterType="map" resultType="Long">
 		/*getUidItemByItemCode*/SELECT
 		unique_id as result
@@ -187,5 +187,5 @@
 		AND uid_company = #{uid_company}
 		AND item_code = #{item_code}
 	</select>
-   
+
 </mapper>

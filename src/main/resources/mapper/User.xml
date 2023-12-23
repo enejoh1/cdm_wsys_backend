@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
  <mapper namespace="user">
 	<resultMap id="result" type="user">
 		<result property="unique_id" 		column="unique_id" 			javaType="java.lang.Long" />
@@ -22,7 +22,7 @@
 		<result property="login_fail_cnt" 	column="login_fail_cnt" 	javaType="java.lang.Integer" />
 		<result property="pw_change_date" 	column="pw_change_date" 	javaType="java.util.Date" />
 		<result property="last_menu" 		column="last_menu" />
-		
+
 		<result property="del_yn" 			column="del_yn" />
 		<result property="creator" 			column="creator" />
 		<result property="creator_uid" 		column="creator_uid" 	javaType="java.lang.Long" />
@@ -30,12 +30,12 @@
 		<result property="changer" 			column="changer" />
 		<result property="changer_uid" 		column="changer_uid" 	javaType="java.lang.Long" />
 		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
-		
+
 		<result property="cp_code" 			column="cp_code" />
 		<result property="cp_name" 			column="cp_name" />
 		<result property="code_type" 		column="code_type" />
 	</resultMap>
-	
+
 	<insert id="insert-user" parameterType="user">
 		INSERT INTO TB_USER
 			(
@@ -50,20 +50,20 @@
 		 	 #{creator_uid}, #{creator}, #{create_date}
 		 	)
 	</insert>
-	
+
 	<sql id="select-user-fields">
 		user.unique_id, user.uid_company, user.user_id, user.user_name, user.u_type, user.u_role, user.u_position, user.emp_no,
 		user.email_address, user.tel_no, user.hp_no, user.is_login, user.login_ip, user.login_date, user.logout_date, user.login_fail_cnt, user.pw_change_date, user.last_menu,
 		user.del_yn, user.creator, user.creator_uid, user.create_date, user.changer, user.changer_uid, user.change_date,
-		
+
 		company.cp_code, company.cp_name, company.code_type
 	</sql>
-	
+
 	<sql id="select-user-join">
 		FROM TB_USER user
 		INNER JOIN TB_COMPANY company on company.unique_id = user.uid_company
 	</sql>
-	
+
    <sql id="select-user-where">
 		WHERE user.del_yn='N'
 		<if test="uid_company">		AND user.uid_company 		= 		#{uid_company}</if>
@@ -84,39 +84,39 @@
 		<if test="login_fail_cnt">	AND user.login_fail_cnt 	= 		#{login_fail_cnt}</if>
 		<if test="pw_change_date">	AND user.pw_change_date 	= 		#{pw_change_date}</if>
 		<if test="last_menu">		AND user.last_menu 			= 		#{last_menu}</if>
-		
+
 		<if test="creator_uid">		AND	user.creator_uid 	= 		#{creator_uid}</if>
 		<if test="creator">			AND	user.creator 		like 	#{creator}</if>
 		<if test="create_date">		AND DATE_FORMAT(user.create_date, '%Y-%m-%d') BETWEEN #{create_date_s} AND #{create_date_e}</if>
 		<if test="changer_uid">		AND	user.changer_uid 	= 		#{changer_uid}</if>
 		<if test="changer">			AND	user.changer 		like 	#{changer}</if>
 		<if test="change_date">		AND DATE_FORMAT(user.change_date, '%Y-%m-%d') BETWEEN #{change_date_s} AND #{change_date_e}</if>
-		
+
 		<if test="unique_id">		AND	user.unique_id 		= 		#{unique_id}</if>
-		
-	</sql>	
-	
+
+	</sql>
+
 	<select id="selectuid-user" parameterType="java.lang.Long" resultMap="result">
 		/*selectuid-user*/SELECT
 		<include refid="select-user-fields" />
 		<include refid="select-user-join" />
 		WHERE user.del_yn='N' AND user.unique_id=#{value}
 	</select>
-	
+
 	<select id="selectcond-user" parameterType="map" resultMap="result">
 		/*selectcond-user*/SELECT
 		<include refid="select-user-fields" />
 		<include refid="select-user-join" />
 		<include refid="select-user-where" />
 	</select>
-	
+
 	<select id="selectcond-user-count" parameterType="map" resultType="Integer">
 		/*selectcond-user-count*/SELECT
 		COUNT(*) AS result
 		<include refid="select-user-join" />
 		<include refid="select-user-where" />
 	</select>
-	
+
 	<select id="selectcond-user-page" parameterType="map" resultMap="result">
 		/*selectcond-user-page*/SELECT
 		<include refid="select-user-fields" />
@@ -125,14 +125,14 @@
 		${order_by}
 		limit ${start_point} , ${end_point}
 	</select>
-     
+
 	<sql id= "update-bymap-user-set" >
 		SET
 			del_yn='N'
 			<if test= "changer_uid"> 	,changer_uid 	= #{changer_uid} </if>
 			<if test= "changer"> 		,changer 		= #{changer} </if>
 			<if test= "change_date"> 	,change_date 	= #{change_date} </if>
-			
+
 			<if test= "user_id"> 		,user_id 		= #{user_id} </if>
 			<if test= "user_name"> 		,user_name 		= #{user_name} </if>
 			<if test= "u_pwd"> 			,u_pwd 			= #{u_pwd} </if>
@@ -156,21 +156,21 @@
       /*update-bymap-user*/
       UPDATE TB_USER
       	<include refid= "update-bymap-user-set" />
-      WHERE 
-      	unique_id = #{unique_id} 
+      WHERE
+      	unique_id = #{unique_id}
       	AND del_yn='N'
 	</update >
-   
+
 	<update id="delete-bymap-user" parameterType="map">
-		UPDATE TB_USER 
-		SET 
+		UPDATE TB_USER
+		SET
 			changer_uid = #{changer_uid},
 			changer = #{changer},
 			change_date=#{change_date},
-			del_yn = 'Y' 
+			del_yn = 'Y'
 		where unique_id=#{unique_id}
 	</update>
-	
+
 	<select id="getUserPwd" parameterType="map" resultType="String">
 		/*"getUserPwd"*/SELECT
 		u_pwd
@@ -178,5 +178,5 @@
 		WHERE del_yn = 'N' AND unique_id = #{unique_id}
 		AND uid_company = #{uid_company}
 	</select>
-   
+
 </mapper>
