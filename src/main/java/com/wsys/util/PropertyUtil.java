@@ -5,11 +5,11 @@ import org.springframework.context.ApplicationContext;
 
 @Slf4j
 public class PropertyUtil {
-	
+
 	public static String getProperty(String propertyName) {
 		return getProperty(propertyName, null);
 	}
-	
+
 	public static String getProperty(String propertyName, String defaultValue) {
 		String value = defaultValue;
 		ApplicationContext applicationContext = ApplicationContextServe.getApplicationContext();
@@ -19,9 +19,8 @@ public class PropertyUtil {
 		} else {
 			value = applicationContext.getEnvironment().getProperty(propertyName).toString();
 		}
-	
+
 		return value;
 	}
 
 }
-

@@ -14,7 +14,7 @@ import com.wsys.vo.CommonVo;
 
 @Repository("CompEnvDao")
 public class CompEnvDaoimpl extends CommonDao implements CompEnvDao {
-	
+
 	public CompEnvDaoimpl() {
 		super("compenv");
 	}

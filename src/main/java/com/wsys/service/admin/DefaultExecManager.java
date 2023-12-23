@@ -136,11 +136,12 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 	@Override
 	// ##DBG lotno 수정.추가
 	public void execWearing(String lotno, Long uid_company, Long user_uid, String user_id, String user_name,
-			List<Long> item_uids, List<Double> item_quans, Long bin_uid) throws Exception {
+			List<Long> item_uids, List<Double> item_quans, Long bin_uid, Date exp_date) throws Exception {
 		Date now = new Date();
 		Location location = new Location();
 		location.setUid_bin(bin_uid);
 		location.setLast_in_date(now);
+		location.setExp_date(exp_date);
 
 		Map cond = new HashMap();
 		cond.put("uid_company", uid_company);
@@ -246,7 +247,7 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 			catch(Exception e1) {
 				lotno="";
 			}
-			
+
 			map.put("location_uid", location_uid);
 			map.put("location_quan", location_quan);
 			map.put("lotno", lotno);
@@ -363,12 +364,12 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 		String rack_code = rack_barcode.substring(0, rack_barcode.length()-6+2);
 		String bin_col = rack_barcode.substring(rack_barcode.length()-4, rack_barcode.length()-2);
 		String bin_row = rack_barcode.substring(rack_barcode.length()-2, rack_barcode.length());
-		
+
 		System.out.println(wh_code);
 		System.out.println(rack_code);
 		System.out.println(bin_col);
 		System.out.println(bin_row);
-		
+
 		Map cond = new HashMap();
 		List<Whouse> whouseList = new ArrayList<Whouse>();
 
@@ -423,11 +424,11 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 //								uid_rack_2 = Long.parseLong (r.getRack_code());
 //						}
 //						System.out.println("uid_rack_2:" + uid_rack_2);					System.out.println("------- uid_rack get code ---2---");
-//		
-//				if(uid_rack==-1 || uid_rack != uid_rack_2){		
+//
+//				if(uid_rack==-1 || uid_rack != uid_rack_2){
 					uid_rack = this.rackDao.insert(uid_company, true, user_name, user_uid, "rack", rack);
 				//}
-				
+
 				// 3. Bin 추가
 				for (int i = 1; i <= rack_col; i++) {
 					String col = "";
@@ -540,7 +541,7 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 
 		String result = "success";
-//		
+//
 		for (Iterator<String> it = multipartRequest.getFileNames(); it.hasNext();) {
 			String fileName = (String) it.next();
 			MultipartFile multipartFile = (MultipartFile) multipartRequest.getFileMap().get(fileName);
@@ -863,7 +864,7 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 
 		String result = "success";
-//		
+//
 		for (Iterator<String> it = multipartRequest.getFileNames(); it.hasNext();) {
 			String fileName = (String) it.next();
 			MultipartFile multipartFile = (MultipartFile) multipartRequest.getFileMap().get(fileName);
@@ -1226,11 +1227,11 @@ System.out.println("##DBG--------1-");
 				break;
 			}
 
-//			xssfCell = xssfRow.createCell((short) 0); 
-//			xssfCell.setCellStyle(tableCellStyle); 
+//			xssfCell = xssfRow.createCell((short) 0);
+//			xssfCell.setCellStyle(tableCellStyle);
 //			xssfCell.setCellValue("QR코드");
-//			xssfCell = xssfRow.createCell((short) 1); 
-//			xssfCell.setCellStyle(tableCellStyle); 
+//			xssfCell = xssfRow.createCell((short) 1);
+//			xssfCell.setCellStyle(tableCellStyle);
 //			xssfCell.setCellValue("바코드");
 			xssfCell = xssfRow.createCell((short) 1);
 			xssfCell.setCellStyle(tableCellStyle);
@@ -1265,7 +1266,7 @@ System.out.println("##DBG--------1-");
 				String detail_info = item.getDetail_info();
 				String unit_code = item.getUnit_code();
 				Double safe_quan = item.getSafe_quan();
-				
+
 				if(safe_quan==null) {
 					safe_quan=0.0;
 				}
@@ -1306,21 +1307,21 @@ System.out.println("##DBG--------1-");
 
 //				file = new File(barcodePath + "/" + unique_id_str + ".png");
 //				if(file.exists() && file.canRead()) {
-//					
+//
 //					xssfCell = xssfRow.createCell((short) 1);
 //					xssfCell.setCellStyle(tableCellStyle);
-//					
+//
 //					FileInputStream inputStream  = new FileInputStream(file);
 //					byte[] bytes = IOUtils.toByteArray(inputStream);
 //					int pictureIdx = xssfWb.addPicture(bytes, XSSFWorkbook.PICTURE_TYPE_JPEG);
 //
 //					inputStream.close();
-//					
+//
 //					int dx1 = 10 * Units.EMU_PER_PIXEL;
 //					int dx2 = -5 * Units.EMU_PER_PIXEL;
 //					int dy1 = 10 * Units.EMU_PER_PIXEL;
 //					int dy2 = -5 * Units.EMU_PER_PIXEL;
-//					
+//
 //					XSSFClientAnchor anchor = new XSSFClientAnchor(dx1, dy1, dx2, dy2, 1, idx, 2, idx+1);
 //					XSSFPicture pict = drawing.createPicture(anchor, pictureIdx);
 //				}
@@ -1602,8 +1603,8 @@ System.out.println("##DBG--------1-");
 					XSSFPicture pict = drawing.createPicture(anchor, pictureIdx);
 				}
 
-//				xssfCell = xssfRow.createCell((short) 0); 
-//				xssfCell.setCellStyle(tableCellStyle); 
+//				xssfCell = xssfRow.createCell((short) 0);
+//				xssfCell.setCellStyle(tableCellStyle);
 //				xssfCell.setCellValue(wh_code + "(" + wh_name + ")");
 
 				xssfCell = xssfRow.createCell((short) 1);
@@ -1628,7 +1629,7 @@ System.out.println("##DBG--------1-");
 			}
 
 //			String osName = System.getProperty("os.name").toLowerCase();
-//			
+//
 //			String first = "";
 //			if(osName.contains("win")) {
 //				first = "C:";
@@ -1714,7 +1715,7 @@ System.out.println("##DBG--------1-");
 
 			tableCellStyle.setAlignment(HorizontalAlignment.CENTER);
 			tableCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-			
+
 			xssfSheet.setColumnWidth((short) 0, 6000);
 
 			switch (type) {
@@ -1735,7 +1736,7 @@ System.out.println("##DBG--------1-");
 
 			xssfCell = xssfRow.createCell((short) 0);
 			xssfCell.setCellStyle(tableCellStyle);
-			
+
 			switch (type) {
 			case "BARCODE":
 				xssfCell.setCellValue("바코드");
@@ -1744,7 +1745,7 @@ System.out.println("##DBG--------1-");
 				xssfCell.setCellValue("QR코드");
 				break;
 			}
-			
+
 			//xssfCell.setCellValue("바코드");
 			xssfCell = xssfRow.createCell((short) 1);
 			xssfCell.setCellStyle(tableCellStyle);
@@ -1811,8 +1812,8 @@ System.out.println("##DBG--------1-");
 					XSSFPicture pict = drawing.createPicture(anchor, pictureIdx);
 				}
 
-//				xssfCell = xssfRow.createCell((short) 0); 
-//				xssfCell.setCellStyle(tableCellStyle); 
+//				xssfCell = xssfRow.createCell((short) 0);
+//				xssfCell.setCellStyle(tableCellStyle);
 //				xssfCell.setCellValue(wh_code + "(" + wh_name + ")");
 
 				xssfCell = xssfRow.createCell((short) 1);
@@ -1837,7 +1838,7 @@ System.out.println("##DBG--------1-");
 			}
 
 //			String osName = System.getProperty("os.name").toLowerCase();
-//			
+//
 //			String first = "";
 //			if(osName.contains("win")) {
 //				first = "C:";
@@ -1930,11 +1931,11 @@ System.out.println("##DBG--------1-");
 //			xssfSheet.setColumnWidth((short) 0, 7000);
 //			xssfRow.setHeight((short) 500);
 
-//			xssfCell = xssfRow.createCell((short) 0); 
-//			xssfCell.setCellStyle(tableCellStyle); 
+//			xssfCell = xssfRow.createCell((short) 0);
+//			xssfCell.setCellStyle(tableCellStyle);
 //			xssfCell.setCellValue("창고");
-//			xssfCell = xssfRow.createCell((short) 1); 
-//			xssfCell.setCellStyle(tableCellStyle); 
+//			xssfCell = xssfRow.createCell((short) 1);
+//			xssfCell.setCellStyle(tableCellStyle);
 //			xssfCell.setCellValue("랙");
 			xssfCell = xssfRow.createCell((short) 0);
 			xssfCell.setCellStyle(tableCellStyle);
@@ -2138,10 +2139,10 @@ System.out.println("##DBG--------1-");
 
 		//Barcode barcode;
 		QRCodeWriter writer;
-		
+
 		int qrColor = 0xff020202;
 		int backgroundColor = 0xFFFFFFFF;
-		
+
 		for (Location loc : locationList) {
 			String bin_code = loc.getBin_code();
 			switch (type) {
@@ -2149,10 +2150,10 @@ System.out.println("##DBG--------1-");
 				// 바코드 생성
 				try {
 					Barcode barcode = BarcodeFactory.createCode128(bin_code);
-	
+
 					String path = barcodePath + "/" + bin_code + ".png";
 					file = new File(path);
-	
+
 					if (!file.exists()) {
 						BarcodeImageHandler.savePNG(barcode, file);
 						file = null;
@@ -2185,7 +2186,7 @@ System.out.println("##DBG--------1-");
 					// TODO: handle exception
 				}
 				break;
-			}		
+			}
 		}
 		return barcodePath;
 	}
@@ -2193,7 +2194,7 @@ System.out.println("##DBG--------1-");
 	@Override
 	public String createBarcodeBinData(Long uid_company, List<Bin> binList) {
 		String osName = System.getProperty("os.name").toLowerCase();
-		
+
 		String first = "";
 		if (osName.contains("win")) {
 			first = "C:";
@@ -2486,8 +2487,8 @@ System.out.println("##DBG--------1-");
 						XSSFPicture pict = drawing.createPicture(anchor, pictureIdx);
 					}
 
-//					xssfCell = xssfRow.createCell((short) 0); 
-//					xssfCell.setCellStyle(tableCellStyle); 
+//					xssfCell = xssfRow.createCell((short) 0);
+//					xssfCell.setCellStyle(tableCellStyle);
 //					xssfCell.setCellValue(wh_code + "(" + wh_name + ")");
 
 					xssfCell = xssfRow.createCell((short) 1);
@@ -2673,7 +2674,7 @@ System.out.println("##DBG--------1-");
 				int rowNum = 0;
 
 				xssfRow = xssfSheet.createRow(rowNum);
-				
+
 				switch (type) {
 				case "BARCODE":
 					xssfRow.setHeight((short) 1500);
@@ -2699,7 +2700,7 @@ System.out.println("##DBG--------1-");
 				case "QRCODE":
 					xssfSheet.setColumnWidth((short) 0, 3000);
 					break;
-				}				
+				}
 				xssfSheet.setColumnWidth((short) 1, 6000);
 				xssfSheet.setColumnWidth((short) 2, 6000);
 				xssfSheet.setColumnWidth((short) 3, 6000);
@@ -2783,8 +2784,8 @@ System.out.println("##DBG--------1-");
 						XSSFPicture pict = drawing.createPicture(anchor, pictureIdx);
 					}
 
-//					xssfCell = xssfRow.createCell((short) 0); 
-//					xssfCell.setCellStyle(tableCellStyle); 
+//					xssfCell = xssfRow.createCell((short) 0);
+//					xssfCell.setCellStyle(tableCellStyle);
 //					xssfCell.setCellValue(wh_code + "(" + wh_name + ")");
 
 					xssfCell = xssfRow.createCell((short) 1);
@@ -2868,10 +2869,10 @@ System.out.println("##DBG--------1-");
 				// 바코드 생성
 				try {
 					Barcode barcode = BarcodeFactory.createCode128(bin_code);
-	
+
 					String path = barcodePath + "/" + bin_code + ".png";
 					file = new File(path);
-	
+
 					if (!file.exists()) {
 						BarcodeImageHandler.savePNG(barcode, file);
 						file = null;

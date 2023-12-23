@@ -14,7 +14,7 @@ import com.wsys.vo.CommonVo;
 
 @Repository("CompanyDao")
 public class CompanyDaoimpl extends CommonDao implements CompanyDao {
-	
+
 	public CompanyDaoimpl() {
 		super("company");
 	}

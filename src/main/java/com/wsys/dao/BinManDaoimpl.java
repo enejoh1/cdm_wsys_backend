@@ -15,7 +15,7 @@ import com.wsys.vo.CommonVo;
 
 @Repository("BinManDao")
 public class BinManDaoimpl extends CommonDao implements BinManDao {
-	
+
 	public BinManDaoimpl() {
 		super("BinMan");
 	}

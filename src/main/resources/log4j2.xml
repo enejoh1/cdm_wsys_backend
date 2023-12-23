@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<Configuration> 
-	<Appenders> 
-		<Console name="console" target="SYSTEM_OUT"> 
-		<PatternLayout pattern="%d %5p [%c] %m%n" /> 
-		</Console> 
-	
-        <RollingFile name="logFile" fileName="d:/log/api.log" filePattern="app_%d{yyyyMMdd}-%i.log.gz">
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+		<PatternLayout pattern="%d %5p [%c] %m%n" />
+		</Console>
+
+        <RollingFile name="logFile" fileName="d:/log/api.log" filePattern="app_%d{yyyyMMdd}-%i.log.gz"  ignoreExceptions="false">
             <PatternLayout pattern="%-5p: %c - %m%n" />
         </RollingFile>
 
-	</Appenders> 
-	<Loggers> 
+	</Appenders>
+	<Loggers>
 		  <logger name="jdbc" level="OFF"/>
 		  <logger name="jdbc.sqlonly" level="DEBUG"/>
 		  <logger name="jdbc.sqltiming" level="OFF"/>
@@ -18,6 +18,5 @@
 		  <logger name="jdbc.resultset" level="OFF"/>
 		  <logger name="jdbc.resultsettable" level="DEBUG"/>
 		  <logger name="jdbc.connection" level="OFF"/>
-	</Loggers> 
+	</Loggers>
 </Configuration>
-

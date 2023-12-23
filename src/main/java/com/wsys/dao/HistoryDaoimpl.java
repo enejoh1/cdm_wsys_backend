@@ -14,7 +14,7 @@ import com.wsys.vo.CommonVo;
 
 @Repository("HistoryDao")
 public class HistoryDaoimpl extends CommonDao implements HistoryDao {
-	
+
 	public HistoryDaoimpl() {
 		super("history");
 	}

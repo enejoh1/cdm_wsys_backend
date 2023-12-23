@@ -14,7 +14,7 @@ import com.wsys.vo.CommonVo;
 
 @Repository("WhouseDao")
 public class WhouseDaoimpl extends CommonDao implements WhouseDao {
-	
+
 	public WhouseDaoimpl() {
 		super("whouse");
 	}

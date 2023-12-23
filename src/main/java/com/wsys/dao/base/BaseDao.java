@@ -19,10 +19,10 @@ public interface BaseDao {
 	public List select_cond(Long uid_company, String tableName, Map condition);
 	public List select_cond(Long uid_company, Map condition, DatabasePage page);
 	public List select_cond(Long uid_company, String tableName, Map condition, DatabasePage page);
-	
+
 	public CommonVo select_uid(Long unique_id);
 	public CommonVo select_uid(String tableName, Long unique_id);
-	
+
 	public String getNextCode(Long uid_company, String tableName, String column_name, String first_code, int length);
 	public String getAutoCode(Long uid_company, String tableName, String column_name, String first_code, int length);
 	public Integer getNextSortNo(Long comast_uid, String table_name, String column_name, String where_name, String where_value, Map cond);

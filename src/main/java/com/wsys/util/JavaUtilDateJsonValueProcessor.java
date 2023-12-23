@@ -8,17 +8,17 @@ import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;
 
 public class JavaUtilDateJsonValueProcessor implements JsonValueProcessor {
-	 
+
     private final DateFormat defaultDateFormat;
- 
+
     public JavaUtilDateJsonValueProcessor(){
         defaultDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     }
-    
+
     public JavaUtilDateJsonValueProcessor(String format){
         defaultDateFormat = new SimpleDateFormat(format);
     }
- 
+
     @Override
     public Object processArrayValue(Object paramObject, JsonConfig paramJsonConfig) {
 //    	if(paramObject == null) return null;
@@ -30,5 +30,5 @@ public class JavaUtilDateJsonValueProcessor implements JsonValueProcessor {
     public Object processObjectValue(String paramString, Object paramObject, JsonConfig paramJsonConfig) {
     	return processArrayValue(paramObject, paramJsonConfig);
     }
- 
+
 }

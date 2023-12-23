@@ -14,7 +14,7 @@ import com.wsys.vo.CommonVo;
 
 @Repository("ItemDao")
 public class ItemDaoimpl extends CommonDao implements ItemDao {
-	
+
 	public ItemDaoimpl() {
 		super("item");
 	}

@@ -16,7 +16,7 @@ public class History extends CommonVo {
 	public Double his_quan;
 	public Date his_date;
 	public String remark;
-	
+
 	public Double quan;
 	public Date last_in_date;
 	public String item_code;
@@ -24,7 +24,7 @@ public class History extends CommonVo {
 	public String specification;
 	public String detail_info;
 	public String unit_code;
-	
+
 	public String bin_code;
 	public String bin_name;
 	public String lotno;	//##DBG lotno추가

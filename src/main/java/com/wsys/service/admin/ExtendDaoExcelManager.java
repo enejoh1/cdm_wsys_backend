@@ -17,39 +17,39 @@ import com.wsys.dao.WhouseDao;
 import com.wsys.vo.SystemInfo;
 
 public abstract class ExtendDaoExcelManager implements ExcelManager {
-	
+
 	@Resource(name = "systemInfo")
 	protected SystemInfo systemInfo;
-	
+
 	@Resource(name = "CompanyDao")
 	protected CompanyDao companyDao;
-	
+
 	@Resource(name = "UserDao")
 	protected UserDao userDao;
-	
+
 	@Resource(name = "MenuDao")
 	protected MenuDao menuDao;
-	
+
 	@Resource(name = "ItemDao")
 	protected ItemDao itemDao;
-	
+
 	@Resource(name = "BinDao")
 	protected BinDao binDao;
-	
+
 	@Resource(name = "BinManDao")
 	protected BinManDao binManDao;
-	
+
 	@Resource(name = "LocationDao")
 	protected LocationDao locationDao;
-	
+
 	@Resource(name = "HistoryDao")
 	protected HistoryDao historyDao;
-	
+
 	@Resource(name = "RackDao")
 	protected RackDao rackDao;
-	
+
 	@Resource(name = "WhouseDao")
 	protected WhouseDao whouseDao;
-	
-	
+
+
 }

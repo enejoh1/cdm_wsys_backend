@@ -14,7 +14,7 @@ import com.wsys.vo.CommonVo;
 
 @Repository("AuthorDao")
 public class AuthorDaoimpl extends CommonDao implements AuthorDao {
-	
+
 	public AuthorDaoimpl() {
 		super("author");
 	}

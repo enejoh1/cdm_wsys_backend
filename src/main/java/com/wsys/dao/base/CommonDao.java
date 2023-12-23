@@ -35,12 +35,12 @@ public class CommonDao implements InitializingBean{
 	protected SqlSessionTemplate sqlSession;
 
 	protected String tableName = "UN-DEFINED";
-	
+
 	public CommonDao(String tableName) {
 		super();
 		this.tableName = tableName;
 	}
-	
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		SqlSessionFactory sf = sqlSession.getSqlSessionFactory();
@@ -49,13 +49,13 @@ public class CommonDao implements InitializingBean{
 		// printProps(props);
 
 	}
-	
+
 	protected void printQueryId(String queryId) {
 		if (log.isDebugEnabled()) {
 			log.debug(queryId);
 		}
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public List selectList(String queryId) {
 		printQueryId(queryId);
@@ -67,22 +67,22 @@ public class CommonDao implements InitializingBean{
 		printQueryId(queryId);
 		return sqlSession.selectList(queryId, params);
 	}
-	
+
 	public Object insert(String queryId, Object params) {
 		printQueryId(queryId);
 		return sqlSession.insert(queryId, params);
 	}
-	
+
 	public Object insertLogBatch(String queryId, Object params) {
 		printQueryId(queryId);
 		return sqlSession.insert(queryId, params);
 	}
-	
+
 	public int update(String queryId) {
 		printQueryId(queryId);
 		return (int) sqlSession.update(queryId);
 	}
-	
+
 	public int update(String queryId, Object params) {
 		System.out.println("--##DBG----int update(String queryId, Object params)-----------------");
 		System.out.println(queryId);
@@ -91,7 +91,7 @@ public class CommonDao implements InitializingBean{
 		printQueryId(queryId);
 		return (int) sqlSession.update(queryId, params);
 	}
-	
+
 	public Object selectOne(String queryId) {
 		printQueryId(queryId);
 		return sqlSession.selectOne(queryId);
@@ -101,7 +101,7 @@ public class CommonDao implements InitializingBean{
 		printQueryId(queryId);
 		return sqlSession.selectOne(queryId, cond);
 	}
-	
+
 	public Object selectOne(String queryId, Map cond) {
 		printQueryId(queryId);
 		return sqlSession.selectOne(queryId, cond);
@@ -111,12 +111,12 @@ public class CommonDao implements InitializingBean{
 		printQueryId(queryId);
 		return sqlSession.selectOne(queryId);
 	}
-	
+
 	public Object queryForObject(String queryId, Object params) {
 		printQueryId(queryId);
 		return sqlSession.selectOne(queryId, params);
 	}
-	
+
 	public List queryForList(String queryId, Object params) {
 		printQueryId(queryId);
 		return sqlSession.selectList(queryId, params);
@@ -126,10 +126,10 @@ public class CommonDao implements InitializingBean{
 		printQueryId(queryId);
 		return (Object) sqlSession.update(queryId, params);
 	}
-	
+
 	public Long getNextUid(String tableName) {
 		String seq_name = "getNextSeqId";
-		
+
 		Map<String, String> mapSequenceName = new HashMap<String, String>();
 		mapSequenceName.put("seq_name", "sq_" + tableName.toLowerCase());
 
@@ -138,28 +138,28 @@ public class CommonDao implements InitializingBean{
 
 	public Long getCurUid(String tableName) {
 		String curSeqName = "getCurSeqId";
-		
+
 		Map<String, String> seqCond = new HashMap<String, String>();
 			seqCond.put("seq_name", "sq_" + tableName.toLowerCase());
 
 		return ((Long) this.queryForObject(curSeqName, seqCond));
 	}
-	
+
 	public Long getTableLastUid(String tableName) {
 		String curSeqName = "getTableLastUid";
-		
+
 		Map<String, String> seqCond = new HashMap<String, String>();
 			seqCond.put("table_name", "tb_" + tableName.toLowerCase());
 
 		return ((Long) this.queryForObject(curSeqName, seqCond));
 	}
-	
+
 	public int updateLastSeqId(String tableName) {
 		String queryId = "updateLastSeqId";
 		//현재테이블에 사용되고 있는 마지막 UID 가져오기
 		Long curUId = getTableLastUid(tableName);
-		
-		//해당 시퀀스에 마지막 UID 업데이트 
+
+		//해당 시퀀스에 마지막 UID 업데이트
 		Map seqCond = new HashMap<String, String>();
 			seqCond.put("seq_name", "SQ_" + tableName.toLowerCase());
 			seqCond.put("lastSeqId", curUId);
@@ -177,7 +177,7 @@ public class CommonDao implements InitializingBean{
 		}
 		return sdomain.getUnique_id();
 	}
-	
+
 //CRUD
 	public Long insert(boolean use_seq, String creator, Long creator_uid, String tableName, CommonVo sdomain)
 			throws Exception {
@@ -194,9 +194,9 @@ public class CommonDao implements InitializingBean{
 		sdomain.setCreator(creator);
 		sdomain.setCreator_uid(creator_uid);
 		sdomain.setUid_company(uid_company);
-		
+
 		return this.insert(use_seq, tableName, sdomain);
-		
+
 	}
 
 	//##DBG lotno 수정.추가
@@ -211,10 +211,10 @@ public class CommonDao implements InitializingBean{
 		sdomain.setUid_company(uid_company);
 		System.out.println("----:a6-1-4--");
 		sdomain.setLotno(lotno);//##DBG lotno 추가
-		
-		return this.insert(use_seq, tableName, sdomain);		
+
+		return this.insert(use_seq, tableName, sdomain);
 	}
-	
+
 	//##DBG lotno 수정.추가
 	public Long insert(String lotno, Long uid_company, boolean use_seq, String creator, Long creator_uid, String tableName, String sqlName, CommonVo sdomain)
 			throws Exception {
@@ -224,13 +224,13 @@ public class CommonDao implements InitializingBean{
 		sdomain.setCreator_uid(creator_uid);
 		sdomain.setUid_company(uid_company);
 		sdomain.setLotno(lotno);//##DBG lotno 추가
-		
+
 		return this.insert(use_seq, tableName, sqlName, sdomain);
-		
+
 	}
 
 	protected Long insert(boolean use_seq, String tableName, CommonVo sdomain) {
-		
+
 		Exception[] e = new Exception[1];
 		Date today = new Date();
 		sdomain.setCreate_date(today);
@@ -238,7 +238,7 @@ public class CommonDao implements InitializingBean{
 		System.out.println("----:a6-1-5--");
 		Long nextUid = sdomain.getUnique_id();
 		System.out.println("----:a6-1-6--");
-		
+
 		//seq 사용할 경우
 		if (use_seq == true) {
 			System.out.println("----:a6-1-7--");
@@ -256,29 +256,29 @@ public class CommonDao implements InitializingBean{
 					nextUid = getNextUid(tableName);
 					System.out.println("----:a6-1-12--");
 				}
-			}	
-			
+			}
+
 			System.out.println("----:a6-1-13--");
 			sdomain.setUnique_id(nextUid);
 			System.out.println("----:a6-1-14--");
 		}
-		
+
 		System.out.println("----:a6-1-15--");
 		Long retUid = this.insert(/* "insert-" + */tableName.toLowerCase(), sdomain, e);
 		System.out.println("----:a6-1-16--");
-		
+
 		return retUid;
 
 	}
-	
+
 	protected Long insert(boolean use_seq, String tableName, String sqlName, CommonVo sdomain) {
-		
+
 		Exception[] e = new Exception[1];
 		Date today = new Date();
 		sdomain.setCreate_date(today);
-		
+
 		Long nextUid = sdomain.getUnique_id();
-		
+
 		//seq 사용할 경우
 		if (use_seq == true) {
 			Long tbLastUid = getTableLastUid(tableName);
@@ -290,17 +290,17 @@ public class CommonDao implements InitializingBean{
 					//SEQID 다시 불러온 후 넣어줌
 					nextUid = getNextUid(tableName);
 				}
-			}	
-			
+			}
+
 			sdomain.setUnique_id(nextUid);
 		}
-		
+
 		Long retUid = this.insert(/* "insert-" + */sqlName.toLowerCase(), sdomain, e);
-		
+
 		return retUid;
-		
+
 	}
-	
+
 	protected Long insertSysLog(String tableName, Map logMap) {
 		try {
 			insertLogBatch(tableName, logMap);
@@ -309,20 +309,20 @@ public class CommonDao implements InitializingBean{
 		}
 		return -1L;
 	}
-	
+
 	public int updateByMap(String changer, Long changer_uid, String tableName, Map map) {
 		map.put("changer_uid", changer_uid);
 		map.put("changer", changer);
 		map.put("change_date", new Date());
-		
+
 		int n = 0;
-		
+
 		try {
 			n = this.update("update-bymap-" + tableName.toLowerCase(), map);
 		} catch (Exception e) {
-			e.printStackTrace();	
+			e.printStackTrace();
 		}
-		
+
 		return n;
 	}
 
@@ -330,26 +330,26 @@ public class CommonDao implements InitializingBean{
 		map.put("changer_uid", changer_uid);
 		map.put("changer", changer);
 		map.put("change_date", new Date());
-		
+
 		return this.update("delete-bymap-" + tableName.toLowerCase(), map);
 	}
-	
+
 	public CommonVo select_uid(Long unique_id) {
 		if (tableName.compareToIgnoreCase("UN-DEFINED") == 0)
 			return null;
 		return select_uid(this.tableName, unique_id);
 	}
-	
+
 	public CommonVo select_uid(String tableName, Long unique_id) {
 		return (CommonVo) this.queryForObject("selectuid-" + tableName.toLowerCase(), unique_id);
 	}
-	
+
 	public List select_cond(Long uid_comast, Map condition) {
 		if (tableName.compareToIgnoreCase("UN-DEFINED") == 0)
 			return null;
 		return select_cond(uid_comast, this.tableName, condition);
 	}
-	
+
 	public List select_cond(Long uid_company, String tableName, Map condition) {
 		if (uid_company == null) {//세션이 끊어진경우.
 			return null;
@@ -362,7 +362,7 @@ public class CommonDao implements InitializingBean{
 		}
 		return select_cond(tableName, condition);
 	}
-	
+
 	public List select_cond(Long uid_comast, Map condition, DatabasePage page) {
 		if (tableName.compareToIgnoreCase("UN-DEFINED") == 0)
 			return null;
@@ -380,13 +380,13 @@ public class CommonDao implements InitializingBean{
 				condition.put("uid_company", uid_company);
 			}
 		}
-		
+
 		String order_by = null;
 		if (page != null && page.getListSort() != null) {
 			for (String sort : page.getListSort()) {
-				System.out.print(">>>>>>1>>>>>>");		
-				System.out.print(sort);		
-				System.out.println("<<<<1<<<<<<<");		
+				System.out.print(">>>>>>1>>>>>>");
+				System.out.print(sort);
+				System.out.println("<<<<1<<<<<<<");
 				log.debug("sort = " + sort);
 
 				if (order_by == null) {
@@ -415,12 +415,12 @@ public class CommonDao implements InitializingBean{
 //			limit = 100;
 			limit = 10000;
 		}
-		
+
 
 		Boolean isAsc = null;	//##DBG 정렬 추가
 		isAsc = page.getListSortAsc(); //##DBG 추가
 
-//		}		
+//		}
 		List list = select_cond(tableName + "-page", condition, start, limit, order_by, isAsc); //##DBG 정렬 수정
 //		this.addSysLogs(uid_company, list, page);
 
@@ -457,7 +457,7 @@ public class CommonDao implements InitializingBean{
 
 		return select_cond(tableName/* + "-paging" */, condition);
 	}
-	
+
 	public List select_cond(String tableName, Map condition) {
 		System.out.println("-##DBG-----List select_cond(String tableName, Map condition)---------");
 		try {
@@ -467,7 +467,7 @@ public class CommonDao implements InitializingBean{
 			return null;
 		}
 	}
-	
+
 	public List select_cond(String tableName, Map condition, DatabasePage page) {
 		String order_by = null;
 		if (page != null && page.getListSort() != null) {
@@ -488,7 +488,7 @@ public class CommonDao implements InitializingBean{
 
 		try {
 			count = (Integer) this.queryForObject("selectcond-" + tableName + "-count", condition);
-		} catch (Exception e) { 
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -506,18 +506,18 @@ public class CommonDao implements InitializingBean{
 			limit = 100;
 //			limit = 1000;
 		}
-		
+
 		List list = select_cond(tableName + "-page", condition, start, limit, order_by, null);
-		
+
 		Long uid_company = (Long) condition.get("uid_company");
 //		this.addSysLogs(uid_company, list, page);
-		
+
 		return list;
 	}
-	
+
 	public String getNextCode(Long uid_company, String tableName, String column_name, String first_code, int length) {
 		String queryName = "getNextCode";
-		
+
 		Map<String, Object> cond = new HashMap<String, Object>();
 			cond.put("table_name", "tb_" + tableName.toLowerCase());
 			cond.put("column_name", column_name);
@@ -525,10 +525,10 @@ public class CommonDao implements InitializingBean{
 			cond.put("length", length);
 		return ((String) this.queryForObject(queryName, cond));
 	}
-	
+
 	public String getAutoCode(Long uid_company, String tableName, String column_name, String first_code, int length) {
 		String queryName = "getAutoCode";
-		
+
 		Map<String, Object> cond = new HashMap<String, Object>();
 			cond.put("table_name", "tb_" + tableName.toLowerCase());
 			cond.put("column_name", column_name);
@@ -536,7 +536,7 @@ public class CommonDao implements InitializingBean{
 			cond.put("length", length);
 		return ((String) this.queryForObject(queryName, cond));
 	}
-	
+
 	public Integer getNextSortNo(Long uid_company, String table_name, String column_name, String where_name,
 			String where_value, Map cond) {
 		cond.put("table_name", "tb_" + tableName.toLowerCase());
@@ -544,41 +544,41 @@ public class CommonDao implements InitializingBean{
 		cond.put("column_name", column_name);
 		cond.put("where_name", where_name);
 		cond.put("where_value", where_value);
-		
+
 		return (Integer) this.queryForObject("getNextSortNo", cond);
 	}
-	
+
 	public Long duplicateCodeCheck(Long uid_company, String tableName, String column_name, String code) {
 		String queryName = "duplicateCodeCheck";
-		
+
 		Map<String, Object> cond = new HashMap<String, Object>();
 			cond.put("table_name", "tb_" + tableName.toLowerCase());
 			cond.put("column_name", column_name);
 			cond.put("code", code);
 		return ((Long) this.queryForObject(queryName, cond));
 	}
-	
+
 //	public void addSysLogs(Long uid_company, List list, DatabasePage page) {
 //		Map<String, Object> data = new HashMap<String, Object>();
 //		data.put("datas", list);
-//		
+//
 //		JsonValueProcessor beanProcessor = new JavaUtilDateJsonValueProcessor();
 //		JsonConfig jsonConfig = new JsonConfig();
-//		jsonConfig.registerJsonValueProcessor(java.util.Date.class, beanProcessor);		 
+//		jsonConfig.registerJsonValueProcessor(java.util.Date.class, beanProcessor);
 //		String jsonStr = JSONObject.fromObject(data, jsonConfig).toString();
-//		
+//
 //		int bytes = jsonStr.getBytes(StandardCharsets.UTF_8).length;
-//		
+//
 //		try {
-//		    
+//
 //		    String ip = page.getIp_address();
 //			String menu_code = page.getMenu_code();
 //			String menu_name = page.getMenu_name();
 //			SysLog syslog = new SysLog();
 //			Double dataDouble = (double) bytes;
-//			SysLog log = new SysLog(uid_company, page.getUser_id(), ip, menu_code, menu_name, page.getEvent_type(), 
+//			SysLog log = new SysLog(uid_company, page.getUser_id(), ip, menu_code, menu_name, page.getEvent_type(),
 //					new Date(), null, dataDouble);
-//			
+//
 //			Map logMap = new HashMap();
 //			logMap.put("uid_company", uid_company);
 //			logMap.put("user_id", page.getUser_id());
@@ -589,15 +589,15 @@ public class CommonDao implements InitializingBean{
 //			logMap.put("event_date", new Date());
 //			logMap.put("event_reason", null);
 //			logMap.put("data_size", dataDouble);
-//			
+//
 //			Long uid_syslog = this.insertSysLog("PC_INSERT_SYSLOG", logMap);
-//			
+//
 //		} catch(Exception e) {
-//			
+//
 //		}
 //	}
-	
-	
+
+
 	private void printProps(Properties props) {
 		// System.out.println("\n");
 		if (props != null) {

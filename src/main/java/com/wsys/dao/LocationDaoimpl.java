@@ -16,7 +16,7 @@ import com.wsys.vo.Location;
 
 @Repository("LocationDao")
 public class LocationDaoimpl extends CommonDao implements LocationDao {
-	
+
 	public LocationDaoimpl() {
 		super("location");
 	}
@@ -34,7 +34,7 @@ public class LocationDaoimpl extends CommonDao implements LocationDao {
 	}
 
 	@Override
-	public void updateLocationByUniqueData(Long uid_company, Long uid_location, Double quan, 
+	public void updateLocationByUniqueData(Long uid_company, Long uid_location, Double quan,
 			Long user_uid, String user_name, String type) {
 		Map map = new HashMap();
 		map.put("uid_company", uid_company);
@@ -59,7 +59,7 @@ public class LocationDaoimpl extends CommonDao implements LocationDao {
 	}
 
 	@Override
-	public void updateLocationByUniqueData(String lotno, Long uid_company, Long uid_location, Double quan, 
+	public void updateLocationByUniqueData(String lotno, Long uid_company, Long uid_location, Double quan,
 			Long user_uid, String user_name, String type) {
 		Map map = new HashMap();
 		map.put("uid_company", uid_company);
@@ -79,7 +79,7 @@ public class LocationDaoimpl extends CommonDao implements LocationDao {
 				break;
 			}
 		}
-		
+
 		System.out.println("--##DBG----updateLocationByUniqueData(String lotno, Long uid_company, Long uid_location, Double quan, Long user_uid, String user_name, String type)---------------");
 		System.out.println(map);
 		this.update("updateLocationByUniqueData", map);

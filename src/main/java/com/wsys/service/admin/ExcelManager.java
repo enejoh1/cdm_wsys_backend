@@ -24,7 +24,7 @@ public interface ExcelManager {
 
 	public String ExcelReleaseUpload(Long uid_company, Long user_uid, String user_id, String user_name,
 			HttpServletRequest request, HttpServletResponse response) throws Exception;
-	
+
 	public String ExcelStockMoveUpload(Long uid_company, Long user_uid, String user_id, String user_name,
 			HttpServletRequest request, HttpServletResponse response) throws Exception;
 

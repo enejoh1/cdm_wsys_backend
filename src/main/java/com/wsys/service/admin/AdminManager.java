@@ -41,5 +41,5 @@ public interface AdminManager {
 			List<String> cp_name_list, List<String> email_list, List<String> address_list, List<String> tel_no_list) throws Exception;
 
 	public void updateCodeType(String user_id, String user_name, Long user_uid, Long unique_id, String codeType);
-	
+
 }

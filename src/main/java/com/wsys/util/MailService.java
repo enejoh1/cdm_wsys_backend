@@ -21,7 +21,7 @@ import lombok.AllArgsConstructor;
 public class MailService {
 	@Autowired
 	private JavaMailSender javaMailSender;
-	
+
 	public void sendMailAttach(MailVo mailVo) {
 		try {
 				MimeMessage message = javaMailSender.createMimeMessage();

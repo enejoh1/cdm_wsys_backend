@@ -16,11 +16,11 @@ public class WsysApplication extends SpringBootServletInitializer {
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(WsysApplication.class);
 	}
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(WsysApplication.class, args);
 	}
-	
+
 	@Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {

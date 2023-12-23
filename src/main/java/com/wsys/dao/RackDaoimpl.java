@@ -15,7 +15,7 @@ import com.wsys.vo.Rack;
 
 @Repository("RackDao")
 public class RackDaoimpl extends CommonDao implements RackDao {
-	
+
 	public RackDaoimpl() {
 		super("rack");
 	}
@@ -43,7 +43,7 @@ public class RackDaoimpl extends CommonDao implements RackDao {
 	@Override
 	public void deleteRackAllData(String user_name, Long user_uid, Long rackUid) {
 		Map map = new HashMap();
-		map.put("changer", user_name); 
+		map.put("changer", user_name);
 		map.put("changer_uid", user_uid);
 		map.put("uid_rack", rackUid);
 		// Location -> Bin -> Rack �닚�쑝濡� �궘�젣

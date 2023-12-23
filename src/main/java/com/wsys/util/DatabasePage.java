@@ -8,9 +8,9 @@ public class DatabasePage {
 	private Integer start = -1;
 	private Integer count = 0;
 	private Boolean sortAsc = false;
-	
+
 	private List<String> listSort;  //first: property, second: direction
-	
+
 	// syslog 瑜� �쐞�븳 ���옣
 	public String user_id = null;
 	public String ip_address = null;
@@ -18,7 +18,7 @@ public class DatabasePage {
 	public String menu_name = null;
 	public String event_type = "議고쉶";
 	public Double data_size = 0.0;
-	
+
 	public DatabasePage() {
 		super();
 		limit = 100;
@@ -33,7 +33,7 @@ public class DatabasePage {
 		count = max;
 		listSort = new ArrayList<String>();
 	}
-	
+
 	public void setDefault() {
 		limit = 100;
 		start = 0;
@@ -41,7 +41,7 @@ public class DatabasePage {
 		listSort = new ArrayList<String>();
 		listSort.add("unique_id");
 	}
-	
+
 	public DatabasePage(String sort_order) {
 		limit = 100;
 		start = 0;
@@ -49,12 +49,12 @@ public class DatabasePage {
 		listSort = new ArrayList<String>();
 		listSort.add(sort_order);
 	}
-	
+
 	public DatabasePage(DatabasePage page) {
 		this.limit = page.getLimit();
 		this.start = page.getStart();
 		this.count = page.getCount();
-		
+
 		 List<String> list = page.getListSort();
 		 if(list!=null) {
 			 for(String sort : list) {
@@ -74,21 +74,21 @@ public class DatabasePage {
 	public void setStart(Integer start) {
 		this.start = start;
 	}
-	
+
 	public List<String> getListSort() {
 		return listSort;
 	}
 	public void setListSort(List<String> listSort) {
 		this.listSort = listSort;
 	}
-	
+
 	public void addSort(String sort) {
 		if(this.listSort==null) {
 			this.listSort = new ArrayList<String>();
 		}
 		listSort.add(sort);
 	}
-	
+
 	//##DBG 정렬 추가
 	public Boolean getListSortAsc() {
 		return sortAsc;
@@ -97,7 +97,7 @@ public class DatabasePage {
 	public void addSortAsc(Boolean sort_Asc) {
 		sortAsc = sort_Asc;
 	}
-	
+
 	public void removeAllSort() {
 		if(this.listSort!=null) {
 			this.listSort.clear();
@@ -145,8 +145,5 @@ public class DatabasePage {
 	public void setMenu_name(String menu_name) {
 		this.menu_name = menu_name;
 	}
-	
+
 }
-
-
-

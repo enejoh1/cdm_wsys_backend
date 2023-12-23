@@ -15,7 +15,7 @@ import com.wsys.vo.Menu;
 
 @Repository("MenuDao")
 public class MenuDaoimpl extends CommonDao implements MenuDao {
-	
+
 	public MenuDaoimpl() {
 		super("menu");
 	}

@@ -17,7 +17,7 @@ public class BinMan extends CommonVo {
 	public Integer bin_row;
 	public Integer bin_col;
 	public String remark;
-	
+
 	public String rack_code;
 	public String rack_name;
 	public String wh_code;

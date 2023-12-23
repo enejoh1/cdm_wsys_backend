@@ -21,21 +21,23 @@ public class CommonVo implements Serializable{
 	protected String	changer = null;		//수정한사람
 	protected Date	 	change_date = null;	//수정일자
 	protected Long		rownum = null;			//row수
-	
+
 	protected String    lotno = null;	//##DBG lotno 추가
-	
-	protected JSONObject	jsonObject; 
+
+	protected JSONObject	jsonObject;
 	protected JSONArray		jsonArray;
-	
+
 	protected SimpleDateFormat	dateFormat 		= new SimpleDateFormat("yyyy-MM-dd");
 	protected SimpleDateFormat	dateFormatDetail = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	protected DecimalFormat 	decimalFormat 		= new DecimalFormat("#,###.##");
-	
+	protected Date				exp_date = null;
+
+
 	public Long getId() {
 		if(unique_id == null || unique_id < 1L) unique_id = null;
 		return unique_id;
 	}
-	
+
 	public Long getUnique_id() {
 		return unique_id;
 	}
@@ -43,11 +45,11 @@ public class CommonVo implements Serializable{
 	public void setUnique_id(Long unique_id) {
 		this.unique_id = unique_id;
 	}
-	
+
 	public Long getKey() {
 		return unique_id;
 	}
-	
+
 	public String getUnique_id_str() {
 		return String.valueOf(unique_id);
 	}
@@ -135,21 +137,21 @@ public class CommonVo implements Serializable{
 			return "0";
 		return decimalFormat.format(value);
 	}
-	
+
 	public String Date2String(Date date) {
 		if(date==null)
 			return "0000-00-00";
 		return dateFormat.format(date);
 	}
-	
+
 	public String Date2String_Long(Date date) {
 		if(date==null)
 			return "0000/00/00 00:00:00";
 		return dateFormatDetail.format(date);
 	}
-	
+
 	public Date String2Date(String value) {
-		
+
 		Date date = null;
 		if(value==null || value.length()==0) {
 			return new Date();
@@ -159,10 +161,10 @@ public class CommonVo implements Serializable{
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		return date;
 	}
-	
+
 	public Date getNullDate(Date date) {
 		if(date==null) {
 			return null;
@@ -173,7 +175,14 @@ public class CommonVo implements Serializable{
 		}
 		return date;
 	}
-	
-	
-	
+
+	public Date getExp_date() {
+		return exp_date;
+	}
+
+	public void setExp_date(Date exp_date) {
+		this.exp_date = exp_date;
+	}
+
+
 }

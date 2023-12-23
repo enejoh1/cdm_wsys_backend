@@ -17,7 +17,7 @@ public class ExceptionConverter extends RuntimeException {
     }
 
     /**
-     * and allow the user of ExceptionConverter to get a handle to it. 
+     * and allow the user of ExceptionConverter to get a handle to it.
      * @return the original exception
      */
     public Exception getException() {
@@ -25,7 +25,7 @@ public class ExceptionConverter extends RuntimeException {
     }
 
     /**
-     * We print the message of the checked exception 
+     * We print the message of the checked exception
      * @return message of the original exception
      */
     public String getMessage() {
@@ -41,7 +41,7 @@ public class ExceptionConverter extends RuntimeException {
     }
 
     /**
-     * The toString() is changed to be prefixed with ExceptionConverter 
+     * The toString() is changed to be prefixed with ExceptionConverter
      * @return String version of the exception
      */
     public String toString() {
@@ -55,7 +55,7 @@ public class ExceptionConverter extends RuntimeException {
 
     /**
      * here we prefix, with s.print(), not s.println(), the stack
-     * trace with "ExceptionConverter:" 
+     * trace with "ExceptionConverter:"
      * @param s
      */
     public void printStackTrace(java.io.PrintStream s) {
@@ -66,7 +66,7 @@ public class ExceptionConverter extends RuntimeException {
     }
 
     /**
-     * Again, we prefix the stack trace with "ExceptionConverter:" 
+     * Again, we prefix the stack trace with "ExceptionConverter:"
      * @param s
      */
     public void printStackTrace(java.io.PrintWriter s) {
@@ -79,7 +79,7 @@ public class ExceptionConverter extends RuntimeException {
     /**
      * requests to fill in the stack trace we will have to ignore.
      * We can't throw an exception here, because this method
-     * is called by the constructor of Throwable 
+     * is called by the constructor of Throwable
      * @return a Throwable
      */
     public Throwable fillInStackTrace() {

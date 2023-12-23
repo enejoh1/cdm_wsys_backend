@@ -23,7 +23,7 @@ import net.sf.json.JsonConfig;
 
 @Repository("BinDao")
 public class BinDaoimpl extends CommonDao implements BinDao {
-	
+
 	public BinDaoimpl() {
 		super("bin");
 	}

@@ -14,7 +14,7 @@ import com.wsys.vo.CommonVo;
 
 @Repository("SysConfDao")
 public class SysConfDaoimpl extends CommonDao implements SysConfDao {
-	
+
 	public SysConfDaoimpl() {
 		super("sysconf");
 	}

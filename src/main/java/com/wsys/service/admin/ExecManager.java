@@ -28,21 +28,21 @@ public interface ExecManager {
 	public List<BinMan> readBinMan(Long uid_company, Map cond, DatabasePage page);
 
 	public void execWearing(String lotno, Long uid_company, Long user_uid, String user_id, String user_name, List<Long> item_uids,
-			List<Double> item_quans, Long bin_uid) throws Exception;//##DBG lotno ����.�߰�
-	
+			List<Double> item_quans, Long bin_uid, Date exp_date) throws Exception;//##DBG lotno ����.�߰�
+
 	public void execRelease(String lotno, Long uid_company, Long user_uid, String user_id, String user_name, List<Long> location_uids,
 			List<Double> location_quans) throws Exception;//##DBG lotno ����.�߰�
 
-	public void execMove(Long uid_company, Long user_uid, String user_id, String user_name, 
+	public void execMove(Long uid_company, Long user_uid, String user_id, String user_name,
 			List<Long> location_uids, List<Double> location_quans, Long bin_uid) throws Exception;
 
-	public void execMove(List<String> lotnos, Long uid_company, Long user_uid, String user_id, String user_name, 
+	public void execMove(List<String> lotnos, Long uid_company, Long user_uid, String user_id, String user_name,
 			List<Long> location_uids, List<Double> location_quans, Long bin_uid) throws Exception; //##DBG lotno �߰�
 
 	public List<Location> readLocation(Long uid_company, Map cond, DatabasePage page);
-	
+
 	public List<Location> readLocationByItem(Long uid_company, Map cond, DatabasePage page);
-	
+
 	//##DBG 추가 : readLocationByLotNo
 	public List<Location> readLocationByLotNo(Long uid_company, Map cond, DatabasePage page);
 
@@ -116,7 +116,7 @@ public interface ExecManager {
 
 	public void cancelInOut(Long uid_company, Long user_uid, String user_id, String user_name,
 			List<Long> unique_id_list);
-	
+
 	public String createBinExcelTemplate(Long uid_company, List<Bin> binList, List<Rack> whouseGroup,
 			String barcodeFolder, String type); //##DBG 추가
 	public String createBarcodeBinData(Long uid_company, List<Bin> binList, String type); //##DBG추가
