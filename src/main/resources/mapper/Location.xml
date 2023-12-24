@@ -105,7 +105,7 @@
 		location.del_yn, location.creator, location.creator_uid, location.create_date, location.changer, location.changer_uid, location.change_date,
 
 		item.item_code, item.item_name, item.specification, item.detail_info, item.unit_code,
-		bin.bin_code, bin.bin_name, bin.bin_row, bin.bin_col,
+		bin.bin_code, bin.bin_name, bin.bin_row, bin.bin_col, location.exp_date,
 		rack.rack_code, rack.rack_name,
 		whouse.wh_code, whouse.wh_name
 	</sql>

@@ -31,6 +31,8 @@ public class CommonVo implements Serializable{
 	protected SimpleDateFormat	dateFormatDetail = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	protected DecimalFormat 	decimalFormat 		= new DecimalFormat("#,###.##");
 	protected Date				exp_date = null;
+	protected String			history_in = null;
+	protected String				history_out = null;
 
 
 	public Long getId() {
@@ -184,5 +186,20 @@ public class CommonVo implements Serializable{
 		this.exp_date = exp_date;
 	}
 
+	public String getHistory_in() {
+		return history_in;
+	}
+
+	public void setHistory_in(String history_in) {
+		this.history_in = history_in;
+	}
+
+	public String getHistory_out() {
+		return history_out;
+	}
+
+	public void setHistory_out(String history_out) {
+		this.history_out = history_out;
+	}
 
 }
