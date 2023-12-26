@@ -28,7 +28,7 @@ public interface ExecManager {
 	public List<BinMan> readBinMan(Long uid_company, Map cond, DatabasePage page);
 
 	public void execWearing(String lotno, Long uid_company, Long user_uid, String user_id, String user_name, List<Long> item_uids,
-			List<Double> item_quans, Long bin_uid, String exp_date, String expiration_period, String supply_name, String batch_lot_id, String supply_lot_number, String supply_company_name) throws Exception;//##DBG lotno ����.�߰�
+			List<Double> item_quans, Long bin_uid, String expiration_period, String supply_name, String batch_lot_id, String supply_lot_number, String supply_company_name) throws Exception;//##DBG lotno ����.�߰�
 
 	public void execRelease(String lotno, Long uid_company, Long user_uid, String user_id, String user_name, List<Long> location_uids,
 			List<Double> location_quans) throws Exception;//##DBG lotno ����.�߰�

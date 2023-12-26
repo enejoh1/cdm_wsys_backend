@@ -30,7 +30,6 @@ public class CommonVo implements Serializable{
 	protected SimpleDateFormat	dateFormat 		= new SimpleDateFormat("yyyy-MM-dd");
 	protected SimpleDateFormat	dateFormatDetail = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	protected DecimalFormat 	decimalFormat 		= new DecimalFormat("#,###.##");
-	protected Date				exp_date = null;
 	protected Date 				expiration_period;
 	protected String 			supply_name = null;
 	protected String 			batch_lot_id = null;
@@ -182,13 +181,6 @@ public class CommonVo implements Serializable{
 		return date;
 	}
 
-	public Date getExp_date() {
-		return exp_date;
-	}
-
-	public void setExp_date(Date exp_date) {
-		this.exp_date = exp_date;
-	}
 	public Date getExpiration_period() {
 		return expiration_period;
 	}

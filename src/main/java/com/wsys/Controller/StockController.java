@@ -370,7 +370,6 @@ public class StockController extends BaseAbstractController {
 		List<Long> item_uids = this.getRequestUniqueIds(request, "item_uids");
 		List<Double> item_quans = this.getRequestDoubles(request, "item_quans");
 		String bin_code = this.getRequestString(request, "bin_code");
-		String exp_date = this.getRequestString(request, "exp_date");
 		String expiration_period = this.getRequestString(request, "expiration_period");
 		String supply_name = this.getRequestString(request, "supply_name");
 		String batch_lot_id = this.getRequestString(request, "batch_lot_id");
@@ -389,7 +388,7 @@ public class StockController extends BaseAbstractController {
 		System.out.println(lotno);
 		if(binList!=null && binList.size()>0) {
 			bin_uid = binList.get(0).getUnique_id();
-			this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, exp_date, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name);//##DBG lotno 수정.추가
+			this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name);//##DBG lotno 수정.추가
 
 			data.put("result", true);
 		} else {
@@ -418,7 +417,6 @@ public class StockController extends BaseAbstractController {
 		String user_id = this.getRequestString(request, "user_id");
 		String user_name = this.getRequestString(request, "user_name");
 		String lotno = this.getRequestString(request, "set_lotno");//##DBG lotno 추가
-		String exp_date = this.getRequestString(request, "exp_date");//##DBG lotno 추가
 		String expiration_period = this.getRequestString(request, "expiration_period");
 		String supply_name = this.getRequestString(request, "supply_name");
 		String batch_lot_id = this.getRequestString(request, "batch_lot_id");
@@ -438,7 +436,7 @@ public class StockController extends BaseAbstractController {
 
 		System.out.println("----:a3----");
 		System.out.println(lotno);
-		this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, exp_date, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name);//##DBG lotno 수정.추가
+		this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name);//##DBG lotno 수정.추가
 
 		return null;
 	}

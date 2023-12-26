@@ -137,18 +137,16 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 	@Override
 	// ##DBG lotno 수정.추가
 	public void execWearing(String lotno, Long uid_company, Long user_uid, String user_id, String user_name,
-			List<Long> item_uids, List<Double> item_quans, Long bin_uid, String exp_date, String expiration_period, String supply_name, String batch_lot_id, String supply_lot_number, String supply_company_name) throws Exception {
+			List<Long> item_uids, List<Double> item_quans, Long bin_uid, String expiration_period, String supply_name, String batch_lot_id, String supply_lot_number, String supply_company_name) throws Exception {
 		Date now = new Date();
 		Location location = new Location();
 		location.setUid_bin(bin_uid);
 		location.setLast_in_date(now);
-		location.setExp_date(String2Date(exp_date));
 
 		Map cond = new HashMap();
 		cond.put("uid_company", uid_company);
 		cond.put("uid_bin", bin_uid);
 		cond.put("lotno", lotno);// ##DBG lotno 추가
-		cond.put("exp_date", String2Date(exp_date));// ##DBG lotno 추가
 		cond.put("expiration_period", String2Date(expiration_period));
 		cond.put("supply_name", supply_name);
 		cond.put("batch_lot_id", batch_lot_id);
