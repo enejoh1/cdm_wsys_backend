@@ -137,7 +137,7 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 	@Override
 	// ##DBG lotno 수정.추가
 	public void execWearing(String lotno, Long uid_company, Long user_uid, String user_id, String user_name,
-			List<Long> item_uids, List<Double> item_quans, Long bin_uid, String exp_date) throws Exception {
+			List<Long> item_uids, List<Double> item_quans, Long bin_uid, String exp_date, String expiration_period, String supply_name, String batch_lot_id, String supply_lot_number, String supply_company_name) throws Exception {
 		Date now = new Date();
 		Location location = new Location();
 		location.setUid_bin(bin_uid);
@@ -149,6 +149,11 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 		cond.put("uid_bin", bin_uid);
 		cond.put("lotno", lotno);// ##DBG lotno 추가
 		cond.put("exp_date", String2Date(exp_date));// ##DBG lotno 추가
+		cond.put("expiration_period", String2Date(expiration_period));
+		cond.put("supply_name", supply_name);
+		cond.put("batch_lot_id", batch_lot_id);
+		cond.put("supply_lot_number", supply_lot_number);
+		cond.put("supply_company_name", supply_company_name);
 
 		System.out.println("----:a6----");
 		System.out.println(lotno);
@@ -2280,7 +2285,7 @@ System.out.println("##DBG--------1-");
 
 	@Override
 	public void webRegistLocationData(Long uid_company, Long user_uid, String user_id, String user_name, String wh_code,
-			String rack_code, Integer row, Integer col) throws Exception {
+			String rack_code, Integer row, Integer col, Integer capacity) throws Exception {
 		Map cond = new HashMap();
 		List<Whouse> whouseList = new ArrayList<Whouse>();
 
@@ -2342,6 +2347,7 @@ System.out.println("##DBG--------1-");
 					bin.setBin_name(bin_code);
 					bin.setBin_col(i);
 					bin.setBin_row(j);
+					bin.setCapacity(capacity);
 
 					this.binDao.insert(uid_company, true, user_name, user_uid, "bin", bin);
 				}

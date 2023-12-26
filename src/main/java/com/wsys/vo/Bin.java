@@ -22,4 +22,7 @@ public class Bin extends CommonVo {
 	public String rack_name;
 	public String wh_code;
 	public String wh_name;
+	public Integer capacity;
+	public Integer history_in = null;
+	public Integer history_out = null;
 }

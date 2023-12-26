@@ -21,18 +21,23 @@
 		<result property="changer" 			column="changer" />
 		<result property="changer_uid" 		column="changer_uid" 	javaType="java.lang.Long" />
 		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
+		<result property="expiration_period" 		column="expiration_period" 		javaType="java.util.Date" />
+		<result property="supply_name" 				column="supply_name" />
+		<result property="batch_lot_id" 			column="batch_lot_id" />
+		<result property="supply_lot_number" 		column="supply_lot_number" />
+		<result property="supply_company_name" 		column="supply_company_name" />
 	</resultMap>
 
 	<insert id="insert-item" parameterType="user">
 		INSERT INTO TB_ITEM
 			(
 			 unique_id, uid_company, item_code, item_name, specification, detail_info, unit_code, safe_quan, remark,
-			 creator_uid, creator, create_date
+			 creator_uid, creator, create_date, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name
 			)
 		VALUES
 		 	(
 		 	 #{unique_id}, #{uid_company}, #{item_code}, #{item_name}, #{specification}, #{detail_info}, #{unit_code}, #{safe_quan}, #{remark},
-		 	 #{creator_uid}, #{creator}, #{create_date}
+		 	 #{creator_uid}, #{creator}, #{create_date}, #{expiration_period}, #{supply_name}, #{batch_lot_id}, #{supply_lot_number}, #{supply_company_name}
 		 	)
 		 ON DUPLICATE KEY UPDATE
 		 	change_date = now(),
@@ -52,12 +57,12 @@
 		INSERT INTO TB_ITEM
 			(
 			 unique_id, uid_company, item_code, item_name, specification, detail_info, unit_code, safe_quan, remark,
-			 creator_uid, creator, create_date
+			 creator_uid, creator, create_date, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name
 			)
 		VALUES
 		 	(
 		 	 #{unique_id}, #{uid_company}, #{item_code}, #{item_name}, #{specification}, #{detail_info}, #{unit_code}, #{safe_quan}, #{remark},
-		 	 #{creator_uid}, #{creator}, #{create_date}
+		 	 #{creator_uid}, #{creator}, #{create_date}, #{expiration_period}, #{supply_name}, #{batch_lot_id}, #{supply_lot_number}, #{supply_company_name}
 		 	)
 		 ON DUPLICATE KEY UPDATE
 		 	change_date = now(),
@@ -74,8 +79,7 @@
 	</insert>
 
 	<sql id="select-item-fields">
-		item.unique_id, item.uid_company, item.item_code, item.item_name, item.specification, item.detail_info, item.unit_code, item.safe_quan, item.remark,
-		item.del_yn, item.creator, item.creator_uid, item.create_date, item.changer, item.changer_uid, item.change_date,
+		item.*,
 		NVL((SELECT SUM(quan) FROM tb_location where del_yn = 'N' AND uid_item = item.unique_id GROUP BY uid_item), 0) as sum_quan,
 		NVL((SELECT COUNT(*) FROM tb_history his join tb_location locate on locate.unique_id = his.uid_location and locate.uid_item = item.unique_id where his.is_inout = 'IN'), 0) as history_in,
 		NVL((SELECT COUNT(*) FROM tb_history his join tb_location locate on locate.unique_id = his.uid_location and locate.uid_item = item.unique_id where his.is_inout = 'OUT'), 0) as history_out
@@ -161,6 +165,11 @@
 			<if test= "unit_code"> 		,unit_code 	= #{unit_code} </if>
 			<if test= "safe_quan"> 		,safe_quan 		= #{safe_quan} </if>
 			<if test= "remark"> 		,remark 		= #{remark} </if>
+			<if test= "expiration_period"> 		,expiration_period 		= #{expiration_period} </if>
+			<if test= "supply_name"> 			,supply_name 			= #{supply_name} </if>
+			<if test= "batch_lot_id"> 			,batch_lot_id 			= #{batch_lot_id} </if>
+			<if test= "supply_lot_number"> 		,supply_lot_number 		= #{supply_lot_number} </if>
+			<if test= "supply_company_name"> 	,supply_company_name 	= #{supply_company_name} </if>
 	</sql>
 
 	<update id= "update-bymap-item" parameterType = "map">

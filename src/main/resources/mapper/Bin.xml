@@ -10,6 +10,7 @@
 		<result property="bin_name" 		column="bin_name" />
 		<result property="bin_row" 		column="bin_row" 			javaType="java.lang.Integer" />
 		<result property="bin_col" 		column="bin_col" 			javaType="java.lang.Integer" />
+		<result property="capacity" 	column="capacity" 			javaType="java.lang.Integer" />
 		<result property="remark" 			column="remark" />
 
 		<result property="rack_code" 		column="rack_code" />
@@ -30,12 +31,12 @@
 	<insert id="insert-bin" parameterType="bin">
 		INSERT INTO TB_BIN
 			(
-			 unique_id, uid_company, uid_rack, bin_code, bin_name, bin_row, bin_col, remark,
+			 unique_id, uid_company, uid_rack, bin_code, bin_name, bin_row, bin_col, capacity, remark,
 			 creator_uid, creator, create_date
 			)
 		VALUES
 		 	(
-		 	 #{unique_id}, #{uid_company}, #{uid_rack}, #{bin_code}, #{bin_name}, #{bin_row}, #{bin_col}, #{remark},
+		 	 #{unique_id}, #{uid_company}, #{uid_rack}, #{bin_code}, #{bin_name}, #{bin_row}, #{bin_col}, #{capacity}, #{remark},
 		 	 #{creator_uid}, #{creator}, #{create_date}
 		 	)
 		ON DUPLICATE KEY UPDATE

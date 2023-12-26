@@ -371,6 +371,11 @@ public class StockController extends BaseAbstractController {
 		List<Double> item_quans = this.getRequestDoubles(request, "item_quans");
 		String bin_code = this.getRequestString(request, "bin_code");
 		String exp_date = this.getRequestString(request, "exp_date");
+		String expiration_period = this.getRequestString(request, "expiration_period");
+		String supply_name = this.getRequestString(request, "supply_name");
+		String batch_lot_id = this.getRequestString(request, "batch_lot_id");
+		String supply_lot_number = this.getRequestString(request, "supply_lot_number");
+		String supply_company_name = this.getRequestString(request, "supply_company_name");
 
 		if(bin_code==null||bin_code.length()<1) return null;
 		if(item_uids==null||item_uids.size()<1 || item_quans==null||item_quans.size()<1) return null;
@@ -384,7 +389,7 @@ public class StockController extends BaseAbstractController {
 		System.out.println(lotno);
 		if(binList!=null && binList.size()>0) {
 			bin_uid = binList.get(0).getUnique_id();
-			this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, exp_date);//##DBG lotno 수정.추가
+			this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, exp_date, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name);//##DBG lotno 수정.추가
 
 			data.put("result", true);
 		} else {
@@ -414,6 +419,12 @@ public class StockController extends BaseAbstractController {
 		String user_name = this.getRequestString(request, "user_name");
 		String lotno = this.getRequestString(request, "set_lotno");//##DBG lotno 추가
 		String exp_date = this.getRequestString(request, "exp_date");//##DBG lotno 추가
+		String expiration_period = this.getRequestString(request, "expiration_period");
+		String supply_name = this.getRequestString(request, "supply_name");
+		String batch_lot_id = this.getRequestString(request, "batch_lot_id");
+		String supply_lot_number = this.getRequestString(request, "supply_lot_number");
+		String supply_company_name = this.getRequestString(request, "supply_company_name");
+
 		System.out.println("----:a1----");
 		System.out.println(lotno);
 		if(uid_company==null || uid_company<1L) return null;
@@ -427,7 +438,7 @@ public class StockController extends BaseAbstractController {
 
 		System.out.println("----:a3----");
 		System.out.println(lotno);
-		this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, exp_date);//##DBG lotno 수정.추가
+		this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, exp_date, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name);//##DBG lotno 수정.추가
 
 		return null;
 	}
@@ -598,7 +609,12 @@ public class StockController extends BaseAbstractController {
 		String his_s_date = this.getRequestString(request, "his_s_date");
 		String his_e_date = this.getRequestString(request, "his_e_date");
 		String lotno = this.getRequestString(request, "lotno");
+
 		String is_exp_date = this.getRequestString(request, "is_exp_date");
+		String batch_lot_id = this.getRequestString(request, "batch_lot_id");
+		String supply_name = this.getRequestString(request, "supply_name");
+		String supply_lot_number = this.getRequestString(request, "supply_lot_number");
+		String supply_company_name = this.getRequestString(request, "supply_company_name");
 		System.out.println("--2----##DBG------String readLocationHistory(HttpServletRequest request, HttpServletResponse response) throws Exception ------");
 
 		Map cond = new HashMap();
@@ -613,6 +629,10 @@ public class StockController extends BaseAbstractController {
 		if(bin_code!=null && bin_code.length()>0) cond.put("bin_code", "%" + bin_code + "%");
 		if(lotno!=null && lotno.length()>0) cond.put("lotno", "%" + lotno + "%");
 		if(is_exp_date!=null && is_exp_date.length()>0) cond.put("is_exp_date", is_exp_date);
+		if(batch_lot_id!=null && batch_lot_id.length()>0) cond.put("batch_lot_id", "%" + batch_lot_id + "%");
+		if(supply_name!=null && supply_name.length()>0) cond.put("supply_name", "%" + supply_name + "%");
+		if(supply_lot_number!=null && supply_lot_number.length()>0) cond.put("supply_lot_number", "%" + supply_lot_number + "%");
+		if(supply_company_name!=null && supply_company_name.length()>0) cond.put("supply_company_name", "%" + supply_company_name + "%");
 
 		if(his_s_date!=null && his_s_date.length()>0 &&
 				his_e_date!=null && his_e_date.length()>0) {
@@ -1198,6 +1218,7 @@ public class StockController extends BaseAbstractController {
 		String rack_code = this.getRequestString(request, "rack_code");
 		Integer row = this.getRequestInteger(request, "row");
 		Integer col = this.getRequestInteger(request, "col");
+		Integer capacity = this.getRequestInteger(request, "capacity");
 
 		if(wh_code==null || wh_code.length()<1) return null;
 		if(rack_code==null || rack_code.length()<1) return null;
@@ -1205,7 +1226,7 @@ public class StockController extends BaseAbstractController {
 		if(col==null || col<1) return null;
 
 		this.execManager.webRegistLocationData(uid_company, user_uid, user_id, user_name,
-				wh_code, rack_code, row, col);
+				wh_code, rack_code, row, col, capacity);
 
 		return null;
 	}

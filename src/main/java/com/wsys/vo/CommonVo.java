@@ -31,8 +31,12 @@ public class CommonVo implements Serializable{
 	protected SimpleDateFormat	dateFormatDetail = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	protected DecimalFormat 	decimalFormat 		= new DecimalFormat("#,###.##");
 	protected Date				exp_date = null;
-	protected String			history_in = null;
-	protected String				history_out = null;
+	protected Date 				expiration_period;
+	protected String 			supply_name = null;
+	protected String 			batch_lot_id = null;
+
+	protected String 			supply_lot_number = null;
+	protected String 			supply_company_name = null;
 
 
 	public Long getId() {
@@ -185,21 +189,43 @@ public class CommonVo implements Serializable{
 	public void setExp_date(Date exp_date) {
 		this.exp_date = exp_date;
 	}
-
-	public String getHistory_in() {
-		return history_in;
+	public Date getExpiration_period() {
+		return expiration_period;
 	}
 
-	public void setHistory_in(String history_in) {
-		this.history_in = history_in;
+	public void setExpiration_period(Date expiration_period) {
+		this.expiration_period = expiration_period;
 	}
 
-	public String getHistory_out() {
-		return history_out;
+	public String getSupply_name() {
+		return supply_name;
 	}
 
-	public void setHistory_out(String history_out) {
-		this.history_out = history_out;
+	public void setSupply_name(String supply_name) {
+		this.supply_name = supply_name;
 	}
 
+	public String getBatch_lot_id() {
+		return batch_lot_id;
+	}
+
+	public void setBatch_lot_id(String batch_lot_id) {
+		this.batch_lot_id = batch_lot_id;
+	}
+
+	public String getSupply_lot_number() {
+		return supply_lot_number;
+	}
+
+	public void setSupply_lot_number(String supply_lot_number) {
+		this.supply_lot_number = supply_lot_number;
+	}
+
+	public String getSupply_company_name() {
+		return supply_company_name;
+	}
+
+	public void setSupply_company_name(String supply_company_name) {
+		this.supply_company_name = supply_company_name;
+	}
 }
