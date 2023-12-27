@@ -387,9 +387,7 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 					Double quan = (Double) m.get("quan");
 					String lotno = (String)m.get("lotno");
 					System.out.println("##DBG---LOTNO: " + lotno);
-					if(bin_code==null||bin_code.length()<1
-						|| item_code==null||item_code.length()<1
-						|| quan==null) {
+					if(bin_code==null||bin_code.length()<1 || item_code==null||item_code.length()<1 || quan==null) {
 						continue;
 					};
 
@@ -1587,6 +1585,11 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 			xssfSheet.setColumnWidth(4, 3000); // 입고량
 			xssfSheet.setColumnWidth(5, 5000); // 위치정보
 			xssfSheet.setColumnWidth(6, 7000); // 입고일자
+			xssfSheet.setColumnWidth(7, 5000); // 위치정보
+			xssfSheet.setColumnWidth(8, 5000); // 위치정보
+			xssfSheet.setColumnWidth(9, 5000); // 위치정보
+			xssfSheet.setColumnWidth(10, 5000); // 위치정보
+			xssfSheet.setColumnWidth(11, 5000); // 위치정보
 
 			// 폰트 스타일
 			XSSFFont font = xssfWb.createFont();
@@ -1604,6 +1607,7 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 			CellStyle headerCellStyle = xssfWb.createCellStyle();
 			CellStyle tableCellStyle = xssfWb.createCellStyle();
 			CellStyle dateCellStyle = xssfWb.createCellStyle();
+			CellStyle dateYMDCellStyle = xssfWb.createCellStyle();
 
 			XSSFFont titleFont = xssfWb.createFont();
 			titleFont.setFontName(HSSFFont.FONT_ARIAL); // 폰트 스타일
@@ -1613,7 +1617,7 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 
 			// Title
 			xssfRow = xssfSheet.createRow(rowNum++);
-			xssfSheet.addMergedRegion(new CellRangeAddress(0,0,0,6));
+			xssfSheet.addMergedRegion(new CellRangeAddress(0,0,0,11));
 			xssfCell = xssfRow.createCell((short) 0);
 
 			titleCellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -1663,6 +1667,16 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 						createHelper.createDataFormat().getFormat("YYYY-mm-dd HH:mm:ss")
 					);
 
+			dateYMDCellStyle.setBorderTop(BorderStyle.THIN); // 테두리 위쪽
+			dateYMDCellStyle.setBorderBottom(BorderStyle.THIN); // 테두리 아래쪽
+			dateYMDCellStyle.setBorderLeft(BorderStyle.THIN); // 테두리 왼쪽
+			dateYMDCellStyle.setBorderRight(BorderStyle.THIN); // 테두리 오른쪽
+			dateYMDCellStyle.setAlignment(HorizontalAlignment.CENTER);
+
+			dateYMDCellStyle.setDataFormat(
+						createHelper.createDataFormat().getFormat("YYYY-mm-dd")
+					);
+
 			xssfCell = xssfRow.createCell((short) 0);
 			xssfCell.setCellStyle(headerCellStyle);
 			xssfCell.setCellValue("품번");
@@ -1703,6 +1717,21 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 				xssfCell.setCellValue("출고날짜");
 				break;
 			};
+			xssfCell = xssfRow.createCell((short) 7);
+			xssfCell.setCellStyle(headerCellStyle);
+			xssfCell.setCellValue("Batch LOT ID");
+			xssfCell = xssfRow.createCell((short) 8);
+			xssfCell.setCellStyle(headerCellStyle);
+			xssfCell.setCellValue("공급처 LOT 번호");
+			xssfCell = xssfRow.createCell((short) 9);
+			xssfCell.setCellStyle(headerCellStyle);
+			xssfCell.setCellValue("유효기간");
+			xssfCell = xssfRow.createCell((short) 10);
+			xssfCell.setCellStyle(headerCellStyle);
+			xssfCell.setCellValue("공급사");
+			xssfCell = xssfRow.createCell((short) 11);
+			xssfCell.setCellStyle(headerCellStyle);
+			xssfCell.setCellValue("급업체명");
 
 			int i=0;
 			for(History history : historyList) {
@@ -1728,6 +1757,21 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 				xssfCell = xssfRow.createCell((short) 6);
 				xssfCell.setCellStyle(dateCellStyle);
 				xssfCell.setCellValue(history.getHis_date());
+				xssfCell = xssfRow.createCell((short) 7);
+				xssfCell.setCellStyle(tableCellStyle);
+				xssfCell.setCellValue(history.getBatch_lot_id());
+				xssfCell = xssfRow.createCell((short) 8);
+				xssfCell.setCellStyle(tableCellStyle);
+				xssfCell.setCellValue(history.getSupply_lot_number());
+				xssfCell = xssfRow.createCell((short) 9);
+				xssfCell.setCellStyle(dateYMDCellStyle);
+				xssfCell.setCellValue(history.getExpiration_period());
+				xssfCell = xssfRow.createCell((short) 10);
+				xssfCell.setCellStyle(tableCellStyle);
+				xssfCell.setCellValue(history.getSupply_name());
+				xssfCell = xssfRow.createCell((short) 11);
+				xssfCell.setCellStyle(tableCellStyle);
+				xssfCell.setCellValue(history.getSupply_company_name());
 			}
 
 			String excelPath = first + "/works/LOGIFORM/" + uid_company;
