@@ -182,9 +182,9 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 				FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
 
 				int rows = sheet.getPhysicalNumberOfRows();
-				int cols = sheet.getRow(0).getPhysicalNumberOfCells();
+				int cols = sheet.getRow(1).getPhysicalNumberOfCells();
 
-				HSSFRow cell_header = sheet.getRow(0);
+				HSSFRow cell_header = sheet.getRow(1);
 
 				for(int rowIndex=1; rowIndex<rows+1; rowIndex++) {
 					HSSFRow row=sheet.getRow(rowIndex);
@@ -278,9 +278,9 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 				FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
 
 				int rows = sheet.getPhysicalNumberOfRows();
-				int cols = sheet.getRow(0).getPhysicalNumberOfCells();
+				int cols = sheet.getRow(1).getPhysicalNumberOfCells();
 
-				XSSFRow cell_header = sheet.getRow(0);
+				XSSFRow cell_header = sheet.getRow(1);
 
 				for(int rowIndex=1; rowIndex<rows+1; rowIndex++) {
 					XSSFRow row=sheet.getRow(rowIndex);
@@ -1590,6 +1590,7 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 			xssfSheet.setColumnWidth(9, 5000); // 위치정보
 			xssfSheet.setColumnWidth(10, 5000); // 위치정보
 			xssfSheet.setColumnWidth(11, 5000); // 위치정보
+			xssfSheet.setColumnWidth(12, 5000); // 위치정보
 
 			// 폰트 스타일
 			XSSFFont font = xssfWb.createFont();
@@ -1692,20 +1693,25 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 
 			xssfCell = xssfRow.createCell((short) 4);
 			xssfCell.setCellStyle(headerCellStyle);
-			switch(gubun) {
-			case "IN":
-				xssfCell.setCellValue("입고량");
-				break;
-			case "OUT":
-				xssfCell.setCellValue("출고량");
-				break;
-			}
+			xssfCell.setCellValue("입고수량");
+			// switch(gubun) {
+			// case "IN":
+			// 	xssfCell.setCellValue("입고량");
+			// 	break;
+			// case "OUT":
+			// 	xssfCell.setCellValue("출고량");
+			// 	break;
+			// }
 
 			xssfCell = xssfRow.createCell((short) 5);
 			xssfCell.setCellStyle(headerCellStyle);
-			xssfCell.setCellValue("위치정보");
+			xssfCell.setCellValue("위치");
 
 			xssfCell = xssfRow.createCell((short) 6);
+			xssfCell.setCellStyle(headerCellStyle);
+			xssfCell.setCellValue("위치정보");
+
+			xssfCell = xssfRow.createCell((short) 7);
 			xssfCell.setCellStyle(headerCellStyle);
 
 
@@ -1717,19 +1723,19 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 				xssfCell.setCellValue("출고날짜");
 				break;
 			};
-			xssfCell = xssfRow.createCell((short) 7);
-			xssfCell.setCellStyle(headerCellStyle);
-			xssfCell.setCellValue("Batch LOT ID");
 			xssfCell = xssfRow.createCell((short) 8);
 			xssfCell.setCellStyle(headerCellStyle);
-			xssfCell.setCellValue("공급처 LOT 번호");
+			xssfCell.setCellValue("Batch LOT ID");
 			xssfCell = xssfRow.createCell((short) 9);
 			xssfCell.setCellStyle(headerCellStyle);
-			xssfCell.setCellValue("유효기간");
+			xssfCell.setCellValue("공급처 LOT 번호");
 			xssfCell = xssfRow.createCell((short) 10);
 			xssfCell.setCellStyle(headerCellStyle);
-			xssfCell.setCellValue("공급사");
+			xssfCell.setCellValue("유효기간");
 			xssfCell = xssfRow.createCell((short) 11);
+			xssfCell.setCellStyle(headerCellStyle);
+			xssfCell.setCellValue("공급사");
+			xssfCell = xssfRow.createCell((short) 12);
 			xssfCell.setCellStyle(headerCellStyle);
 			xssfCell.setCellValue("급업체명");
 
@@ -1753,23 +1759,26 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 				xssfCell.setCellValue(history.getHis_quan());
 				xssfCell = xssfRow.createCell((short) 5);
 				xssfCell.setCellStyle(tableCellStyle);
-				xssfCell.setCellValue(history.getBin_name());
+				xssfCell.setCellValue(history.getBin_code());
 				xssfCell = xssfRow.createCell((short) 6);
+				xssfCell.setCellStyle(tableCellStyle);
+				xssfCell.setCellValue(history.getBin_name());
+				xssfCell = xssfRow.createCell((short) 7);
 				xssfCell.setCellStyle(dateCellStyle);
 				xssfCell.setCellValue(history.getHis_date());
-				xssfCell = xssfRow.createCell((short) 7);
-				xssfCell.setCellStyle(tableCellStyle);
-				xssfCell.setCellValue(history.getBatch_lot_id());
 				xssfCell = xssfRow.createCell((short) 8);
 				xssfCell.setCellStyle(tableCellStyle);
-				xssfCell.setCellValue(history.getSupply_lot_number());
+				xssfCell.setCellValue(history.getBatch_lot_id());
 				xssfCell = xssfRow.createCell((short) 9);
+				xssfCell.setCellStyle(tableCellStyle);
+				xssfCell.setCellValue(history.getSupply_lot_number());
+				xssfCell = xssfRow.createCell((short) 10);
 				xssfCell.setCellStyle(dateYMDCellStyle);
 				xssfCell.setCellValue(history.getExpiration_period());
-				xssfCell = xssfRow.createCell((short) 10);
+				xssfCell = xssfRow.createCell((short) 11);
 				xssfCell.setCellStyle(tableCellStyle);
 				xssfCell.setCellValue(history.getSupply_name());
-				xssfCell = xssfRow.createCell((short) 11);
+				xssfCell = xssfRow.createCell((short) 12);
 				xssfCell.setCellStyle(tableCellStyle);
 				xssfCell.setCellValue(history.getSupply_company_name());
 			}
