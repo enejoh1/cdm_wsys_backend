@@ -32,10 +32,11 @@
 		<result property="lotno" 			column="lotno" /> <!-- ##DBG lotno 추가 -->
 		<result property="lotno" 			column="set_lotno" /> <!-- ##DBG lotno 추가 -->
 		<result property="is_exp_date" 		column="is_exp_date" />
-		<result property="batch_lot_id" 	column="batch_lot_id" />
-		<result property="supply_name" 		column="supply_name" />
-		<result property="supply_lot_number" 	column="supply_lot_number" />
-		<result property="supply_company_name" 	column="supply_company_name" />
+		<result property="expiration_period" 		column="expiration_period" 		javaType="java.util.Date" />
+		<result property="supply_name" 				column="supply_name" />
+		<result property="batch_lot_id" 			column="batch_lot_id" />
+		<result property="supply_lot_number" 		column="supply_lot_number" />
+		<result property="supply_company_name" 		column="supply_company_name" />
 	</resultMap>
 
 	<insert id="insert-history" parameterType="history">
@@ -43,12 +44,12 @@
 		INSERT INTO TB_HISTORY
 			(
 			 unique_id, uid_company, uid_location, is_inout, his_quan, his_date, remark,
-			 creator_uid, creator, create_date, lotno
+			 creator_uid, creator, create_date, lotno, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name
 			)
 		VALUES
 		 	(
 		 	 #{unique_id}, #{uid_company}, #{uid_location}, #{is_inout}, #{his_quan}, #{his_date}, #{remark},
-		 	 #{creator_uid}, #{creator}, #{create_date}, #{lotno}
+		 	 #{creator_uid}, #{creator}, #{create_date}, #{lotno}, #{expiration_period}, #{supply_name}, #{batch_lot_id}, #{supply_lot_number}, #{supply_company_name}
 		 	)
 	</insert>
 
@@ -57,11 +58,11 @@
 		history.lotno,
 		history.unique_id, history.uid_company, history.uid_location, history.is_inout, history.his_quan, history.his_date, history.remark,
 		history.del_yn, history.creator, history.creator_uid, history.create_date, history.changer, history.changer_uid, history.change_date,
+		history.batch_lot_id, history.supply_lot_number, history.supply_company_name, history.expiration_period, history.supply_name,
 
 		location.quan, location.last_in_date,
 		bin.bin_code, bin.bin_name,
-		item.item_code, item.item_name, item.specification, item.detail_info, item.unit_code, item.batch_lot_id,
-		item.supply_lot_number, item.supply_company_name, item.expiration_period, item.supply_name
+		item.item_code, item.item_name, item.specification, item.detail_info, item.unit_code
 	</sql>
 
 	<sql id="select-history-join">
@@ -99,11 +100,11 @@
 
 		<if test="unique_id">		AND	history.unique_id 			= 		#{unique_id}</if>
 		<if test="lotno">		    AND	UPPER(history.lotno) 		like	UPPER(#{lotno})</if>
-		<if test="is_exp_date">		AND CURDATE() > DATE_FORMAT(item.expiration_period, '%Y-%m-%d')</if>
-		<if test="batch_lot_id">		AND	UPPER(item.batch_lot_id) 		like	UPPER(#{batch_lot_id})</if>
-		<if test="supply_name">			AND	UPPER(item.supply_name) 		like	UPPER(#{supply_name})</if>
-		<if test="supply_lot_number">	AND	UPPER(item.supply_lot_number) 	like	UPPER(#{supply_lot_number})</if>
-		<if test="supply_company_name">	AND	UPPER(item.supply_company_name) like	UPPER(#{supply_company_name})</if>
+		<if test="is_exp_date">		AND CURDATE() > DATE_FORMAT(history.expiration_period, '%Y-%m-%d')</if>
+		<if test="batch_lot_id">		AND	UPPER(history.batch_lot_id) 		like	UPPER(#{batch_lot_id})</if>
+		<if test="supply_name">			AND	UPPER(history.supply_name) 		like	UPPER(#{supply_name})</if>
+		<if test="supply_lot_number">	AND	UPPER(history.supply_lot_number) 	like	UPPER(#{supply_lot_number})</if>
+		<if test="supply_company_name">	AND	UPPER(history.supply_company_name) like	UPPER(#{supply_company_name})</if>
 
 	</sql>
 
@@ -133,7 +134,8 @@
 		<include refid="select-history-fields" />
 		<include refid="select-history-join" />
 		<include refid="select-history-where" />
-		${order_by}
+		<!-- ${order_by} -->
+		order by history.expiration_period desc
 		limit ${start_point} , ${end_point}
 	</select>
 

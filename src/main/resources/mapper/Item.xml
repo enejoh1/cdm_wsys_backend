@@ -21,23 +21,18 @@
 		<result property="changer" 			column="changer" />
 		<result property="changer_uid" 		column="changer_uid" 	javaType="java.lang.Long" />
 		<result property="change_date" 		column="change_date" 	javaType="java.util.Date" />
-		<result property="expiration_period" 		column="expiration_period" 		javaType="java.util.Date" />
-		<result property="supply_name" 				column="supply_name" />
-		<result property="batch_lot_id" 			column="batch_lot_id" />
-		<result property="supply_lot_number" 		column="supply_lot_number" />
-		<result property="supply_company_name" 		column="supply_company_name" />
 	</resultMap>
 
 	<insert id="insert-item" parameterType="user">
 		INSERT INTO TB_ITEM
 			(
 			 unique_id, uid_company, item_code, item_name, specification, detail_info, unit_code, safe_quan, remark,
-			 creator_uid, creator, create_date, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name
+			 creator_uid, creator, create_date
 			)
 		VALUES
 		 	(
 		 	 #{unique_id}, #{uid_company}, #{item_code}, #{item_name}, #{specification}, #{detail_info}, #{unit_code}, #{safe_quan}, #{remark},
-		 	 #{creator_uid}, #{creator}, #{create_date}, #{expiration_period}, #{supply_name}, #{batch_lot_id}, #{supply_lot_number}, #{supply_company_name}
+		 	 #{creator_uid}, #{creator}, #{create_date}
 		 	)
 		 ON DUPLICATE KEY UPDATE
 		 	change_date = now(),
@@ -57,12 +52,12 @@
 		INSERT INTO TB_ITEM
 			(
 			 unique_id, uid_company, item_code, item_name, specification, detail_info, unit_code, safe_quan, remark,
-			 creator_uid, creator, create_date, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name
+			 creator_uid, creator, create_date
 			)
 		VALUES
 		 	(
 		 	 #{unique_id}, #{uid_company}, #{item_code}, #{item_name}, #{specification}, #{detail_info}, #{unit_code}, #{safe_quan}, #{remark},
-		 	 #{creator_uid}, #{creator}, #{create_date}, #{expiration_period}, #{supply_name}, #{batch_lot_id}, #{supply_lot_number}, #{supply_company_name}
+		 	 #{creator_uid}, #{creator}, #{create_date}
 		 	)
 		 ON DUPLICATE KEY UPDATE
 		 	change_date = now(),
@@ -165,11 +160,6 @@
 			<if test= "unit_code"> 		,unit_code 	= #{unit_code} </if>
 			<if test= "safe_quan"> 		,safe_quan 		= #{safe_quan} </if>
 			<if test= "remark"> 		,remark 		= #{remark} </if>
-			<if test= "expiration_period"> 		,expiration_period 		= #{expiration_period} </if>
-			<if test= "supply_name"> 			,supply_name 			= #{supply_name} </if>
-			<if test= "batch_lot_id"> 			,batch_lot_id 			= #{batch_lot_id} </if>
-			<if test= "supply_lot_number"> 		,supply_lot_number 		= #{supply_lot_number} </if>
-			<if test= "supply_company_name"> 	,supply_company_name 	= #{supply_company_name} </if>
 	</sql>
 
 	<update id= "update-bymap-item" parameterType = "map">

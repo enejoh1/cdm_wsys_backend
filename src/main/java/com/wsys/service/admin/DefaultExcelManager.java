@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -332,8 +333,8 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 	    		                };
 
 	    		                if(value!=null && value.length()>0) {
-	    		                	header_name = header_name.trim().toUpperCase();
-	    		                	header_name = header_name.replaceAll(" ", "");
+//	    		                	header_name = header_name.trim().toUpperCase();
+//	    		                	header_name = header_name.replaceAll(" ", "");
 
 	    		                	switch(header_name) {
 	    		                	case "LOTNO":
@@ -356,6 +357,26 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 	    		                			quan = 0.0;
 	    		                		}
 	    		                		map.put("quan", quan);
+	    		                		break;
+	    		                	case "Batch LOT ID":
+	    		                		if(value==null || value.length()<1) break;
+	    		                		map.put("batch_lot_id", value);
+	    		                		break;
+	    		                	case "공급처 LOT 번호":
+	    		                		if(value==null || value.length()<1) break;
+	    		                		map.put("supply_lot_number", value);
+	    		                		break;
+	    		                	case "유효기간":
+	    		                		if(value==null || value.length()<1) break;
+	    		                		map.put("expiration_period", value);
+	    		                		break;
+	    		                	case "공급사":
+	    		                		if(value==null || value.length()<1) break;
+	    		                		map.put("supply_name", value);
+	    		                		break;
+	    		                	case "급업체명":
+	    		                		if(value==null || value.length()<1) break;
+	    		                		map.put("supply_company_name", value);
 	    		                		break;
 	    		                	}
 	    		                }
@@ -386,6 +407,11 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 					String item_code = (String) m.get("item_code");
 					Double quan = (Double) m.get("quan");
 					String lotno = (String)m.get("lotno");
+					String batch_lot_id = (String) m.get("batch_lot_id");
+					String supply_lot_number = (String) m.get("supply_lot_number");
+					String expiration_period = (String) m.get("expiration_period");
+					String supply_name = (String) m.get("supply_name");
+					String supply_company_name = (String) m.get("supply_company_name");
 					System.out.println("##DBG---LOTNO: " + lotno);
 					if(bin_code==null||bin_code.length()<1 || item_code==null||item_code.length()<1 || quan==null) {
 						continue;
@@ -438,6 +464,11 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 						history.setHis_quan(quan);
 						history.setHis_date(new Date());
 						history.setLotno(lotno);
+						history.setExpiration_period(String2Date(expiration_period));
+						history.setSupply_name(supply_name);
+						history.setBatch_lot_id(batch_lot_id);
+						history.setSupply_lot_number(supply_lot_number);
+						history.setSupply_company_name(supply_company_name);
 
 						System.out.println("##DBG-------(6)");
 						this.historyDao.insert(lotno,uid_company, true, user_name, user_uid, "history", history);
@@ -1618,7 +1649,7 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 
 			// Title
 			xssfRow = xssfSheet.createRow(rowNum++);
-			xssfSheet.addMergedRegion(new CellRangeAddress(0,0,0,11));
+			xssfSheet.addMergedRegion(new CellRangeAddress(0,0,0,12));
 			xssfCell = xssfRow.createCell((short) 0);
 
 			titleCellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -1978,4 +2009,19 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 		return result;
 	}
 
+	public Date String2Date(String value) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String ret= value;
+
+		if(value.isEmpty()) {
+			return null;
+		}
+		Date date = null;
+		try {
+			ret = ret.replaceAll("/", "-");
+			date = dateFormat.parse(ret);
+		} catch (ParseException e) {}
+
+		return date;
+	}
 }

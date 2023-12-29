@@ -103,14 +103,16 @@
 		location.unique_id, location.uid_company, location.uid_bin, location.uid_item, location.quan, location.last_in_date, location.last_out_date, location.remark,
 		location.del_yn, location.creator, location.creator_uid, location.create_date, location.changer, location.changer_uid, location.change_date,
 
-		item.item_code, item.item_name, item.specification, item.detail_info, item.unit_code, item.batch_lot_id, item.supply_lot_number,
+		item.item_code, item.item_name, item.specification, item.detail_info, item.unit_code,
 		bin.bin_code, bin.bin_name, bin.bin_row, bin.bin_col,
 		rack.rack_code, rack.rack_name,
-		whouse.wh_code, whouse.wh_name
+		whouse.wh_code, whouse.wh_name,
+		history.batch_lot_id, history.supply_lot_number
 	</sql>
 
 	<sql id="select-location-join">
 		FROM TB_LOCATION location
+		INNER JOIN TB_HISTORY history on location.unique_id = history.uid_location
 		INNER JOIN TB_ITEM item on item.unique_id = location.uid_item
 		INNER JOIN TB_BIN bin on bin.unique_id = location.uid_bin
 		INNER JOIN TB_RACK rack on rack.unique_id = bin.uid_rack

@@ -134,6 +134,24 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 		this.historyDao.insert(lotno, uid_company, true, user_name, user_uid, "history", history); // ##DBG lotno 수정.추가
 	}
 
+	// ##DBG lotno 수정.추가
+	public void addLocationHistoryWearing(String lotno, Long uid_company, Long user_uid, String user_id, String user_name,
+			Long uid_location, String is_inout, Double quan, Date date, String expiration_period, String supply_name, String batch_lot_id, String supply_lot_number, String supply_company_name) throws Exception {
+		History history = new History();
+		history.setUid_location(uid_location);
+		history.setIs_inout(is_inout);
+		history.setHis_quan(quan);
+		history.setHis_date(date);
+		history.setHis_lotno(lotno); // ##DBG lotno 추가
+		history.setExpiration_period(String2Date(expiration_period));
+		history.setSupply_name(supply_name);
+		history.setBatch_lot_id(batch_lot_id);
+		history.setSupply_lot_number(supply_lot_number);
+		history.setSupply_company_name(supply_company_name);
+
+		this.historyDao.insert(lotno, uid_company, true, user_name, user_uid, "history", history); // ##DBG lotno 수정.추가
+	}
+
 	@Override
 	// ##DBG lotno 수정.추가
 	public void execWearing(String lotno, Long uid_company, Long user_uid, String user_id, String user_name,
@@ -147,11 +165,6 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 		cond.put("uid_company", uid_company);
 		cond.put("uid_bin", bin_uid);
 		cond.put("lotno", lotno);// ##DBG lotno 추가
-		cond.put("expiration_period", String2Date(expiration_period));
-		cond.put("supply_name", supply_name);
-		cond.put("batch_lot_id", batch_lot_id);
-		cond.put("supply_lot_number", supply_lot_number);
-		cond.put("supply_company_name", supply_company_name);
 
 		System.out.println("----:a6----");
 		System.out.println(lotno);
@@ -176,7 +189,7 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 
 			System.out.println("----:a7----");
 			System.out.println(lotno);
-			addLocationHistory(lotno, uid_company, user_uid, user_id, user_name, uid_location, "IN", item_quan, now);// ##DBG
+			addLocationHistoryWearing(lotno, uid_company, user_uid, user_id, user_name, uid_location, "IN", item_quan, now, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name);// ##DBG
 																														// lotno
 																														// 수정.추가
 		}
