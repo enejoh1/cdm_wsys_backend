@@ -4,6 +4,7 @@ services:
   cdmwsysbackend:
     image: cdmwsysbackend
     container_name: wsys_backend
+    restart: unless-stopped
     build:
       context: .
       dockerfile: ./Dockerfile
