@@ -12,7 +12,7 @@ FROM openjdk:11-jre-slim
 
 WORKDIR /app
 
-COPY --from=builder /app/build/libs/wsys.jar app.jar
+COPY --from=builder /app/build/libs/wsys-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 

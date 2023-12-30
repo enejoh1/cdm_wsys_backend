@@ -1,26 +1,11 @@
-version: "3.7"
+version: '3.4'
 
 services:
-  wsys:
-    image: wsys:build1.2
-    volumes:
-      - .:/app
-      - ../HBLWMS_WEB:/app/vue_wsys
+  cdmwsysbackend:
+    image: cdmwsysbackend
+    container_name: wsys_backend
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     ports:
-      - 81:80
       - 7080:7080
-    working_dir: /app
-    command: ["./gradlew", "bootRun"]
-    deploy:
-      resources:
-        limits:
-          cpus: '1.00'
-          memory: 1500M
-        reservations:
-          cpus: '0.50'
-          memory: 500M
-
-networks:
-  default:
-    external: true
-    name: br0
