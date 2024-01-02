@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  cdmwsysbackend:
+    image: cdmwsysbackend
+    container_name: wsys_backend
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 7080:7080

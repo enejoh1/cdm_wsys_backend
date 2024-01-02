@@ -3,18 +3,18 @@ plugins {
 	//id 'org.springframework.boot' version '2.5.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
-	id 'war'
-	id "com.github.node-gradle.node" version "2.2.3"
+//	id 'war'
+//	id "com.github.node-gradle.node" version "2.2.3"
 }
 
-node {
-    version = '14.18.1'
-    npmVersion = '8.1.0'
-    distBaseUrl = 'https://nodejs.org/dist'
-    workDir = file("./vue_wsys")
-    npmWorkDir = file("./vue_wsys")
-    nodeModulesDir = file("./vue_wsys")
-}
+//node {
+//    version = '14.18.1'
+//    npmVersion = '8.1.0'
+//    distBaseUrl = 'https://nodejs.org/dist'
+//    workDir = file("./vue_wsys")
+//    npmWorkDir = file("./vue_wsys")
+//    nodeModulesDir = file("./vue_wsys")
+//}
 
 // task1. 기존 vuejs 프로젝트 빌드 결과물 제거
 /*
@@ -22,10 +22,10 @@ node {
 2) Vuejs 프로젝트를 빌드하기 전에 packjage.json파일에 명시된 의존 라이브러리들을 최신화 하기위해서
 기존 node_modules에 저장되어 있는 library들을 제거해줍니다.
 */
-task deleteVueArtifact(type: Delete) {
-    delete "src/main/resources/static", "src/main/resources/index.html"
-	/*"fontend/node_modules" , "src/main/resources/basic-tool/node_modules"*/
-}
+//task deleteVueArtifact(type: Delete) {
+//    delete "src/main/resources/static", "src/main/resources/index.html"
+//	/*"fontend/node_modules" , "src/main/resources/basic-tool/node_modules"*/
+//}
 
 // task2. Vuejs 프로젝트의 의존 라이브러리 최신화 (npm install)
 /*
@@ -34,40 +34,41 @@ task deleteVueArtifact(type: Delete) {
 가끔 예전 버전에서 내장된 npmInstall task가 동작 오류를 발생시킬 때가 있어 별도 정의해서 사용하기도 합니다.
 별도 정의가 필요하다면 아래처럼 생성해서 사용하시면 됩니다.^^
 */
-task installNpm(type: NpmTask) {
-    args = ['install']
-}
+//task installNpm(type: NpmTask) {
+//    args = ['install']
+//}
 
 // task3. vuejs 프로젝트 빌드
 // dependsOn은 해당 task를 실행하기 전에 선 수행해야하는 task 목록을 지정하여 선 수행시켜주는 역할을 합니다.
 // dependsOn에 명시된 task들은 명시된 순서대로 수행됩니다.
-task npmBuild(type: NpmTask, dependsOn: ['deleteVueArtifact'/*, 'npmInstall'*/]) {
-    args = ["run", "build"]
-}
+//task npmBuild(type: NpmTask, dependsOn: ['deleteVueArtifact'/*, 'npmInstall'*/]) {
+//    args = ["run", "build"]
+//}
 
 // gradle build 시 수행되는 processResources task가 실행되기 전에 npmBuild task를 실행하라.
 //processResources.dependsOn 'npmBuild'
 
 group = 'com.wsys'
-//version = '0.0.1-SNAPSHOT'
+version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-bootWar.enabled = false
-war.enabled = true
-war{
-	baseName = 'ROOT'
+//bootWar.enabled = false
+//war.enabled = true
+//war{
+//	baseName = 'ROOT'
 	// destinationDir new File("C:/Users/user/OneDrive/바탕 화면")
 //	destinationDir new File("D:/log")
+//
+//}
+//tasks.withType(Tar).configureEach {
+//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//}
+//
+//
+//tasks.withType(Zip).configureEach {
+//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//}
 
-}
-tasks.withType(Tar).configureEach {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-
-tasks.withType(Zip).configureEach {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
 repositories {
 	mavenCentral()
 	maven { url "https://repo.spring.io/milestone" }
@@ -75,7 +76,7 @@ repositories {
 }
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+//	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -101,7 +102,7 @@ dependencies {
 
 	//developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	//디플로이 할때 주석 처리 할 것
-    providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper'
+//    providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper'
 
 	implementation 'org.springframework.mobile:spring-mobile-starter:2.0.0.M2'
 
