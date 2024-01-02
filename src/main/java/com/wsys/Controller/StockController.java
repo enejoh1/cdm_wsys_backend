@@ -375,6 +375,12 @@ public class StockController extends BaseAbstractController {
 		String batch_lot_id = this.getRequestString(request, "batch_lot_id");
 		String supply_lot_number = this.getRequestString(request, "supply_lot_number");
 		String supply_company_name = this.getRequestString(request, "supply_company_name");
+		String item_id = this.getRequestString(request, "item_id");
+		String item_code = this.getRequestString(request, "add_item_code");
+		String item_name = this.getRequestString(request, "add_item_name");
+		String specification = this.getRequestString(request, "add_specification");
+		String detail_info = this.getRequestString(request, "add_detail_info");
+		String type = this.getRequestString(request, "add_type");
 
 		if(bin_code==null||bin_code.length()<1) return null;
 		if(item_uids==null||item_uids.size()<1 || item_quans==null||item_quans.size()<1) return null;
@@ -388,7 +394,7 @@ public class StockController extends BaseAbstractController {
 		System.out.println(lotno);
 		if(binList!=null && binList.size()>0) {
 			bin_uid = binList.get(0).getUnique_id();
-			this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name);//##DBG lotno 수정.추가
+			this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name, item_id, item_code, item_name, specification, detail_info, type);//##DBG lotno 수정.추가
 
 			data.put("result", true);
 		} else {
@@ -422,6 +428,12 @@ public class StockController extends BaseAbstractController {
 		String batch_lot_id = this.getRequestString(request, "batch_lot_id");
 		String supply_lot_number = this.getRequestString(request, "supply_lot_number");
 		String supply_company_name = this.getRequestString(request, "supply_company_name");
+		String item_id = this.getRequestString(request, "item_id");
+		String item_code = this.getRequestString(request, "add_item_code");
+		String item_name = this.getRequestString(request, "add_item_name");
+		String specification = this.getRequestString(request, "add_specification");
+		String detail_info = this.getRequestString(request, "add_detail_info");
+		String type = this.getRequestString(request, "add_type");
 
 		System.out.println("----:a1----");
 		System.out.println(lotno);
@@ -436,7 +448,7 @@ public class StockController extends BaseAbstractController {
 
 		System.out.println("----:a3----");
 		System.out.println(lotno);
-		this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name);//##DBG lotno 수정.추가
+		this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name, item_id, item_code, item_name, specification, detail_info, type);//##DBG lotno 수정.추가
 
 		return null;
 	}
@@ -708,10 +720,21 @@ public class StockController extends BaseAbstractController {
 				System.out.println("-------------<3>-----------");
 				data.put("datas", historyList);
 				System.out.println("-------------<4>-----------");
+
+
 			}
 			break;
 		}
 		System.out.println("---5---##DBG------String readLocationHistory(HttpServletRequest request, HttpServletResponse response) throws Exception ------");
+
+		cond.put("is_inout", "IN");
+		Integer totalHistoryIn = this.execManager.countItemHistory(uid_company, cond);
+		data.put("total_in", totalHistoryIn);
+
+		cond.remove("is_inout");
+		cond.put("is_inout", "OUT");
+		Integer totalHistoryOut = this.execManager.countItemHistory(uid_company, cond);
+		data.put("total_out", totalHistoryOut);
 
 		data.put("count", page.getCount());
 		System.out.println("---6---##DBG------String readLocationHistory(HttpServletRequest request, HttpServletResponse response) throws Exception ------");

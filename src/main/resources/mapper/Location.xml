@@ -100,7 +100,7 @@
 	<!-- //##DBG lotno 수정.추가,  ##DBG 추가 아래 셀레트 sql에 location.lotno, 추가 -->
 	<sql id="select-location-fields">
 		location.lotno,
-		location.unique_id, location.uid_company, location.uid_bin, location.uid_item, location.quan, location.last_in_date, location.last_out_date, location.remark,
+		location.unique_id, location.uid_company, location.uid_bin, location.uid_item, sum(location.quan) as quan, location.last_in_date, location.last_out_date, location.remark,
 		location.del_yn, location.creator, location.creator_uid, location.create_date, location.changer, location.changer_uid, location.change_date,
 
 		item.item_code, item.item_name, item.specification, item.detail_info, item.unit_code,
@@ -174,6 +174,7 @@
 		<include refid="select-location-join" />
 		<include refid="select-location-where" />
 		${order_by}
+		group by location.lotno, bin.bin_code
 		limit ${start_point} , ${end_point}
 	</select>
 

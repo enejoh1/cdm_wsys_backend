@@ -136,7 +136,7 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 
 	// ##DBG lotno 수정.추가
 	public void addLocationHistoryWearing(String lotno, Long uid_company, Long user_uid, String user_id, String user_name,
-			Long uid_location, String is_inout, Double quan, Date date, String expiration_period, String supply_name, String batch_lot_id, String supply_lot_number, String supply_company_name) throws Exception {
+			Long uid_location, String is_inout, Double quan, Date date, String expiration_period, String supply_name, String batch_lot_id, String supply_lot_number, String supply_company_name, String type) throws Exception {
 		History history = new History();
 		history.setUid_location(uid_location);
 		history.setIs_inout(is_inout);
@@ -148,6 +148,7 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 		history.setBatch_lot_id(batch_lot_id);
 		history.setSupply_lot_number(supply_lot_number);
 		history.setSupply_company_name(supply_company_name);
+		history.setType(type);
 
 		this.historyDao.insert(lotno, uid_company, true, user_name, user_uid, "history", history); // ##DBG lotno 수정.추가
 	}
@@ -155,7 +156,21 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 	@Override
 	// ##DBG lotno 수정.추가
 	public void execWearing(String lotno, Long uid_company, Long user_uid, String user_id, String user_name,
-			List<Long> item_uids, List<Double> item_quans, Long bin_uid, String expiration_period, String supply_name, String batch_lot_id, String supply_lot_number, String supply_company_name) throws Exception {
+			List<Long> item_uids, List<Double> item_quans, Long bin_uid, String expiration_period, String supply_name, String batch_lot_id, String supply_lot_number, String supply_company_name, String item_id, String item_code, String item_name, String specification, String detail_info, String type) throws Exception {
+
+		Map condItem = new HashMap();
+		condItem.put("unique_id", item_id);
+ 		List item = this.itemDao.select_cond(uid_company, "item", condItem);
+		if (!item.isEmpty()) {
+			Map updateCond = new HashMap();
+			updateCond.put("unique_id", item_id);
+			updateCond.put("item_code", item_code);
+			updateCond.put("item_name", item_name);
+			updateCond.put("specification", specification);
+			updateCond.put("detail_info", detail_info);
+			this.itemDao.updateByMap(user_name, user_uid, "item", updateCond);//##DBG : 이 품목이 이 bin에 재고가 존재하면 update
+		}
+
 		Date now = new Date();
 		Location location = new Location();
 		location.setUid_bin(bin_uid);
@@ -189,7 +204,7 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 
 			System.out.println("----:a7----");
 			System.out.println(lotno);
-			addLocationHistoryWearing(lotno, uid_company, user_uid, user_id, user_name, uid_location, "IN", item_quan, now, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name);// ##DBG
+			addLocationHistoryWearing(lotno, uid_company, user_uid, user_id, user_name, uid_location, "IN", item_quan, now, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name, type);// ##DBG
 																														// lotno
 																														// 수정.추가
 		}
@@ -285,6 +300,12 @@ public class DefaultExecManager extends ExtendDaoExecManager implements Initiali
 		System.out
 				.println("//##DBG---------- readLocation(Long uid_company, Map cond, DatabasePage page) -------------");
 		return this.locationDao.select_cond(uid_company, "location", cond, page);
+	}
+
+	@Override
+	public Integer countItemHistory(Long uid_company, Map cond) {
+		List<History> list = this.historyDao.select_cond(uid_company, "history", cond);
+		return list.size();
 	}
 
 	@Override

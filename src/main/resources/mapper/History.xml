@@ -37,6 +37,7 @@
 		<result property="batch_lot_id" 			column="batch_lot_id" />
 		<result property="supply_lot_number" 		column="supply_lot_number" />
 		<result property="supply_company_name" 		column="supply_company_name" />
+		<result property="type" 		column="type" />
 	</resultMap>
 
 	<insert id="insert-history" parameterType="history">
@@ -44,12 +45,12 @@
 		INSERT INTO TB_HISTORY
 			(
 			 unique_id, uid_company, uid_location, is_inout, his_quan, his_date, remark,
-			 creator_uid, creator, create_date, lotno, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name
+			 creator_uid, creator, create_date, lotno, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name, type
 			)
 		VALUES
 		 	(
 		 	 #{unique_id}, #{uid_company}, #{uid_location}, #{is_inout}, #{his_quan}, #{his_date}, #{remark},
-		 	 #{creator_uid}, #{creator}, #{create_date}, #{lotno}, #{expiration_period}, #{supply_name}, #{batch_lot_id}, #{supply_lot_number}, #{supply_company_name}
+		 	 #{creator_uid}, #{creator}, #{create_date}, #{lotno}, #{expiration_period}, #{supply_name}, #{batch_lot_id}, #{supply_lot_number}, #{supply_company_name}, #{type}
 		 	)
 	</insert>
 

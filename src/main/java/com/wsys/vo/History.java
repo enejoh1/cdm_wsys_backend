@@ -29,4 +29,5 @@ public class History extends CommonVo {
 	public String bin_name;
 	public String lotno;	//##DBG lotno추가
 	public String his_lotno;	//##DBG lotno추가
+	public String type;
 }
