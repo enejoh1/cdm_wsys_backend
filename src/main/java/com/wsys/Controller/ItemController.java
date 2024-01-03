@@ -32,6 +32,7 @@ import com.wsys.vo.SystemInfo;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+import org.springframework.beans.factory.annotation.Value;
 
 @Controller
 @RequestMapping(value ={"/item.do"})
@@ -46,6 +47,8 @@ public class ItemController extends BaseAbstractController {
 
 	@Resource(name = "systemInfo")
 	protected SystemInfo systemInfo;
+    @Value("${STANDARD_EXCEL_TEMPLATE_URL}")
+    private String excelPathEnv;
 
 	@RequestMapping(params = "method=readItem")
 	public String readItem(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -79,7 +82,8 @@ public class ItemController extends BaseAbstractController {
 			page.setLimit(100000);
 			itemList = this.execManager.readItem(uid_company, cond, page);
 			excelPath = this.excelManager.createStockMgmtExcel(uid_company, itemList);
-			data.put("result", excelPath);
+			data.put("result", excelPathEnv);
+			// data.put("result", excelPath);
 		} else {
 			itemList = this.execManager.readItem(uid_company, cond, page);
 			data.put("result", itemList);

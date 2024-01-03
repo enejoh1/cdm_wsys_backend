@@ -56,8 +56,8 @@ public class StockController extends BaseAbstractController {
 
 	@Resource(name = "systemInfo")
 	protected SystemInfo systemInfo;
-	
-    @Value("${spring.excel}")
+
+    @Value("${WEARING_EXCEL_TEMPLATE_URL}")
     private String excelPathEnv;
 
 	@RequestMapping(params = "method=readwhouse")
