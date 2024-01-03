@@ -40,6 +40,7 @@ import com.wsys.vo.SystemInfo;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+import org.springframework.beans.factory.annotation.Value;
 
 @Controller
 @RequestMapping(value ={"/template.do"})
@@ -53,6 +54,9 @@ public class ExcelController extends BaseAbstractController {
 	private ExcelManager excelManager;
 	@Resource(name = "systemInfo")
 	protected SystemInfo systemInfo;
+
+    @Value("${WEARING_EXCEL_TEMPLATE_URL}")
+    private String excelPathEnv;
 
 	// 입고 엑셀 템플릿 다운
 	@RequestMapping(params = "method=wearingExcelTemplateDown")
@@ -70,7 +74,7 @@ public class ExcelController extends BaseAbstractController {
 		excelPath = this.excelManager.createWearingTemplate(uid_company);
 
 		Map<String, Object> data = new HashMap<String, Object>();
-		data.put("result", excelPath);
+		data.put("result", excelPathEnv);
 		JsonConfig jsonConfig = new JsonConfig();
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, this.JsonValueProcessor());
 		String jsonStr = JSONObject.fromObject(data, jsonConfig).toString();
@@ -100,7 +104,7 @@ public class ExcelController extends BaseAbstractController {
 		excelPath = this.excelManager.createReleaseTemplate(uid_company);
 
 		Map<String, Object> data = new HashMap<String, Object>();
-		data.put("result", excelPath);
+		data.put("result", excelPathEnv);
 		JsonConfig jsonConfig = new JsonConfig();
 		jsonConfig.registerJsonValueProcessor(java.util.Date.class, this.JsonValueProcessor());
 		String jsonStr = JSONObject.fromObject(data, jsonConfig).toString();
