@@ -1,9 +1,11 @@
 version: '3.4'
 
 services:
-  cdmwsysbackend:
-    image: 222.252.16.150:5555/wsys-frontend:1.0.0.30122023_1
+  wsys_backend:
+    image: 222.252.16.150:5555/wsys-backend:1.0.0.03012024_1
     container_name: wsys_backend
     restart: unless-stopped
     ports:
       - 7080:7080
+    environment:
+      EXCEL: https://docs.google.com/spreadsheets/d/1LiyY8us3QtB0ZxW4uN3vJo7KEtry8e01
