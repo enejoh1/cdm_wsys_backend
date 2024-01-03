@@ -41,6 +41,7 @@ import com.wsys.vo.Whouse;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+import org.springframework.beans.factory.annotation.Value;
 
 @Controller
 @RequestMapping(value ={"/stock.do"})
@@ -55,6 +56,9 @@ public class StockController extends BaseAbstractController {
 
 	@Resource(name = "systemInfo")
 	protected SystemInfo systemInfo;
+	
+    @Value("${spring.excel}")
+    private String excelPathEnv;
 
 	@RequestMapping(params = "method=readwhouse")
 	public String readwhouse(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -713,7 +717,8 @@ public class StockController extends BaseAbstractController {
 				page.setLimit(100000);
 				historyList = this.execManager.readItemHistory(uid_company, cond, page);
 				excelPath = this.excelManager.createHistoryExcel(uid_company, historyList, his_s_date, his_e_date, gubun);
-				data.put("result", excelPath);
+				data.put("result", excelPathEnv);
+				// data.put("result", excelPath);
 			} else {
 				System.out.println("-------------<2>-----------");
 				historyList = this.execManager.readItemHistory(uid_company, cond, page);
