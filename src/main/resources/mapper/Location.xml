@@ -173,7 +173,7 @@
 		<include refid="select-location-fields" />
 		<include refid="select-location-join" />
 		<include refid="select-location-where" />
-		${order_by}
+		<!-- ${order_by} -->
 		group by location.lotno, bin.bin_code
 		limit ${start_point} , ${end_point}
 	</select>

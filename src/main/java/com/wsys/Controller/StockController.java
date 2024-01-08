@@ -398,8 +398,15 @@ public class StockController extends BaseAbstractController {
 		System.out.println("----:a2----");
 		System.out.println(lotno);
 
-		List<Location> locationDetail = this.execManager.readLocationByBinAndItem(uid_company, item_id, bin_code, page);
-		if (!locationDetail.isEmpty())
+		List<Location> locationDetail = this.execManager.readLocationByBinAndItem(uid_company, bin_code, page);
+		boolean isExists = false;
+		for (Location location : locationDetail) {
+			if (!location.getItem_name().equals(item_name) && !location.getItem_code().equals(item_code)) {
+				isExists = true;
+				break;
+			}
+		}
+		if (!locationDetail.isEmpty() && isExists)
 		{
 			data.put("result", false);
 			data.put("description", "Failed");

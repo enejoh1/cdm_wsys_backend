@@ -75,7 +75,7 @@
 
 	<sql id="select-item-fields">
 		item.*,
-		NVL((SELECT SUM(quan) FROM tb_location where del_yn = 'N' AND uid_item = item.unique_id GROUP BY uid_item), 0) as sum_quan,
+		NVL((SELECT SUM(location.quan) FROM tb_location location INNER JOIN TB_HISTORY history on location.unique_id = history.uid_location  where location.del_yn = 'N' AND location.uid_item = item.unique_id), 0) as sum_quan,
 		NVL((SELECT COUNT(*) FROM tb_history his join tb_location locate on locate.unique_id = his.uid_location and locate.uid_item = item.unique_id where his.is_inout = 'IN'), 0) as history_in,
 		NVL((SELECT COUNT(*) FROM tb_history his join tb_location locate on locate.unique_id = his.uid_location and locate.uid_item = item.unique_id where his.is_inout = 'OUT'), 0) as history_out
 
