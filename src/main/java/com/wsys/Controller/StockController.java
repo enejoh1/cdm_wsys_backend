@@ -390,19 +390,28 @@ public class StockController extends BaseAbstractController {
 		if(item_uids==null||item_uids.size()<1 || item_quans==null||item_quans.size()<1) return null;
 
 		List<Bin> binList = this.execManager.getBinInfo(uid_company, bin_code);
+		DatabasePage page = this.settingPage(request);
 
 		Long bin_uid = null;
 		Map<String, Object> data = new HashMap<String, Object>();
 
 		System.out.println("----:a2----");
 		System.out.println(lotno);
-		if(binList!=null && binList.size()>0) {
-			bin_uid = binList.get(0).getUnique_id();
-			this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name, item_id, item_code, item_name, specification, detail_info, type);//##DBG lotno 수정.추가
 
-			data.put("result", true);
-		} else {
+		List<Location> locationDetail = this.execManager.readLocationByBinAndItem(uid_company, item_id, bin_code, page);
+		if (!locationDetail.isEmpty())
+		{
 			data.put("result", false);
+			data.put("description", "Failed");
+		} else {
+			if(binList!=null && binList.size()>0) {
+				bin_uid = binList.get(0).getUnique_id();
+				this.execManager.execWearing(lotno, uid_company, user_uid, user_id, user_name, item_uids, item_quans, bin_uid, expiration_period, supply_name, batch_lot_id, supply_lot_number, supply_company_name, item_id, item_code, item_name, specification, detail_info, type);//##DBG lotno 수정.추가
+
+				data.put("result", true);
+			} else {
+				data.put("result", false);
+			}
 		}
 
 		JsonConfig jsonConfig = new JsonConfig();
