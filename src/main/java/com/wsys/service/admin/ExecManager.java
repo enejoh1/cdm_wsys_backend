@@ -123,5 +123,5 @@ public interface ExecManager {
 			String barcodeFolder, String type); //##DBG 추가
 	public String createBarcodeBinData(Long uid_company, List<Bin> binList, String type); //##DBG추가
 
-	public List<Location> readLocationByBinAndItem(Long uid_company, String item_uids, String bin_code, DatabasePage page);
+	public List<Location> readLocationByBinAndItem(Long uid_company, String bin_code, DatabasePage page);
 }

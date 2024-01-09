@@ -2968,9 +2968,8 @@ System.out.println("##DBG--------1-");
 	}
 
 	@Override
-	public List<Location> readLocationByBinAndItem(Long uid_company, String item_uids, String bin_code, DatabasePage page){
+	public List<Location> readLocationByBinAndItem(Long uid_company, String bin_code, DatabasePage page){
 		Map cond = new HashMap();
-		cond.put("uid_item", item_uids);
 		cond.put("bin_code", bin_code);
 		return this.locationDao.select_cond(uid_company, "location", cond, page);
 
