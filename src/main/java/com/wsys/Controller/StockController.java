@@ -402,7 +402,7 @@ public class StockController extends BaseAbstractController {
 		if (!locationDetail.isEmpty())
 		{
 			data.put("result", false);
-			data.put("description", "Failed");
+			data.put("description", "이 위치에는 이미 다른 제품이 있습니다. 다른 위치를 선택해 주세요!");
 		} else {
 			if(binList!=null && binList.size()>0) {
 				bin_uid = binList.get(0).getUnique_id();
