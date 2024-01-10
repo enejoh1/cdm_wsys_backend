@@ -1,12 +1,8 @@
 package com.wsys.service.admin;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -19,16 +15,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFPatriarch;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -40,44 +31,21 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.ImageUtils;
-import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFColor;
-import org.apache.poi.xssf.usermodel.XSSFCreationHelper;
-import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFPicture;
 import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFShape;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.wsys.util.DatabasePage;
-import com.wsys.vo.Bin;
-import com.wsys.vo.BinMan;
-import com.wsys.vo.Company;
 import com.wsys.vo.History;
 import com.wsys.vo.Item;
 import com.wsys.vo.Location;
-import com.wsys.vo.Menu;
-import com.wsys.vo.Rack;
-import com.wsys.vo.User;
-import com.wsys.vo.Whouse;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sourceforge.barbecue.Barcode;
-import net.sourceforge.barbecue.BarcodeFactory;
-import net.sourceforge.barbecue.BarcodeImageHandler;
 
 @Service("ExcelManager")
 public class DefaultExcelManager extends ExtendDaoExcelManager implements InitializingBean {
@@ -1585,17 +1553,12 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 	}
 
 	@Override
-	public String createHistoryExcel(Long uid_company, List<History> historyList, String s_date, String e_date, String gubun) {
+	public byte[] createHistoryExcel(Long uid_company, List<History> historyList, String s_date, String e_date, String gubun) {
 		String result = null;
 
 		String osName = System.getProperty("os.name").toLowerCase();
 
-		String first = "";
-		if(osName.contains("win")) {
-			first = "C:";
-		} else {
-			first = "";
-		}
+		String first = ".";
 
 		XSSFWorkbook xssfWb = null;
 		XSSFSheet xssfSheet = null;
@@ -1831,13 +1794,14 @@ public class DefaultExcelManager extends ExtendDaoExcelManager implements Initia
 			fos = new FileOutputStream(file);
 			xssfWb.write(fos);
 			if (fos != null) fos.close();
-
+			byte[] bytes = new byte[(int) file.length()];
+			return bytes;
 		} catch (Exception e) {
 			result = null;
 		}
 
-		return result;
-	}
+        return new byte[0];
+    }
 
 	@Override
 	public String createStockMgmtExcel(Long uid_company, List<Item> itemList) {

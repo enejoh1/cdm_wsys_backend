@@ -732,8 +732,8 @@ public class StockController extends BaseAbstractController {
 				String excelPath = null;
 				page.setLimit(100000);
 				historyList = this.execManager.readItemHistory(uid_company, cond, page);
-				excelPath = this.excelManager.createHistoryExcel(uid_company, historyList, his_s_date, his_e_date, gubun);
-				data.put("result", excelPathEnv);
+				byte[] excel = this.excelManager.createHistoryExcel(uid_company, historyList, his_s_date, his_e_date, gubun);
+				data.put("result", excel);
 				// data.put("result", excelPath);
 			} else {
 				System.out.println("-------------<2>-----------");
